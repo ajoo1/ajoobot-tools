@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AjooBot — أدوات الطالب الهندسية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+<style>
+:root{
+  --bg-root:#060c18; --bg-primary:#080d1a; --bg-secondary:#0d1526; --bg-card:#101828; --bg-card2:#141f36;
+  --text-main:#e2e8f0; --text-muted:#94a3b8; --text-dim:#526079;
+  --accent:#06b6d4; --accent-h:#0891b2; --accent-b:#3b82f6; --accent-g:#10b981;
+  --accent-r:#ef4444; --accent-y:#f59e0b; --accent-p:#a855f7;
+  --border:rgba(6,182,212,.16); --border-h:rgba(6,182,212,.5);
+  --font-en:'JetBrains Mono',monospace; --font-ar:'Cairo',sans-serif;
+  --r-sm:6px; --r-md:10px; --r-lg:16px;
+  --glow:0 0 18px rgba(6,182,212,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:
+    radial-gradient(circle at 15% 0%, rgba(6,182,212,.08), transparent 40%),
+    radial-gradient(circle at 85% 100%, rgba(59,130,246,.08), transparent 40%),
+    var(--bg-root);
+  color:var(--text-main); font-family:var(--font-ar); line-height:1.6; min-height:100vh;
+}
+::selection{background:rgba(6,182,212,.35)}
+a{color:inherit;text-decoration:none}
+input,select,button,textarea{font-family:inherit;color:inherit}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--accent-h);border-radius:10px}
+::-webkit-scrollbar-track{background:var(--bg-secondary)}
+
+/* ═══ TOP BAR ═══ */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  padding:16px 24px;background:rgba(8,13,26,.85);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{
+  width:42px;height:42px;border-radius:var(--r-md);
+  background:linear-gradient(135deg,var(--accent-b),var(--accent));
+  display:flex;align-items:center;justify-content:center;font-size:19px;color:#04101c;
+  box-shadow:var(--glow);
+}
+.brand-text h1{font-size:17px;font-weight:800;font-family:var(--font-en);color:var(--text-main);letter-spacing:.5px}
+.brand-text h1 span{color:var(--accent)}
+.brand-text p{font-size:11px;color:var(--text-muted);margin-top:1px}
+.back-home{
+  display:flex;align-items:center;gap:7px;padding:9px 16px;border:1px solid var(--border);
+  border-radius:var(--r-sm);font-size:12.5px;font-weight:600;color:var(--text-muted);transition:.25s;
+}
+.back-home:hover{color:var(--accent);border-color:var(--border-h);box-shadow:var(--glow)}
+
+/* ═══ LAYOUT ═══ */
+.layout{display:flex;max-width:1400px;margin:0 auto;min-height:calc(100vh - 73px)}
+.tool-nav{
+  width:230px;flex-shrink:0;padding:20px 14px;border-left:1px solid var(--border);
+  display:flex;flex-direction:column;gap:6px;position:sticky;top:73px;height:calc(100vh - 73px);overflow-y:auto;
+}
+.tool-nav-label{font-size:10.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;font-family:var(--font-en);padding:10px 10px 6px}
+.nav-btn{
+  display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:var(--r-sm);
+  font-size:13.5px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:.2s;border:1px solid transparent;
+  background:none;text-align:right;width:100%;
+}
+.nav-btn i{width:18px;text-align:center;font-size:14px;color:var(--text-dim);transition:.2s}
+.nav-btn:hover{background:rgba(6,182,212,.06);color:var(--text-main)}
+.nav-btn:hover i{color:var(--accent)}
+.nav-btn.active{background:rgba(6,182,212,.1);color:var(--accent);border-color:var(--border)}
+.nav-btn.active i{color:var(--accent)}
+
+.tool-panels{flex:1;padding:26px 30px;min-width:0}
+.tool-panel{display:none;animation:fadeIn .35s ease}
+.tool-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.panel-head{margin-bottom:22px}
+.panel-head h2{font-size:21px;font-weight:800;display:flex;align-items:center;gap:10px}
+.panel-head h2 i{color:var(--accent)}
+.panel-head p{color:var(--text-muted);font-size:13px;margin-top:6px}
+
+.card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:22px;margin-bottom:18px;
+}
+.card h3{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--text-main);display:flex;align-items:center;gap:8px}
+.card h3 i{color:var(--accent);font-size:13px}
+
+/* form bits */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px;font-weight:600}
+.field input[type=text],.field input[type=number],.field select,.field textarea{
+  width:100%;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:10px 13px;font-size:14px;color:var(--text-main);font-family:var(--font-en);transition:.2s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(6,182,212,.12)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.field-row4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:640px){.field-row,.field-row3,.field-row4{grid-template-columns:1fr 1fr}}
+
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.25s;font-family:var(--font-ar);
+  background:linear-gradient(135deg,var(--accent),var(--accent-h));color:#04101c;box-shadow:var(--glow);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 25px rgba(6,182,212,.5)}
+.btn.btn-blue{background:linear-gradient(135deg,var(--accent-b),#1d4ed8);color:#fff;box-shadow:0 0 18px rgba(59,130,246,.3)}
+.btn.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-muted);box-shadow:none}
+.btn.btn-ghost:hover{color:var(--accent);border-color:var(--border-h);transform:none}
+.btn.btn-sm{padding:7px 14px;font-size:12px}
+
+.subtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:0}
+.subtab-btn{
+  padding:9px 16px;font-size:12.5px;font-weight:700;color:var(--text-muted);cursor:pointer;
+  border-bottom:2px solid transparent;transition:.2s;
+}
+.subtab-btn:hover{color:var(--text-main)}
+.subtab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.subpanel{display:none}
+.subpanel.active{display:block}
+
+.result-box{
+  background:var(--bg-secondary);border:1px dashed var(--border-h);border-radius:var(--r-md);
+  padding:16px 18px;margin-top:14px;font-family:var(--font-en);
+}
+.result-box .rlabel{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;font-family:var(--font-en)}
+.result-box .rvalue{font-size:20px;font-weight:800;color:var(--accent);word-break:break-all}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.result-item{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 13px}
+.result-item .rk{font-size:10.5px;color:var(--text-dim);margin-bottom:3px}
+.result-item .rv{font-size:14px;font-weight:700;color:var(--text-main);font-family:var(--font-en)}
+.error-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.35);color:#fca5a5;border-radius:var(--r-sm);padding:11px 15px;margin-top:12px;font-size:13px}
+
+table{width:100%;border-collapse:collapse;font-family:var(--font-en);font-size:13px}
+table th,table td{padding:8px 10px;text-align:center;border:1px solid var(--border)}
+table th{background:var(--bg-secondary);color:var(--accent);font-size:11.5px}
+table tbody tr:hover{background:rgba(6,182,212,.05)}
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-sm)}
+
+.hint{font-size:11.5px;color:var(--text-dim);margin-top:8px;line-height:1.7}
+.hint code{background:var(--bg-secondary);padding:1px 6px;border-radius:4px;color:var(--accent);font-family:var(--font-en)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-icon"><i class="fa-solid fa-robot"></i></div>
+    <div class="brand-text">
+      <h1>Ajoo<span>Bot</span></h1>
+      <p>أدوات هندسية سريعة لمساعدتك في مذاكرتك</p>
+    </div>
+  </div>
+  <a class="back-home" href="https://www.ajoo.dpdns.org/"><i class="fa-solid fa-arrow-right-to-bracket"></i> رجوع للموقع الرئيسي</a>
+</div>
+
+<div class="layout">
+  <nav class="tool-nav" id="toolNav">
+    <div class="tool-nav-label">الأدوات</div>
+    <button class="nav-btn active" data-tool="baseconv"><i class="fa-solid fa-code"></i> محول الأنظمة العددية</button>
+    <button class="nav-btn" data-tool="kmap"><i class="fa-solid fa-table-cells"></i> K-Map Solver</button>
+    <button class="nav-btn" data-tool="truth"><i class="fa-solid fa-list-check"></i> جدول الصواب</button>
+    <button class="nav-btn" data-tool="boolexpr"><i class="fa-solid fa-square-root-variable"></i> تقييم معادلة منطقية</button>
+    <button class="nav-btn" data-tool="resistor"><i class="fa-solid fa-bolt"></i> ألوان المقاومة</button>
+    <button class="nav-btn" data-tool="subnet"><i class="fa-solid fa-network-wired"></i> Subnet Calculator</button>
+    <button class="nav-btn" data-tool="matrix"><i class="fa-solid fa-table-cells-large"></i> حاسبة المصفوفات</button>
+    <button class="nav-btn" data-tool="sci"><i class="fa-solid fa-calculator"></i> آلة حاسبة علمية</button>
+  </nav>
+
+  <main class="tool-panels" id="toolPanels">
+
+    <!-- ═══════════════ 1) BASE CONVERTER ═══════════════ -->
+    <section class="tool-panel active" id="tool-baseconv">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-code"></i> محول الأنظمة العددية</h2>
+        <p>اكتب رقم في أي خانة وهيتحول تلقائي للباقي (Binary / Octal / Decimal / Hex)</p>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label>Binary (Base 2)</label>
+          <input type="text" id="bc-bin" placeholder="مثال: 11111111" oninput="bcOnInput('bin')"/>
+        </div>
+        <div class="field">
+          <label>Octal (Base 8)</label>
+          <input type="text" id="bc-oct" placeholder="مثال: 377" oninput="bcOnInput('oct')"/>
+        </div>
+        <div class="field">
+          <label>Decimal (Base 10)</label>
+          <input type="text" id="bc-dec" placeholder="مثال: 255" oninput="bcOnInput('dec')"/>
+        </div>
+        <div class="field">
+          <label>Hexadecimal (Base 16)</label>
+          <input type="text" id="bc-hex" placeholder="مثال: FF" oninput="bcOnInput('hex')"/>
+        </div>
+        <div id="bc-error"></div>
+        <div class="hint">تقدر تكتب رقم سالب بحط <code>-</code> في الأول. الأرقام السداسية عشرية اكتبها بحروف إنجليزية A-F.</div>
+        <button class="btn btn-ghost btn-sm" onclick="bcClear()" style="margin-top:12px"><i class="fa-solid fa-eraser"></i> مسح الكل</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 2) K-MAP SOLVER ═══════════════ -->
+    <section class="tool-panel" id="tool-kmap">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-cells"></i> K-Map Solver</h2>
+        <p>اختار عدد المتغيرات، ودوس على أي خانة عشان تدور بين 0 و 1 و X (Don't Care)، وبعدين دوس حل</p>
+      </div>
+      <div class="card">
+        <div class="field" style="max-width:220px">
+          <label>عدد المتغيرات</label>
+          <select id="km-numvars" onchange="kmapBuildGrid()">
+            <option value="2">2 متغيرات (A,B)</option>
+            <option value="3" selected>3 متغيرات (A,B,C)</option>
+            <option value="4">4 متغيرات (A,B,C,D)</option>
+          </select>
+        </div>
+        <div id="kmap-grid-wrap"></div>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" onclick="kmapSolve()"><i class="fa-solid fa-wand-magic-sparkles"></i> حل (Simplify)</button>
+          <button class="btn btn-ghost" onclick="kmapReset()"><i class="fa-solid fa-rotate-left"></i> تصفير الخريطة</button>
+        </div>
+        <div id="kmap-result"></div>
+        <div class="hint">دوس على أي خلية: أول دوسة = 1، تاني دوسة = 0، تالت دوسة = X (Don't Care)، ورابع دوسة ترجع 0 (فاضية).</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 3) TRUTH TABLE ═══════════════ -->
+    <section class="tool-panel" id="tool-truth">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-list-check"></i> جدول الصواب (Truth Table)</h2>
+        <p>اعمل جدول الصواب من معادلة، أو اعمل العكس: هات المعادلة المبسطة من جدول</p>
+      </div>
+      <div class="subtabs">
+        <div class="subtab-btn active" data-sub="tt-fromexpr" onclick="switchSubtab('tt','tt-fromexpr')">من المعادلة → جدول</div>
+        <div class="subtab-btn" data-sub="tt-toexpr" onclick="switchSubtab('tt','tt-toexpr')">من الجدول → معادلة</div>
+      </div>
+
+      <div class="subpanel active" id="tt-fromexpr">
+        <div class="card">
+          <div class="field">
+            <label>اكتب المعادلة المنطقية</label>
+            <input type="text" id="tt-expr" placeholder="مثال: A.B + C'  أو  AB+C'"/>
+          </div>
+          <div class="hint">
+            الرموز المتاحة: AND = <code>.</code> أو <code>*</code> أو <code>&amp;</code> أو مجاورة الحروف زي <code>AB</code> — 
+            OR = <code>+</code> أو <code>|</code> — NOT = <code>'</code> بعد الحرف أو <code>!</code> قبله — XOR = <code>^</code>. 
+            كل متغير لازم يكون حرف واحد بس (A, B, C...).
+          </div>
+          <button class="btn" onclick="ttFromExpr()" style="margin-top:14px"><i class="fa-solid fa-play"></i> اعرض الجدول</button>
+          <div id="tt-fromexpr-result"></div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="tt-toexpr">
+        <div class="card">
+          <div class="field" style="max-width:220px">
+            <label>عدد المتغيرات</label>
+            <select id="tt2-numvars" onchange="tt2BuildTable()">
+              <option value="2">2 متغيرات (A,B)</option>
+              <option value="3" selected>3 متغيرات (A,B,C)</option>
+              <option value="4">4 متغيرات (A,B,C,D)</option>
+              <option value="5">5 متغيرات (A,B,C,D,E)</option>
+            </select>
+          </div>
+          <div id="tt2-table-wrap"></div>
+          <button class="btn" onclick="tt2Solve()" style="margin-top:14px"><i class="fa-solid fa-wand-magic-sparkles"></i> هات المعادلة المبسطة</button>
+          <div id="tt2-result"></div>
+          <div class="hint">دوس على قيمة الـ Output لأي صف عشان تدور بين 0 و 1 و X.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 4) BOOLEAN EXPRESSION EVALUATOR ═══════════════ -->
+    <section class="tool-panel" id="tool-boolexpr">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-square-root-variable"></i> تقييم معادلة منطقية</h2>
+        <p>اكتب المعادلة وحط قيمة كل متغير (0 أو 1) وشوف الناتج على طول</p>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label>المعادلة المنطقية</label>
+          <input type="text" id="be-expr" placeholder="مثال: A.B + C'" oninput="beDetectVars()"/>
+        </div>
+        <div id="be-vars-wrap"></div>
+        <button class="btn" onclick="beEvaluate()" style="margin-top:14px"><i class="fa-solid fa-play"></i> احسب الناتج</button>
+        <div id="be-result"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 5) RESISTOR COLOR CODE ═══════════════ -->
+    <section class="tool-panel" id="tool-resistor">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-bolt"></i> حاسبة ألوان المقاومة</h2>
+        <p>اختار الألوان واحسب قيمة المقاومة وهامش الخطأ</p>
+      </div>
+      <div class="card">
+        <div class="field" style="max-width:260px">
+          <label>عدد الحلقات (Bands)</label>
+          <select id="rc-bandcount" onchange="rcBuildInputs()">
+            <option value="4">4 حلقات</option>
+            <option value="5">5 حلقات</option>
+          </select>
+        </div>
+        <div id="rc-inputs" class="field-row4"></div>
+        <div id="rc-visual" style="margin-top:20px"></div>
+        <button class="btn" onclick="rcCalculate()" style="margin-top:16px"><i class="fa-solid fa-bolt"></i> احسب القيمة</button>
+        <div id="rc-result"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 6) SUBNET CALCULATOR SUITE ═══════════════ -->
+    <section class="tool-panel" id="tool-subnet">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-network-wired"></i> Subnet Calculator</h2>
+        <p>مجموعة أدوات الشبكات: حساب السبنت، الآلة الحاسبة الثنائية، حساب العناوين، والتحويل بين IPv4 والثنائي</p>
+      </div>
+      <div class="subtabs">
+        <div class="subtab-btn active" data-sub="sn-main" onclick="switchSubtab('sn','sn-main')">IPv4 Subnet</div>
+        <div class="subtab-btn" data-sub="sn-bincalc" onclick="switchSubtab('sn','sn-bincalc')">Binary Calculator</div>
+        <div class="subtab-btn" data-sub="sn-addr" onclick="switchSubtab('sn','sn-addr')">Address Calculation</div>
+        <div class="subtab-btn" data-sub="sn-ipbin" onclick="switchSubtab('sn','sn-ipbin')">IPv4 ↔ Binary</div>
+      </div>
+
+      <div class="subpanel active" id="sn-main">
+        <div class="card">
+          <div class="field-row">
+            <div class="field">
+              <label>عنوان الـ IP</label>
+              <input type="text" id="sn-ip" placeholder="192.168.1.10"/>
+            </div>
+            <div class="field">
+              <label>CIDR (Prefix Length)</label>
+              <input type="number" id="sn-cidr" min="0" max="32" placeholder="24"/>
+            </div>
+          </div>
+          <button class="btn" onclick="subnetCalculate()"><i class="fa-solid fa-play"></i> احسب</button>
+          <div id="sn-result"></div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="sn-bincalc">
+        <div class="card">
+          <div class="field-row">
+            <div class="field"><label>الرقم الأول (Decimal أو Binary)</label><input type="text" id="bcalc-a" placeholder="مثال: 12 أو 1100"/></div>
+            <div class="field"><label>الرقم الثاني</label><input type="text" id="bcalc-b" placeholder="مثال: 5 أو 0101"/></div>
+          </div>
+          <div class="field" style="max-width:220px">
+            <label>العملية</label>
+            <select id="bcalc-op">
+              <option value="add">جمع (+)</option>
+              <option value="sub">طرح (-)</option>
+              <option value="mul">ضرب (×)</option>
+              <option value="and">AND</option>
+              <option value="or">OR</option>
+              <option value="xor">XOR</option>
+            </select>
+          </div>
+          <button class="btn" onclick="binCalcRun()"><i class="fa-solid fa-play"></i> احسب</button>
+          <div id="bcalc-result"></div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="sn-addr">
+        <div class="card">
+          <h3><i class="fa-solid fa-diagram-project"></i> حساب عدد السبنتات المطلوبة (VLSM)</h3>
+          <div class="field-row">
+            <div class="field"><label>الشبكة الأساسية (Network/CIDR)</label><input type="text" id="addr-net" placeholder="192.168.1.0"/></div>
+            <div class="field"><label>CIDR الأساسي</label><input type="number" id="addr-cidr" placeholder="24"/></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>عدد السبنتات المطلوبة</label><input type="number" id="addr-subnets" placeholder="4"/></div>
+            <div class="field"><label>أو عدد الأجهزة (Hosts) المطلوبة في كل سبنت</label><input type="number" id="addr-hosts" placeholder="اختياري"/></div>
+          </div>
+          <button class="btn" onclick="addrCalcRun()"><i class="fa-solid fa-play"></i> احسب السبنتات</button>
+          <div id="addr-result"></div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="sn-ipbin">
+        <div class="card">
+          <div class="field">
+            <label>IPv4 (مثال: 192.168.1.1)</label>
+            <input type="text" id="ipbin-ip" placeholder="192.168.1.1" oninput="ipToBinLive()"/>
+          </div>
+          <div class="field">
+            <label>Binary (32 bit، ممكن تفصل كل 8 بمسافة)</label>
+            <input type="text" id="ipbin-bin" placeholder="11000000.10101000.00000001.00000001" oninput="binToIpLive()"/>
+          </div>
+          <div id="ipbin-error"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 7) MATRIX CALCULATOR ═══════════════ -->
+    <section class="tool-panel" id="tool-matrix">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-table-cells-large"></i> حاسبة المصفوفات</h2>
+        <p>اجمع، اطرح، اضرب، حول (Transpose)، احسب المحدد (Determinant) والمعكوس (Inverse)</p>
+      </div>
+      <div class="card">
+        <div class="field-row3">
+          <div class="field"><label>عدد صفوف A</label><input type="number" id="mx-a-rows" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
+          <div class="field"><label>عدد أعمدة A</label><input type="number" id="mx-a-cols" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
+          <div></div>
+        </div>
+        <div id="mx-a-grid"></div>
+        <hr style="border-color:var(--border);margin:18px 0"/>
+        <div class="field-row3">
+          <div class="field"><label>عدد صفوف B</label><input type="number" id="mx-b-rows" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
+          <div class="field"><label>عدد أعمدة B</label><input type="number" id="mx-b-cols" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
+          <div></div>
+        </div>
+        <div id="mx-b-grid"></div>
+        <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" onclick="mxOp('add')">A + B</button>
+          <button class="btn btn-sm" onclick="mxOp('sub')">A − B</button>
+          <button class="btn btn-sm" onclick="mxOp('mul')">A × B</button>
+          <button class="btn btn-sm btn-blue" onclick="mxOp('transA')">Aᵀ</button>
+          <button class="btn btn-sm btn-blue" onclick="mxOp('transB')">Bᵀ</button>
+          <button class="btn btn-sm btn-blue" onclick="mxOp('detA')">det(A)</button>
+          <button class="btn btn-sm btn-blue" onclick="mxOp('detB')">det(B)</button>
+          <button class="btn btn-sm btn-blue" onclick="mxOp('invA')">A⁻¹</button>
+          <button class="btn btn-sm btn-blue" onclick="mxOp('invB')">B⁻¹</button>
+        </div>
+        <div id="mx-result"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 8) SCIENTIFIC CALCULATOR ═══════════════ -->
+    <section class="tool-panel" id="tool-sci">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-calculator"></i> آلة حاسبة علمية</h2>
+        <p>دوال مثلثية ولوغاريتمات وأقواس — تقدر كمان تكتب أي تعبير رياضي في الشاشة مباشرة</p>
+      </div>
+      <div class="card" style="max-width:420px">
+        <div class="field-row" style="margin-bottom:10px">
+          <div></div>
+          <div style="display:flex;justify-content:left;align-items:center;gap:8px">
+            <label style="margin:0;font-size:11px">Deg</label>
+            <label class="sci-switch">
+              <input type="checkbox" id="sci-rad-toggle" onchange="sciModeLabel()"/>
+              <span class="sci-slider"></span>
+            </label>
+            <label style="margin:0;font-size:11px">Rad</label>
+          </div>
+        </div>
+        <input type="text" id="sci-display" readonly style="width:100%;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px 14px;font-size:22px;text-align:left;direction:ltr;font-family:var(--font-en);margin-bottom:12px"/>
+        <div class="sci-grid" id="sci-grid"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<style>
+/* Sci calculator */
+.sci-switch{position:relative;display:inline-block;width:38px;height:20px}
+.sci-switch input{opacity:0;width:0;height:0}
+.sci-slider{position:absolute;cursor:pointer;inset:0;background:var(--bg-secondary);border:1px solid var(--border);border-radius:20px;transition:.2s}
+.sci-slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:2px;background:var(--text-muted);border-radius:50%;transition:.2s}
+.sci-switch input:checked + .sci-slider{background:rgba(6,182,212,.25);border-color:var(--accent)}
+.sci-switch input:checked + .sci-slider:before{transform:translateX(17px);background:var(--accent)}
+.sci-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.sci-btn{
+  padding:13px 0;border-radius:var(--r-sm);background:var(--bg-secondary);border:1px solid var(--border);
+  color:var(--text-main);font-family:var(--font-en);font-size:14px;font-weight:600;cursor:pointer;transition:.15s;
+}
+.sci-btn:hover{border-color:var(--border-h);color:var(--accent)}
+.sci-btn.op{color:var(--accent)}
+.sci-btn.eq{background:linear-gradient(135deg,var(--accent),var(--accent-h));color:#04101c;grid-column:span 2}
+.sci-btn.clr{color:var(--accent-r)}
+
+/* Resistor visual */
+.resistor-body{
+  display:flex;align-items:center;gap:2px;height:52px;background:linear-gradient(180deg,#d9c39a,#c2a877);
+  border-radius:26px;padding:0 26px;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.35);
+}
+.resistor-body::before,.resistor-body::after{content:'';position:absolute;top:50%;transform:translateY(-50%);width:34px;height:6px;background:#8a8a8a}
+.resistor-body::before{right:-34px}
+.resistor-body::after{left:-34px}
+.resistor-band{width:12px;height:100%}
+.res-select-wrap{display:flex;flex-direction:column;gap:6px}
+.res-swatch{width:16px;height:16px;border-radius:3px;display:inline-block;vertical-align:middle;margin-left:6px;border:1px solid rgba(255,255,255,.25)}
+</style>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   SHARED HELPERS: navigation + subtabs
+   ════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.nav-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.tool-panel').forEach(function(p){ p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('tool-' + btn.dataset.tool).classList.add('active');
+  });
+});
+function switchSubtab(group, id){
+  var groupEl = document.querySelector('[data-sub="'+id+'"]').closest('.tool-panel');
+  groupEl.querySelectorAll('.subtab-btn').forEach(function(b){ b.classList.remove('active'); });
+  groupEl.querySelectorAll('.subpanel').forEach(function(p){ p.classList.remove('active'); });
+  groupEl.querySelector('[data-sub="'+id+'"]').classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+/* ════════════════════════════════════════════════════════════
+   BOOLEAN EXPRESSION ENGINE (parser + evaluator + Quine-McCluskey)
+   شغالة على متغيرات حرف واحد بس: A,B,C,D...
+   ════════════════════════════════════════════════════════════ */
+function boolTokenize(expr){
+  var tokens = []; var i = 0; var s = expr.replace(/\s+/g,'');
+  while(i < s.length){
+    var c = s[i];
+    if(/[A-Za-z]/.test(c)){ tokens.push({t:'VAR', name:c.toUpperCase()}); i++; continue; }
+    if(c==='('){ tokens.push({t:'LP'}); i++; continue; }
+    if(c===')'){ tokens.push({t:'RP'}); i++; continue; }
+    if(c==="'"){ tokens.push({t:'PRIME'}); i++; continue; }
+    if(c==='!' || c==='~'){ tokens.push({t:'NOT'}); i++; continue; }
+    if(c==='.' || c==='*' || c==='&'){ tokens.push({t:'AND'}); i++; continue; }
+    if(c==='+' || c==='|'){ tokens.push({t:'OR'}); i++; continue; }
+    if(c==='^'){ tokens.push({t:'XOR'}); i++; continue; }
+    throw new Error("رمز غير مفهوم: '" + c + "'");
+  }
+  return tokens;
+}
+function boolParse(tokens){
+  var pos = 0;
+  function peek(){ return tokens[pos]; }
+  function next(){ return tokens[pos++]; }
+  function startsUnary(tok){ return tok && (tok.t==='VAR'||tok.t==='NOT'||tok.t==='LP'); }
+  function parseOr(){ var n=parseXor(); while(peek()&&peek().t==='OR'){ next(); n={op:'OR',a:n,b:parseXor()}; } return n; }
+  function parseXor(){ var n=parseAnd(); while(peek()&&peek().t==='XOR'){ next(); n={op:'XOR',a:n,b:parseAnd()}; } return n; }
+  function parseAnd(){
+    var n = parseUnary();
+    while(true){
+      if(peek() && peek().t==='AND'){ next(); n={op:'AND',a:n,b:parseUnary()}; }
+      else if(startsUnary(peek())){ n={op:'AND',a:n,b:parseUnary()}; }
+      else break;
+    }
+    return n;
+  }
+  function parseUnary(){ if(peek()&&peek().t==='NOT'){ next(); return {op:'NOT',a:parseUnary()}; } return parsePostfix(); }
+  function parsePostfix(){ var n=parsePrimary(); while(peek()&&peek().t==='PRIME'){ next(); n={op:'NOT',a:n}; } return n; }
+  function parsePrimary(){
+    var tok = next();
+    if(!tok) throw new Error('نهاية غير متوقعة للمعادلة');
+    if(tok.t==='VAR') return {op:'VAR', name:tok.name};
+    if(tok.t==='LP'){ var n=parseOr(); if(!peek()||peek().t!=='RP') throw new Error('في قوس ناقص )'); next(); return n; }
+    throw new Error('في رمز مش متوقع في المعادلة');
+  }
+  var result = parseOr();
+  if(pos !== tokens.length) throw new Error('في رموز زيادة في آخر المعادلة');
+  return result;
+}
+function boolGetVars(ast, set){
+  set = set || [];
+  if(ast.op==='VAR'){ if(set.indexOf(ast.name)===-1) set.push(ast.name); }
+  else if(ast.op==='NOT'){ boolGetVars(ast.a,set); }
+  else { boolGetVars(ast.a,set); boolGetVars(ast.b,set); }
+  return set;
+}
+function boolEval(ast, env){
+  switch(ast.op){
+    case 'VAR': return env[ast.name];
+    case 'NOT': return boolEval(ast.a,env)?0:1;
+    case 'AND': return (boolEval(ast.a,env) && boolEval(ast.b,env))?1:0;
+    case 'OR':  return (boolEval(ast.a,env) || boolEval(ast.b,env))?1:0;
+    case 'XOR': return (boolEval(ast.a,env) ^ boolEval(ast.b,env))?1:0;
+  }
+}
+function boolCompile(exprStr){
+  var tokens = boolTokenize(exprStr);
+  var ast = boolParse(tokens);
+  var vars = boolGetVars(ast).sort();
+  return {ast:ast, vars:vars};
+}
+function boolBuildTruthTable(exprStr){
+  var c = boolCompile(exprStr);
+  var n = c.vars.length;
+  if(n===0) throw new Error('محتاج تكتب متغير واحد على الأقل (زي A أو B)');
+  if(n>8) throw new Error('عدد المتغيرات كبير جدًا (الحد الأقصى 8)');
+  var rows = [];
+  for(var i=0;i<Math.pow(2,n);i++){
+    var env = {};
+    for(var b=0;b<n;b++) env[c.vars[b]] = (i >> (n-1-b)) & 1;
+    rows.push({env:env, out:boolEval(c.ast, env)});
+  }
+  return {vars:c.vars, rows:rows};
+}
+
+/* ---- Quine-McCluskey minimizer ---- */
+function qmMinimize(numVars, minterms, dontcares){
+  dontcares = dontcares || [];
+  if(minterms.length===0) return {terms:[], zero:true};
+  if(minterms.length + dontcares.length >= Math.pow(2,numVars) && minterms.length===Math.pow(2,numVars)) return {terms:[], allOnes:true};
+
+  var allTerms = minterms.concat(dontcares);
+  function toBits(num){ return num.toString(2).padStart(numVars,'0'); }
+  function countOnes(bits){ var c=0; for(var i=0;i<bits.length;i++) if(bits[i]==='1') c++; return c; }
+
+  var groups = {};
+  allTerms.forEach(function(m){
+    var bits = toBits(m); var ones = countOnes(bits);
+    groups[ones] = groups[ones] || [];
+    groups[ones].push({bits:bits, mints:[m], used:false});
+  });
+
+  var primeImplicants = [];
+  var currentGroups = groups;
+  while(true){
+    var keys = Object.keys(currentGroups).map(Number).sort(function(a,b){return a-b;});
+    var nextGroups = {}; var anyCombined = false; var combinedSet = {};
+    for(var k=0;k<keys.length-1;k++){
+      var groupA = currentGroups[keys[k]]||[], groupB = currentGroups[keys[k+1]]||[];
+      for(var a=0;a<groupA.length;a++){
+        for(var b=0;b<groupB.length;b++){
+          var ba=groupA[a].bits, bb=groupB[b].bits, diffPos=-1, diffCount=0;
+          for(var p=0;p<numVars;p++){ if(ba[p]!==bb[p]){ diffCount++; diffPos=p; } }
+          if(diffCount===1){
+            var newBits = ba.substring(0,diffPos)+'-'+ba.substring(diffPos+1);
+            var mints = groupA[a].mints.concat(groupB[b].mints).filter(function(v,i,arr){return arr.indexOf(v)===i;});
+            groupA[a].used = true; groupB[b].used = true; anyCombined = true;
+            var dashOnes=0; for(var q=0;q<newBits.length;q++) if(newBits[q]==='1') dashOnes++;
+            nextGroups[dashOnes] = nextGroups[dashOnes]||[];
+            if(!combinedSet[newBits]){ combinedSet[newBits]=true; nextGroups[dashOnes].push({bits:newBits,mints:mints,used:false}); }
+          }
+        }
+      }
+    }
+    keys.forEach(function(kk){
+      (currentGroups[kk]||[]).forEach(function(term){
+        if(!term.used && !primeImplicants.some(function(pi){return pi.bits===term.bits;})) primeImplicants.push(term);
+      });
+    });
+    if(!anyCombined) break;
+    currentGroups = nextGroups;
+  }
+  var uniquePI = []; var seen = {};
+  primeImplicants.forEach(function(pi){ if(!seen[pi.bits]){ seen[pi.bits]=true; uniquePI.push(pi); } });
+
+  var chart = {}; minterms.forEach(function(m){ chart[m]=[]; });
+  uniquePI.forEach(function(pi,idx){ pi.mints.forEach(function(m){ if(chart.hasOwnProperty(m)) chart[m].push(idx); }); });
+
+  var essential = {};
+  Object.keys(chart).forEach(function(m){ if(chart[m].length===1) essential[chart[m][0]]=true; });
+  var selected = Object.keys(essential).map(Number);
+  var covered = {};
+  selected.forEach(function(idx){ uniquePI[idx].mints.forEach(function(m){ if(chart.hasOwnProperty(m)) covered[m]=true; }); });
+  var remaining = minterms.filter(function(m){ return !covered[m]; });
+  while(remaining.length>0){
+    var bestIdx=-1, bestCount=-1;
+    uniquePI.forEach(function(pi,idx){
+      if(selected.indexOf(idx)!==-1) return;
+      var cnt = pi.mints.filter(function(m){ return remaining.indexOf(m)!==-1; }).length;
+      if(cnt>bestCount){ bestCount=cnt; bestIdx=idx; }
+    });
+    if(bestIdx===-1||bestCount===0) break;
+    selected.push(bestIdx);
+    uniquePI[bestIdx].mints.forEach(function(m){ var ri=remaining.indexOf(m); if(ri!==-1) remaining.splice(ri,1); });
+  }
+  return {terms: selected.map(function(idx){return uniquePI[idx];})};
+}
+function qmTermToExpr(term, varNames){
+  var lits = [];
+  for(var i=0;i<term.bits.length;i++){
+    if(term.bits[i]==='0') lits.push(varNames[i]+"'");
+    else if(term.bits[i]==='1') lits.push(varNames[i]);
+  }
+  return lits.length? lits.join('') : '1';
+}
+function qmToExpr(result, varNames){
+  if(result.allOnes) return '1';
+  if(result.zero || result.terms.length===0) return '0';
+  return result.terms.map(function(t){ return qmTermToExpr(t, varNames); }).join(' + ');
+}
+
+/* ════════════════════════════════════════════════════════════
+   1) BASE CONVERTER
+   ════════════════════════════════════════════════════════════ */
+function bcParseBase(str, base){
+  str = str.trim(); if(str==='') return null;
+  var neg=false; if(str[0]==='-'){ neg=true; str=str.slice(1); }
+  if(str==='') return null;
+  var digits = '0123456789ABCDEF'.slice(0, base);
+  var val = 0n; var b = BigInt(base);
+  for(var i=0;i<str.length;i++){
+    var d = digits.indexOf(str[i].toUpperCase());
+    if(d===-1) return null;
+    val = val*b + BigInt(d);
+  }
+  return neg? -val : val;
+}
+function bcToBase(val, base){
+  if(val===0n) return '0';
+  var neg = val<0n; if(neg) val=-val;
+  var digits='0123456789ABCDEF'; var s=''; var b=BigInt(base);
+  while(val>0n){ s = digits[Number(val % b)] + s; val = val / b; }
+  return (neg?'-':'')+s;
+}
+var bcFields = {bin:2, oct:8, dec:10, hex:16};
+function bcOnInput(source){
+  var el = document.getElementById('bc-'+source);
+  var errBox = document.getElementById('bc-error');
+  errBox.innerHTML = '';
+  if(el.value.trim()===''){
+    Object.keys(bcFields).forEach(function(k){ if(k!==source) document.getElementById('bc-'+k).value=''; });
+    return;
+  }
+  var val = bcParseBase(el.value, bcFields[source]);
+  if(val===null){
+    errBox.innerHTML = '<div class="error-box">في رقم مش صحيح لنظام العد ده</div>';
+    return;
+  }
+  Object.keys(bcFields).forEach(function(k){
+    if(k===source) return;
+    document.getElementById('bc-'+k).value = bcToBase(val, bcFields[k]);
+  });
+}
+function bcClear(){
+  Object.keys(bcFields).forEach(function(k){ document.getElementById('bc-'+k).value=''; });
+  document.getElementById('bc-error').innerHTML='';
+}
+
+/* ════════════════════════════════════════════════════════════
+   2) K-MAP SOLVER
+   ════════════════════════════════════════════════════════════ */
+var kmapState = {}; // cellIndex(minterm) -> 0/1/2(X)
+var kmapLayouts = {
+  2: {rowVar:['A'], colVar:['B'], rows:['0','1'], cols:['0','1']},
+  3: {rowVar:['A'], colVar:['B','C'], rows:['0','1'], cols:['00','01','11','10']},
+  4: {rowVar:['A','B'], colVar:['C','D'], rows:['00','01','11','10'], cols:['00','01','11','10']}
+};
+function kmapCellMinterm(numVars, rowBits, colBits){
+  if(numVars===2) return parseInt(rowBits+colBits,2);
+  if(numVars===3) return parseInt(rowBits+colBits,2);
+  return parseInt(rowBits+colBits,2);
+}
+function kmapBuildGrid(){
+  var numVars = parseInt(document.getElementById('km-numvars').value,10);
+  var layout = kmapLayouts[numVars];
+  kmapState = {};
+  var total = Math.pow(2,numVars);
+  for(var i=0;i<total;i++) kmapState[i]=0;
+
+  var vars = numVars===2? ['A','B'] : numVars===3? ['A','B','C'] : ['A','B','C','D'];
+  var html = '<div class="tbl-wrap"><table><thead><tr><th>'+vars.join('')+'</th>';
+  layout.cols.forEach(function(c){ html += '<th>'+layout.colVar.join('')+'='+c+'</th>'; });
+  html += '</tr></thead><tbody>';
+  layout.rows.forEach(function(r){
+    html += '<tr><th>'+layout.rowVar.join('')+'='+r+'</th>';
+    layout.cols.forEach(function(c){
+      var m = kmapCellMinterm(numVars, r, c);
+      html += '<td style="cursor:pointer;font-weight:800;font-size:16px;padding:14px" id="km-cell-'+m+'" onclick="kmapToggleCell('+m+')">0</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  document.getElementById('kmap-grid-wrap').innerHTML = html;
+  document.getElementById('kmap-result').innerHTML = '';
+}
+function kmapToggleCell(m){
+  kmapState[m] = (kmapState[m]+1) % 3; // 0 -> 1 -> 2(X) -> 0
+  var el = document.getElementById('km-cell-'+m);
+  var labels = ['0','1','X'];
+  var colors = ['var(--text-dim)','var(--accent)','var(--accent-y)'];
+  el.textContent = labels[kmapState[m]];
+  el.style.color = colors[kmapState[m]];
+}
+function kmapReset(){
+  Object.keys(kmapState).forEach(function(m){ kmapState[m]=0; });
+  document.querySelectorAll('[id^="km-cell-"]').forEach(function(el){ el.textContent='0'; el.style.color='var(--text-dim)'; });
+  document.getElementById('kmap-result').innerHTML='';
+}
+function kmapSolve(){
+  var numVars = parseInt(document.getElementById('km-numvars').value,10);
+  var vars = numVars===2? ['A','B'] : numVars===3? ['A','B','C'] : ['A','B','C','D'];
+  var minterms=[], dontcares=[];
+  Object.keys(kmapState).forEach(function(k){
+    var v = kmapState[k];
+    if(v===1) minterms.push(parseInt(k,10));
+    else if(v===2) dontcares.push(parseInt(k,10));
+  });
+  var resDiv = document.getElementById('kmap-result');
+  if(minterms.length===0){
+    resDiv.innerHTML = '<div class="result-box"><div class="rlabel">Result</div><div class="rvalue">F = 0</div></div>';
+    return;
+  }
+  var result = qmMinimize(numVars, minterms, dontcares);
+  var expr = qmToExpr(result, vars);
+  var termsHtml = (result.terms||[]).map(function(t){ return '<span style="background:var(--bg-secondary);padding:4px 10px;border-radius:6px;margin-inline-end:6px;display:inline-block;margin-top:6px;color:var(--accent-g)">'+qmTermToExpr(t,vars)+'</span>'; }).join('');
+  resDiv.innerHTML =
+    '<div class="result-box"><div class="rlabel">Simplified Expression (SOP)</div><div class="rvalue">F = '+expr+'</div></div>'+
+    (termsHtml? '<div style="margin-top:10px"><div class="hint" style="margin-bottom:4px">المجموعات (Prime Implicants) المستخدمة:</div>'+termsHtml+'</div>' : '');
+}
+kmapBuildGrid();
+
+/* ════════════════════════════════════════════════════════════
+   3) TRUTH TABLE (from-expr & to-expr)
+   ════════════════════════════════════════════════════════════ */
+function ttFromExpr(){
+  var exprStr = document.getElementById('tt-expr').value.trim();
+  var resDiv = document.getElementById('tt-fromexpr-result');
+  if(!exprStr){ resDiv.innerHTML = '<div class="error-box">اكتب معادلة الأول</div>'; return; }
+  try{
+    var tt = boolBuildTruthTable(exprStr);
+    var html = '<div class="tbl-wrap" style="margin-top:16px"><table><thead><tr>';
+    tt.vars.forEach(function(v){ html += '<th>'+v+'</th>'; });
+    html += '<th style="color:var(--accent-g)">Output</th></tr></thead><tbody>';
+    tt.rows.forEach(function(row){
+      html += '<tr>';
+      tt.vars.forEach(function(v){ html += '<td>'+row.env[v]+'</td>'; });
+      html += '<td style="font-weight:800;color:'+(row.out? 'var(--accent-g)':'var(--text-dim)')+'">'+row.out+'</td></tr>';
+    });
+    html += '</tbody></table></div>';
+    resDiv.innerHTML = html;
+  }catch(e){
+    resDiv.innerHTML = '<div class="error-box">'+e.message+'</div>';
+  }
+}
+
+var tt2State = {};
+function tt2BuildTable(){
+  var numVars = parseInt(document.getElementById('tt2-numvars').value,10);
+  var vars = ['A','B','C','D','E'].slice(0,numVars);
+  tt2State = {};
+  var total = Math.pow(2,numVars);
+  var html = '<div class="tbl-wrap"><table><thead><tr>';
+  vars.forEach(function(v){ html += '<th>'+v+'</th>'; });
+  html += '<th>Output</th></tr></thead><tbody>';
+  for(var i=0;i<total;i++){
+    tt2State[i] = 0;
+    html += '<tr>';
+    for(var b=0;b<numVars;b++){ html += '<td>'+((i>>(numVars-1-b))&1)+'</td>'; }
+    html += '<td style="cursor:pointer;font-weight:800" id="tt2-out-'+i+'" onclick="tt2Toggle('+i+')">0</td></tr>';
+  }
+  html += '</tbody></table></div>';
+  document.getElementById('tt2-table-wrap').innerHTML = html;
+  document.getElementById('tt2-result').innerHTML = '';
+}
+function tt2Toggle(i){
+  tt2State[i] = (tt2State[i]+1)%3;
+  var labels=['0','1','X']; var colors=['var(--text-dim)','var(--accent)','var(--accent-y)'];
+  var el = document.getElementById('tt2-out-'+i);
+  el.textContent = labels[tt2State[i]];
+  el.style.color = colors[tt2State[i]];
+}
+function tt2Solve(){
+  var numVars = parseInt(document.getElementById('tt2-numvars').value,10);
+  var vars = ['A','B','C','D','E'].slice(0,numVars);
+  var minterms=[], dontcares=[];
+  Object.keys(tt2State).forEach(function(k){
+    var v = tt2State[k];
+    if(v===1) minterms.push(parseInt(k,10));
+    else if(v===2) dontcares.push(parseInt(k,10));
+  });
+  var resDiv = document.getElementById('tt2-result');
+  if(minterms.length===0){ resDiv.innerHTML = '<div class="result-box"><div class="rlabel">Result</div><div class="rvalue">F = 0</div></div>'; return; }
+  var result = qmMinimize(numVars, minterms, dontcares);
+  var expr = qmToExpr(result, vars);
+  resDiv.innerHTML = '<div class="result-box"><div class="rlabel">Simplified Expression</div><div class="rvalue">F = '+expr+'</div></div>';
+}
+tt2BuildTable();
+
+/* ════════════════════════════════════════════════════════════
+   4) BOOLEAN EXPRESSION EVALUATOR
+   ════════════════════════════════════════════════════════════ */
+var beVarState = {};
+function beDetectVars(){
+  var exprStr = document.getElementById('be-expr').value.trim();
+  var wrap = document.getElementById('be-vars-wrap');
+  document.getElementById('be-result').innerHTML='';
+  if(!exprStr){ wrap.innerHTML=''; return; }
+  try{
+    var tokens = boolTokenize(exprStr);
+    var ast = boolParse(tokens);
+    var vars = boolGetVars(ast).sort();
+    var html = '<div class="field-row4" style="margin-top:14px">';
+    vars.forEach(function(v){
+      if(!(v in beVarState)) beVarState[v]=0;
+      html += '<div class="field"><label>'+v+'</label>'+
+        '<select onchange="beVarState[\''+v+'\']=parseInt(this.value)">'+
+        '<option value="0"'+(beVarState[v]===0?' selected':'')+'>0</option>'+
+        '<option value="1"'+(beVarState[v]===1?' selected':'')+'>1</option>'+
+        '</select></div>';
+    });
+    html += '</div>';
+    wrap.innerHTML = html;
+  }catch(e){ wrap.innerHTML = '<div class="error-box">'+e.message+'</div>'; }
+}
+function beEvaluate(){
+  var exprStr = document.getElementById('be-expr').value.trim();
+  var resDiv = document.getElementById('be-result');
+  if(!exprStr){ resDiv.innerHTML='<div class="error-box">اكتب معادلة الأول</div>'; return; }
+  try{
+    var tokens = boolTokenize(exprStr);
+    var ast = boolParse(tokens);
+    var vars = boolGetVars(ast).sort();
+    var env = {};
+    vars.forEach(function(v){ env[v] = beVarState[v]||0; });
+    var out = boolEval(ast, env);
+    resDiv.innerHTML = '<div class="result-box"><div class="rlabel">Result</div><div class="rvalue" style="color:'+(out? 'var(--accent-g)':'var(--accent-r)')+'">F = '+out+' ('+(out?'TRUE':'FALSE')+')</div></div>';
+  }catch(e){ resDiv.innerHTML = '<div class="error-box">'+e.message+'</div>'; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   5) RESISTOR COLOR CODE CALCULATOR
+   ════════════════════════════════════════════════════════════ */
+var RC_DIGIT_COLORS = [
+  {name:'black', ar:'أسود', hex:'#1a1a1a', val:0},
+  {name:'brown', ar:'بني', hex:'#8b4513', val:1},
+  {name:'red', ar:'أحمر', hex:'#e53935', val:2},
+  {name:'orange', ar:'برتقالي', hex:'#f4841a', val:3},
+  {name:'yellow', ar:'أصفر', hex:'#fdd835', val:4},
+  {name:'green', ar:'أخضر', hex:'#43a047', val:5},
+  {name:'blue', ar:'أزرق', hex:'#1e88e5', val:6},
+  {name:'violet', ar:'بنفسجي', hex:'#8e24aa', val:7},
+  {name:'grey', ar:'رمادي', hex:'#9e9e9e', val:8},
+  {name:'white', ar:'أبيض', hex:'#f5f5f5', val:9}
+];
+var RC_MULT_COLORS = RC_DIGIT_COLORS.concat([
+  {name:'gold', ar:'ذهبي', hex:'#d4af37', val:-1},
+  {name:'silver', ar:'فضي', hex:'#c0c0c0', val:-2}
+]);
+var RC_TOL_COLORS = [
+  {name:'brown', ar:'بني (±1%)', hex:'#8b4513', tol:'±1%'},
+  {name:'red', ar:'أحمر (±2%)', hex:'#e53935', tol:'±2%'},
+  {name:'green', ar:'أخضر (±0.5%)', hex:'#43a047', tol:'±0.5%'},
+  {name:'blue', ar:'أزرق (±0.25%)', hex:'#1e88e5', tol:'±0.25%'},
+  {name:'gold', ar:'ذهبي (±5%)', hex:'#d4af37', tol:'±5%'},
+  {name:'silver', ar:'فضي (±10%)', hex:'#c0c0c0', tol:'±10%'}
+];
+function rcColorOptions(list, selectedIdx){
+  return list.map(function(c,i){
+    return '<option value="'+i+'"'+(i===selectedIdx?' selected':'')+'>'+c.ar+'</option>';
+  }).join('');
+}
+function rcBuildInputs(){
+  var n = parseInt(document.getElementById('rc-bandcount').value,10);
+  var wrap = document.getElementById('rc-inputs');
+  var html = '';
+  html += '<div class="field"><label>الحلقة 1 (رقم)</label><select id="rc-b1" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,1)+'</select></div>';
+  html += '<div class="field"><label>الحلقة 2 (رقم)</label><select id="rc-b2" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,0)+'</select></div>';
+  if(n===5){
+    html += '<div class="field"><label>الحلقة 3 (رقم)</label><select id="rc-b3" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,0)+'</select></div>';
+  }
+  html += '<div class="field"><label>حلقة المضاعِف (Multiplier)</label><select id="rc-mult" onchange="rcUpdateVisual()">'+rcColorOptions(RC_MULT_COLORS,2)+'</select></div>';
+  html += '<div class="field"><label>حلقة التفاوت (Tolerance)</label><select id="rc-tol" onchange="rcUpdateVisual()">'+rcColorOptions(RC_TOL_COLORS,4)+'</select></div>';
+  wrap.innerHTML = html;
+  rcUpdateVisual();
+}
+function rcUpdateVisual(){
+  var n = parseInt(document.getElementById('rc-bandcount').value,10);
+  var ids = n===5? ['rc-b1','rc-b2','rc-b3','rc-mult','rc-tol'] : ['rc-b1','rc-b2','rc-mult','rc-tol'];
+  var colorsSrc = n===5? [RC_DIGIT_COLORS,RC_DIGIT_COLORS,RC_DIGIT_COLORS,RC_MULT_COLORS,RC_TOL_COLORS] : [RC_DIGIT_COLORS,RC_DIGIT_COLORS,RC_MULT_COLORS,RC_TOL_COLORS];
+  var bands = ids.map(function(id,i){
+    var sel = document.getElementById(id);
+    if(!sel) return '#333';
+    return colorsSrc[i][parseInt(sel.value,10)].hex;
+  });
+  var bandsHtml = bands.map(function(hex,i){
+    var margin = (i===bands.length-1)? 'margin-inline-start:10px' : '';
+    return '<div class="resistor-band" style="background:'+hex+';'+margin+'"></div>';
+  }).join('');
+  document.getElementById('rc-visual').innerHTML = '<div class="resistor-body">'+bandsHtml+'</div>';
+}
+function rcFormatOhms(v){
+  if(v>=1e9) return (v/1e9).toLocaleString('en-US',{maximumFractionDigits:3})+' GΩ';
+  if(v>=1e6) return (v/1e6).toLocaleString('en-US',{maximumFractionDigits:3})+' MΩ';
+  if(v>=1e3) return (v/1e3).toLocaleString('en-US',{maximumFractionDigits:3})+' kΩ';
+  return v.toLocaleString('en-US',{maximumFractionDigits:3})+' Ω';
+}
+function rcCalculate(){
+  var n = parseInt(document.getElementById('rc-bandcount').value,10);
+  var d1 = RC_DIGIT_COLORS[parseInt(document.getElementById('rc-b1').value,10)].val;
+  var d2 = RC_DIGIT_COLORS[parseInt(document.getElementById('rc-b2').value,10)].val;
+  var digitsVal;
+  if(n===5){
+    var d3 = RC_DIGIT_COLORS[parseInt(document.getElementById('rc-b3').value,10)].val;
+    digitsVal = d1*100 + d2*10 + d3;
+  } else {
+    digitsVal = d1*10 + d2;
+  }
+  var multIdx = parseInt(document.getElementById('rc-mult').value,10);
+  var multColor = RC_MULT_COLORS[multIdx];
+  var multiplier = multColor.val>=0 ? Math.pow(10,multColor.val) : (multColor.name==='gold'? 0.1 : 0.01);
+  var tol = RC_TOL_COLORS[parseInt(document.getElementById('rc-tol').value,10)].tol;
+  var ohms = digitsVal * multiplier;
+  document.getElementById('rc-result').innerHTML =
+    '<div class="result-box"><div class="rlabel">Resistance</div><div class="rvalue">'+rcFormatOhms(ohms)+' <span style="font-size:14px;color:var(--text-muted)">'+tol+'</span></div></div>';
+}
+rcBuildInputs();
+
+/* ════════════════════════════════════════════════════════════
+   6) SUBNET CALCULATOR SUITE
+   ════════════════════════════════════════════════════════════ */
+function ipToInt(ip){
+  var parts = ip.trim().split('.');
+  if(parts.length!==4) return null;
+  var nums = parts.map(Number);
+  if(nums.some(function(p){ return isNaN(p) || p<0 || p>255 || !Number.isInteger(p); })) return null;
+  return ((nums[0]<<24)>>>0) + (nums[1]<<16) + (nums[2]<<8) + nums[3];
+}
+function intToIp(int){ return [(int>>>24)&255,(int>>>16)&255,(int>>>8)&255,int&255].join('.'); }
+function cidrToMaskInt(cidr){ return cidr===0? 0 : (0xFFFFFFFF << (32-cidr))>>>0; }
+function ipClass(firstOctet){
+  if(firstOctet<128) return 'A'; if(firstOctet<192) return 'B'; if(firstOctet<224) return 'C';
+  if(firstOctet<240) return 'D (Multicast)'; return 'E (Research)';
+}
+function subnetCalculate(){
+  var ip = document.getElementById('sn-ip').value.trim();
+  var cidr = parseInt(document.getElementById('sn-cidr').value,10);
+  var resDiv = document.getElementById('sn-result');
+  var ipInt = ipToInt(ip);
+  if(ipInt===null){ resDiv.innerHTML = '<div class="error-box">اكتب IP صحيح زي 192.168.1.10</div>'; return; }
+  if(isNaN(cidr) || cidr<0 || cidr>32){ resDiv.innerHTML = '<div class="error-box">اكتب CIDR من 0 لـ 32</div>'; return; }
+  var maskInt = cidrToMaskInt(cidr);
+  var network = (ipInt & maskInt)>>>0;
+  var broadcast = (network | (~maskInt>>>0))>>>0;
+  var totalHosts = Math.pow(2,32-cidr);
+  var usable = cidr>=31? 0 : totalHosts-2;
+  var firstHost = cidr>=31? network : (network+1)>>>0;
+  var lastHost = cidr>=31? broadcast : (broadcast-1)>>>0;
+  resDiv.innerHTML =
+    '<div class="result-grid">'+
+    '<div class="result-item"><div class="rk">Network Address</div><div class="rv">'+intToIp(network)+'/'+cidr+'</div></div>'+
+    '<div class="result-item"><div class="rk">Broadcast Address</div><div class="rv">'+intToIp(broadcast)+'</div></div>'+
+    '<div class="result-item"><div class="rk">Subnet Mask</div><div class="rv">'+intToIp(maskInt)+'</div></div>'+
+    '<div class="result-item"><div class="rk">Wildcard Mask</div><div class="rv">'+intToIp((~maskInt)>>>0)+'</div></div>'+
+    '<div class="result-item"><div class="rk">First Usable Host</div><div class="rv">'+intToIp(firstHost)+'</div></div>'+
+    '<div class="result-item"><div class="rk">Last Usable Host</div><div class="rv">'+intToIp(lastHost)+'</div></div>'+
+    '<div class="result-item"><div class="rk">Usable Hosts</div><div class="rv">'+usable.toLocaleString()+'</div></div>'+
+    '<div class="result-item"><div class="rk">Total Addresses</div><div class="rv">'+totalHosts.toLocaleString()+'</div></div>'+
+    '<div class="result-item"><div class="rk">IP Class</div><div class="rv">'+ipClass((ipInt>>>24)&255)+'</div></div>'+
+    '</div>';
+}
+
+/* ---- Binary Calculator ---- */
+function bcalcParse(s){
+  s = s.trim();
+  if(/^[01]+$/.test(s)) return {val: parseInt(s,2), wasBinary:true};
+  if(/^-?\d+$/.test(s)) return {val: parseInt(s,10), wasBinary:false};
+  return null;
+}
+function binCalcRun(){
+  var a = bcalcParse(document.getElementById('bcalc-a').value);
+  var b = bcalcParse(document.getElementById('bcalc-b').value);
+  var op = document.getElementById('bcalc-op').value;
+  var resDiv = document.getElementById('bcalc-result');
+  if(!a || !b){ resDiv.innerHTML = '<div class="error-box">اكتب رقمين صحيحين (عشري أو ثنائي)</div>'; return; }
+  var result;
+  switch(op){
+    case 'add': result = a.val + b.val; break;
+    case 'sub': result = a.val - b.val; break;
+    case 'mul': result = a.val * b.val; break;
+    case 'and': result = a.val & b.val; break;
+    case 'or':  result = a.val | b.val; break;
+    case 'xor': result = a.val ^ b.val; break;
+  }
+  resDiv.innerHTML =
+    '<div class="result-grid">'+
+    '<div class="result-item"><div class="rk">Decimal</div><div class="rv">'+result+'</div></div>'+
+    '<div class="result-item"><div class="rk">Binary</div><div class="rv">'+(result<0? '-'+Math.abs(result).toString(2) : result.toString(2))+'</div></div>'+
+    '<div class="result-item"><div class="rk">Hex</div><div class="rv">'+(result<0? '-'+Math.abs(result).toString(16).toUpperCase() : result.toString(16).toUpperCase())+'</div></div>'+
+    '</div>';
+}
+
+/* ---- Address / VLSM helper ---- */
+function addrCalcRun(){
+  var net = document.getElementById('addr-net').value.trim();
+  var cidr = parseInt(document.getElementById('addr-cidr').value,10);
+  var subnetsNeeded = parseInt(document.getElementById('addr-subnets').value,10);
+  var hostsNeeded = parseInt(document.getElementById('addr-hosts').value,10);
+  var resDiv = document.getElementById('addr-result');
+  var netInt = ipToInt(net);
+  if(netInt===null || isNaN(cidr) || cidr<0 || cidr>30){ resDiv.innerHTML = '<div class="error-box">اكتب شبكة وCIDR صحيحين</div>'; return; }
+
+  var newCidr;
+  if(!isNaN(hostsNeeded) && hostsNeeded>0){
+    var bitsForHosts = Math.ceil(Math.log2(hostsNeeded+2));
+    newCidr = 32 - bitsForHosts;
+  } else if(!isNaN(subnetsNeeded) && subnetsNeeded>0){
+    var bitsForSubnets = Math.ceil(Math.log2(subnetsNeeded));
+    newCidr = cidr + bitsForSubnets;
+  } else {
+    resDiv.innerHTML = '<div class="error-box">اكتب عدد السبنتات أو عدد الأجهزة المطلوبة</div>';
+    return;
+  }
+  if(newCidr <= cidr || newCidr>30){
+    resDiv.innerHTML = '<div class="error-box">مينفعش نعمل الحسبة دي بالأرقام اللي انت كاتبها (اتأكد إن عدد السبنتات/الأجهزة منطقي بالنسبة للشبكة الأساسية)</div>';
+    return;
+  }
+  var blockSize = Math.pow(2, 32-newCidr);
+  var totalAvailable = Math.pow(2, 32-cidr);
+  var numBlocks = Math.min(totalAvailable/blockSize, 16); // show max 16 rows
+  var baseNet = netInt & cidrToMaskInt(cidr);
+  var rows = '';
+  for(var i=0;i<numBlocks;i++){
+    var subNet = (baseNet + i*blockSize)>>>0;
+    var subBroadcast = (subNet + blockSize - 1)>>>0;
+    rows += '<tr><td>Subnet '+(i+1)+'</td><td>'+intToIp(subNet)+'/'+newCidr+'</td><td>'+intToIp((subNet+1)>>>0)+'</td><td>'+intToIp((subBroadcast-1)>>>0)+'</td><td>'+intToIp(subBroadcast)+'</td></tr>';
+  }
+  resDiv.innerHTML =
+    '<div class="result-box" style="margin-bottom:14px"><div class="rlabel">New Subnet Mask / Prefix</div><div class="rvalue">/'+newCidr+' — '+intToIp(cidrToMaskInt(newCidr))+' — '+(blockSize-2)+' host لكل سبنت</div></div>'+
+    '<div class="tbl-wrap"><table><thead><tr><th>#</th><th>Network</th><th>First Host</th><th>Last Host</th><th>Broadcast</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    (Math.floor(totalAvailable/blockSize) > 16 ? '<div class="hint">تم عرض أول 16 سبنت بس من إجمالي '+Math.floor(totalAvailable/blockSize)+'</div>' : '');
+}
+
+/* ---- IPv4 <-> Binary ---- */
+function ipToBinLive(){
+  var ip = document.getElementById('ipbin-ip').value.trim();
+  var errBox = document.getElementById('ipbin-error');
+  if(ip===''){ errBox.innerHTML=''; return; }
+  var ipInt = ipToInt(ip);
+  if(ipInt===null){ errBox.innerHTML = '<div class="error-box">IP مش صحيح</div>'; return; }
+  errBox.innerHTML = '';
+  var octets = [(ipInt>>>24)&255,(ipInt>>>16)&255,(ipInt>>>8)&255,ipInt&255];
+  document.getElementById('ipbin-bin').value = octets.map(function(o){ return o.toString(2).padStart(8,'0'); }).join('.');
+}
+function binToIpLive(){
+  var bin = document.getElementById('ipbin-bin').value.trim().replace(/[.\s]/g,'');
+  var errBox = document.getElementById('ipbin-error');
+  if(bin===''){ errBox.innerHTML=''; return; }
+  if(!/^[01]+$/.test(bin) || bin.length!==32){
+    errBox.innerHTML = '<div class="error-box">لازم يكون 32 بت بالظبط (0 و 1 بس)</div>';
+    return;
+  }
+  errBox.innerHTML = '';
+  var octets = [];
+  for(var i=0;i<4;i++) octets.push(parseInt(bin.substr(i*8,8),2));
+  document.getElementById('ipbin-ip').value = octets.join('.');
+}
+
+/* ════════════════════════════════════════════════════════════
+   7) MATRIX CALCULATOR (mathjs)
+   ════════════════════════════════════════════════════════════ */
+function mxBuildGrid(rows, cols, gridId){
+  var html = '<div style="display:inline-grid;grid-template-columns:repeat('+cols+',64px);gap:6px;margin-top:8px">';
+  for(var r=0;r<rows;r++){
+    for(var c=0;c<cols;c++){
+      html += '<input type="text" value="0" id="'+gridId+'-'+r+'-'+c+'" style="width:64px;text-align:center;background:var(--bg-secondary);border:1px solid var(--border);border-radius:6px;padding:8px 4px;font-family:var(--font-en)"/>';
+    }
+  }
+  html += '</div>';
+  return html;
+}
+function mxBuildGrids(){
+  var ar = parseInt(document.getElementById('mx-a-rows').value,10)||1;
+  var ac = parseInt(document.getElementById('mx-a-cols').value,10)||1;
+  var br = parseInt(document.getElementById('mx-b-rows').value,10)||1;
+  var bc = parseInt(document.getElementById('mx-b-cols').value,10)||1;
+  document.getElementById('mx-a-grid').innerHTML = mxBuildGrid(ar,ac,'mxa');
+  document.getElementById('mx-b-grid').innerHTML = mxBuildGrid(br,bc,'mxb');
+}
+function mxReadMatrix(prefix, rows, cols){
+  var m = [];
+  for(var r=0;r<rows;r++){
+    var row = [];
+    for(var c=0;c<cols;c++){
+      var v = parseFloat(document.getElementById(prefix+'-'+r+'-'+c).value);
+      row.push(isNaN(v)?0:v);
+    }
+    m.push(row);
+  }
+  return m;
+}
+function mxRenderResult(m){
+  if(Array.isArray(m)){
+    var rows = m.length, cols = Array.isArray(m[0])? m[0].length : 1;
+    var html = '<div class="tbl-wrap"><table><tbody>';
+    m.forEach(function(row){
+      html += '<tr>';
+      (Array.isArray(row)?row:[row]).forEach(function(v){
+        html += '<td>'+ (typeof v==='number'? +v.toFixed(4) : v) +'</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    return html;
+  }
+  return '<div class="result-box"><div class="rlabel">Result</div><div class="rvalue">'+ (typeof m==='number'? +m.toFixed(6) : m) +'</div></div>';
+}
+function mxOp(op){
+  var ar = parseInt(document.getElementById('mx-a-rows').value,10);
+  var ac = parseInt(document.getElementById('mx-a-cols').value,10);
+  var br = parseInt(document.getElementById('mx-b-rows').value,10);
+  var bc = parseInt(document.getElementById('mx-b-cols').value,10);
+  var A = mxReadMatrix('mxa', ar, ac);
+  var B = mxReadMatrix('mxb', br, bc);
+  var resDiv = document.getElementById('mx-result');
+  try{
+    var result;
+    switch(op){
+      case 'add':
+        if(ar!==br||ac!==bc) throw new Error('لازم A و B يكونوا بنفس الأبعاد عشان تجمعهم');
+        result = math.add(A,B); break;
+      case 'sub':
+        if(ar!==br||ac!==bc) throw new Error('لازم A و B يكونوا بنفس الأبعاد عشان تطرحهم');
+        result = math.subtract(A,B); break;
+      case 'mul':
+        if(ac!==br) throw new Error('عدد أعمدة A لازم يساوي عدد صفوف B عشان تضربهم');
+        result = math.multiply(A,B); break;
+      case 'transA': result = math.transpose(A); break;
+      case 'transB': result = math.transpose(B); break;
+      case 'detA':
+        if(ar!==ac) throw new Error('لازم تكون A مربعة عشان تحسب المحدد');
+        result = math.det(A); break;
+      case 'detB':
+        if(br!==bc) throw new Error('لازم تكون B مربعة عشان تحسب المحدد');
+        result = math.det(B); break;
+      case 'invA':
+        if(ar!==ac) throw new Error('لازم تكون A مربعة عشان تحسب المعكوس');
+        result = math.inv(A); break;
+      case 'invB':
+        if(br!==bc) throw new Error('لازم تكون B مربعة عشان تحسب المعكوس');
+        result = math.inv(B); break;
+    }
+    resDiv.innerHTML = mxRenderResult(result);
+  }catch(e){
+    resDiv.innerHTML = '<div class="error-box">'+e.message+'</div>';
+  }
+}
+mxBuildGrids();
+
+/* ════════════════════════════════════════════════════════════
+   8) SCIENTIFIC CALCULATOR (mathjs evaluate)
+   ════════════════════════════════════════════════════════════ */
+var sciExpr = '';
+var SCI_BUTTONS = [
+  ['(', ')', 'C', '⌫', '÷'],
+  ['sin', 'cos', 'tan', '√', '×'],
+  ['ln', 'log', 'x²', '^', '−'],
+  ['7','8','9','π','+'],
+  ['4','5','6','e',''],
+  ['1','2','3','0','.'],
+  ['%','!','ANS','=','']
+];
+function sciModeLabel(){}
+function sciBuildGrid(){
+  var html = '';
+  SCI_BUTTONS.forEach(function(row){
+    row.forEach(function(b){
+      if(b===''){ html += '<div></div>'; return; }
+      var cls = 'sci-btn';
+      if(b==='C') cls += ' clr';
+      if(b==='=') cls += ' eq';
+      if(['÷','×','−','+','^'].indexOf(b)!==-1) cls += ' op';
+      html += '<button class="'+cls+'" onclick="sciPress(\''+b.replace("'","\\'")+'\')">'+b+'</button>';
+    });
+  });
+  document.getElementById('sci-grid').innerHTML = html;
+}
+var sciLastAns = 0;
+function sciPress(b){
+  var disp = document.getElementById('sci-display');
+  switch(b){
+    case 'C': sciExpr=''; break;
+    case '⌫': sciExpr = sciExpr.slice(0,-1); break;
+    case '=':
+      try{
+        var isRad = document.getElementById('sci-rad-toggle').checked;
+        var evalExpr = sciExpr;
+        if(!isRad){
+          evalExpr = evalExpr.replace(/\b(sin|cos|tan)\(/g, function(m,fn){ return fn+'(pi/180*'; });
+        }
+        var val = math.evaluate(evalExpr);
+        sciLastAns = val;
+        if(typeof val === 'number'){
+          sciExpr = Number.isInteger(val) ? String(val) : String(+val.toFixed(10));
+        } else {
+          sciExpr = String(val);
+        }
+      }catch(e){ sciExpr = 'خطأ'; }
+      break;
+    case '÷': sciExpr += '/'; break;
+    case '×': sciExpr += '*'; break;
+    case '−': sciExpr += '-'; break;
+    case 'x²': sciExpr += '^2'; break;
+    case '√': sciExpr += 'sqrt('; break;
+    case 'ln': sciExpr += 'log('; break;
+    case 'log': sciExpr += 'log10('; break;
+    case 'π': sciExpr += 'pi'; break;
+    case 'e': sciExpr += 'e'; break;
+    case 'ANS': sciExpr += '('+sciLastAns+')'; break;
+    case '!': sciExpr += '!'; break;
+    case 'sin': case 'cos': case 'tan': sciExpr += b+'('; break;
+    default: sciExpr += b;
+  }
+  disp.value = sciExpr || '0';
+}
+sciBuildGrid();
+document.getElementById('sci-display').value = '0';
+</script>
+</body>
+</html>
