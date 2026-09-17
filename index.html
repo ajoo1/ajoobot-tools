@@ -9,9 +9,10 @@
   --accent-r:#dc2626; --accent-y:#d97706; --accent-p:#9333ea;
   --border:rgba(8,145,178,.18); --border-h:rgba(8,145,178,.5);
   --font-en:'JetBrains Mono',monospace; --font-ar:'Cairo',sans-serif;
-  --r-sm:6px; --r-md:10px; --r-lg:16px;
+  --r-sm:4px; --r-md:8px; --r-lg:12px;
   --glow:0 0 14px rgba(8,145,178,.18);
   --shadow-card:0 1px 3px rgba(20,30,50,.06), 0 1px 2px rgba(20,30,50,.04);
+  --grid-line:rgba(8,145,178,.07); --grid-line-strong:rgba(8,145,178,.13);
 }
 #ajoobot-page[data-theme="dark"]{
   --bg-root:#060c18; --bg-primary:#080d1a; --bg-secondary:#0d1526; --bg-card:#101828; --bg-card2:#141f36;
@@ -21,21 +22,24 @@
   --border:rgba(6,182,212,.16); --border-h:rgba(6,182,212,.5);
   --glow:0 0 18px rgba(6,182,212,.28);
   --shadow-card:none;
+  --grid-line:rgba(6,182,212,.07); --grid-line-strong:rgba(6,182,212,.13);
 }
 #ajoobot-page *{box-sizing:border-box;margin:0;padding:0}
 #ajoobot-page{
-  background:
+  background-image:
+    linear-gradient(var(--grid-line-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line-strong) 1px, transparent 1px),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
     radial-gradient(circle at 15% 0%, rgba(8,145,178,.06), transparent 40%),
-    radial-gradient(circle at 85% 100%, rgba(37,99,235,.06), transparent 40%),
-    var(--bg-root);
+    radial-gradient(circle at 85% 100%, rgba(37,99,235,.06), transparent 40%);
+  background-size:88px 88px, 88px 88px, 22px 22px, 22px 22px, auto, auto;
+  background-color:var(--bg-root);
   color:var(--text-main); font-family:var(--font-ar); line-height:1.6; min-height:100vh;
-  transition:background .3s ease,color .3s ease;
+  transition:background-color .3s ease,color .3s ease;
 }
 #ajoobot-page[data-theme="dark"]{
-  background:
-    radial-gradient(circle at 15% 0%, rgba(6,182,212,.08), transparent 40%),
-    radial-gradient(circle at 85% 100%, rgba(59,130,246,.08), transparent 40%),
-    var(--bg-root);
+  background-color:var(--bg-root);
 }
 #ajoobot-page[dir="ltr"]{font-family:var(--font-en)}
 #ajoobot-page ::selection{background:rgba(8,145,178,.25)}
@@ -57,6 +61,7 @@
   background:linear-gradient(135deg,var(--accent-b),var(--accent));
   display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff;
   box-shadow:var(--glow);
+  clip-path:polygon(22% 0,100% 0,100% 78%,78% 100%,0 100%,0 22%);
 }
 .brand-text h1{font-size:17px;font-weight:800;font-family:var(--font-en);color:var(--text-main);letter-spacing:.5px}
 .brand-text h1 span{color:var(--accent)}
@@ -92,23 +97,80 @@
 .nav-btn i{width:18px;text-align:center;font-size:14px;color:var(--text-dim);transition:.2s}
 .nav-btn:hover{background:rgba(8,145,178,.06);color:var(--text-main)}
 .nav-btn:hover i{color:var(--accent)}
-.nav-btn.active{background:rgba(8,145,178,.1);color:var(--accent);border-color:var(--border)}
+.nav-btn.active{background:rgba(8,145,178,.1);color:var(--accent);border-color:var(--border);position:relative}
 .nav-btn.active i{color:var(--accent)}
+.nav-btn.active::before{
+  content:'';position:absolute;top:50%;transform:translateY(-50%);
+  width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);
+}
+[dir="ltr"] .nav-btn.active::before{left:2px}
+[dir="rtl"] .nav-btn.active::before{right:2px}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:1100px){
+  .tool-nav{width:190px}
+}
+@media(max-width:900px){
+  .topbar{padding:12px 16px}
+  .brand-icon{width:36px;height:36px;font-size:16px}
+  .brand-text h1{font-size:15px}
+  .brand-text p{display:none}
+  .back-home span{display:none}
+  .back-home{padding:9px 11px}
+  .layout{flex-direction:column;max-width:100%}
+  [dir="rtl"] .tool-nav, [dir="ltr"] .tool-nav{border:none;border-bottom:1px solid var(--border)}
+  .tool-nav{
+    width:100%;flex-direction:row;align-items:center;gap:8px;position:sticky;top:65px;
+    height:auto;padding:10px 12px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+  }
+  .tool-nav-label{display:none}
+  .nav-btn{width:auto;flex:0 0 auto;white-space:nowrap;padding:9px 14px}
+  .nav-btn.active::before{display:none}
+  .tool-panels{padding:16px}
+  .panel-head h2{font-size:18px}
+  .card{padding:16px}
+}
+@media(max-width:480px){
+  .topbar-actions{gap:6px}
+  .icon-toggle-btn span{display:none}
+  .icon-toggle-btn{padding:9px 11px}
+  .field-row,.field-row3,.field-row4{grid-template-columns:1fr}
+  .panel-head{padding-inline-start:12px}
+  .panel-head h2{font-size:16.5px;gap:8px}
+  .panel-head h2 .icon-chip{width:28px;height:28px;font-size:13px}
+  .card{padding:13px}
+  .btn{padding:10px 14px;font-size:12.5px}
+  .result-item{padding:9px 10px}
+  .sci-grid{gap:5px}
+  .sci-btn{padding:11px 0;font-size:13px}
+}
 
 .tool-panels{flex:1;padding:26px 30px;min-width:0}
 .tool-panel{display:none;animation:fadeIn .35s ease}
 .tool-panel.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-.panel-head{margin-bottom:22px}
-.panel-head h2{font-size:21px;font-weight:800;display:flex;align-items:center;gap:10px}
+.panel-head{margin-bottom:22px;position:relative;padding-inline-start:16px;border-inline-start:3px solid var(--accent)}
+.panel-head h2{font-size:21px;font-weight:800;display:flex;align-items:center;gap:11px}
+.panel-head h2 .icon-chip{
+  width:34px;height:34px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(8,145,178,.14),rgba(37,99,235,.08));
+  border:1px solid var(--border-h);border-radius:8px;color:var(--accent);font-size:15px;
+  clip-path:polygon(20% 0,100% 0,100% 80%,80% 100%,0 100%,0 20%);
+}
 .panel-head h2 i{color:var(--accent)}
-.panel-head p{color:var(--text-muted);font-size:13px;margin-top:6px}
+.panel-head p{color:var(--text-muted);font-size:13px;margin-top:6px;font-family:var(--font-en);letter-spacing:.2px}
+[dir="rtl"] .panel-head p{font-family:var(--font-ar);letter-spacing:0}
 
 .card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
+  position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
   padding:22px;margin-bottom:18px;box-shadow:var(--shadow-card);
 }
+.card::before,.card::after{
+  content:'';position:absolute;width:14px;height:14px;pointer-events:none;opacity:.55;
+}
+.card::before{top:-1px;inset-inline-start:-1px;border-top:2px solid var(--accent);border-inline-start:2px solid var(--accent);border-start-start-radius:var(--r-lg)}
+.card::after{bottom:-1px;inset-inline-end:-1px;border-bottom:2px solid var(--accent);border-inline-end:2px solid var(--accent);border-end-end-radius:var(--r-lg)}
 .card h3{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--text-main);display:flex;align-items:center;gap:8px}
 .card h3 i{color:var(--accent);font-size:13px}
 
@@ -166,6 +228,10 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
 
 .hint{font-size:11.5px;color:var(--text-dim);margin-top:8px;line-height:1.7}
 .hint code{background:var(--bg-secondary);padding:1px 6px;border-radius:4px;color:var(--accent);font-family:var(--font-en)}
+
+#mx-a-grid,#mx-b-grid{overflow-x:auto;max-width:100%;padding-bottom:4px}
+#rc-visual{overflow-x:auto;max-width:100%}
+.resistor-body{min-width:max-content}
 
 /* flag register display */
 .flags-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
@@ -256,7 +322,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 1) BASE CONVERTER ═══════════════ -->
     <section class="tool-panel active" id="tool-baseconv">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-code"></i> <span data-i18n="nav_baseconv">Number System Converter</span></h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-code"></i></span> <span data-i18n="nav_baseconv">Number System Converter</span></h2>
         <p data-i18n="bc_desc">Type a number in any field and it converts automatically to the rest (Binary / Octal / Decimal / Hex)</p>
       </div>
       <div class="card">
@@ -285,7 +351,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 2) K-MAP SOLVER ═══════════════ -->
     <section class="tool-panel" id="tool-kmap">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-table-cells"></i> K-Map Solver</h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-table-cells"></i></span> K-Map Solver</h2>
         <p data-i18n="km_desc">Choose the number of variables, click any cell to cycle through 0, 1, and X (Don't Care), then click Solve</p>
       </div>
       <div class="card">
@@ -310,7 +376,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 3) TRUTH TABLE ═══════════════ -->
     <section class="tool-panel" id="tool-truth">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-list-check"></i> <span data-i18n="nav_truth">Truth Table</span></h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-list-check"></i></span> <span data-i18n="nav_truth">Truth Table</span></h2>
         <p data-i18n="tt_desc">Build a truth table from an expression, or the reverse: get a simplified expression from a table</p>
       </div>
       <div class="subtabs">
@@ -356,7 +422,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 4) BOOLEAN EXPRESSION EVALUATOR ═══════════════ -->
     <section class="tool-panel" id="tool-boolexpr">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-square-root-variable"></i> <span data-i18n="nav_boolexpr">Boolean Expression Evaluator</span></h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-square-root-variable"></i></span> <span data-i18n="nav_boolexpr">Boolean Expression Evaluator</span></h2>
         <p data-i18n="be_desc">Write the expression, set each variable to 0 or 1, and see the result instantly</p>
       </div>
       <div class="card">
@@ -373,7 +439,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 5) RESISTOR COLOR CODE ═══════════════ -->
     <section class="tool-panel" id="tool-resistor">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-bolt"></i> <span data-i18n="nav_resistor">Resistor Color Code Calculator</span></h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-bolt"></i></span> <span data-i18n="nav_resistor">Resistor Color Code Calculator</span></h2>
         <p data-i18n="rc_desc">Choose the colors and calculate the resistance value and tolerance</p>
       </div>
       <div class="card">
@@ -394,7 +460,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 6) SUBNET CALCULATOR SUITE ═══════════════ -->
     <section class="tool-panel" id="tool-subnet">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-network-wired"></i> Subnet Calculator</h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-network-wired"></i></span> Subnet Calculator</h2>
         <p data-i18n="sn_desc">A set of networking tools: subnet calculation, address calculation, and IPv4 ↔ Binary conversion</p>
       </div>
       <div class="subtabs">
@@ -454,7 +520,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 7) BINARY SYSTEM ═══════════════ -->
     <section class="tool-panel" id="tool-binsys">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-microchip"></i> <span data-i18n="nav_binsys">Binary System</span></h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-microchip"></i></span> <span data-i18n="nav_binsys">Binary System</span></h2>
         <p data-i18n="bs_desc">Binary arithmetic/logic with a full flag register, plus shift and rotate operations</p>
       </div>
       <div class="subtabs">
@@ -529,7 +595,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 8) MACHINE CODE (Intel 8086) ═══════════════ -->
     <section class="tool-panel" id="tool-mcode">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-hashtag"></i> <span data-i18n="nav_mcode">Machine Code (Intel 8086)</span></h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-hashtag"></i></span> <span data-i18n="nav_mcode">Machine Code (Intel 8086)</span></h2>
         <p data-i18n="mc_desc">Pick an instruction and its operands, and see the exact machine code bytes with a bit-level breakdown</p>
       </div>
       <div class="card">
@@ -592,7 +658,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 9) MATRIX CALCULATOR ═══════════════ -->
     <section class="tool-panel" id="tool-matrix">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-table-cells-large"></i> <span data-i18n="nav_matrix">Matrix Calculator</span></h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-table-cells-large"></i></span> <span data-i18n="nav_matrix">Matrix Calculator</span></h2>
         <p data-i18n="mx_desc">Add, subtract, multiply, transpose, and calculate the determinant and inverse</p>
       </div>
       <div class="card">
@@ -627,7 +693,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <!-- ═══════════════ 10) SCIENTIFIC CALCULATOR ═══════════════ -->
     <section class="tool-panel" id="tool-sci">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-calculator"></i> <span data-i18n="nav_sci">Scientific Calculator</span></h2>
+        <h2><span class="icon-chip"><i class="fa-solid fa-calculator"></i></span> <span data-i18n="nav_sci">Scientific Calculator</span></h2>
         <p data-i18n="sci_desc">Trig functions, logarithms, and parentheses — you can also type any math expression directly on the display</p>
       </div>
       <div class="card" style="max-width:420px">
