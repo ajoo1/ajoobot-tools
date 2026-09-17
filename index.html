@@ -1,77 +1,98 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AjooBot — أدوات الطالب الهندسية</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
 <style>
-:root{
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+#ajoobot-page{
+  --bg-root:#f4f6fb; --bg-primary:#ffffff; --bg-secondary:#eef1f8; --bg-card:#ffffff; --bg-card2:#eef1f8;
+  --text-main:#1a2233; --text-muted:#5b6479; --text-dim:#93a0b8;
+  --accent:#0891b2; --accent-h:#0e7490; --accent-b:#2563eb; --accent-g:#059669;
+  --accent-r:#dc2626; --accent-y:#d97706; --accent-p:#9333ea;
+  --border:rgba(8,145,178,.18); --border-h:rgba(8,145,178,.5);
+  --font-en:'JetBrains Mono',monospace; --font-ar:'Cairo',sans-serif;
+  --r-sm:6px; --r-md:10px; --r-lg:16px;
+  --glow:0 0 14px rgba(8,145,178,.18);
+  --shadow-card:0 1px 3px rgba(20,30,50,.06), 0 1px 2px rgba(20,30,50,.04);
+}
+#ajoobot-page[data-theme="dark"]{
   --bg-root:#060c18; --bg-primary:#080d1a; --bg-secondary:#0d1526; --bg-card:#101828; --bg-card2:#141f36;
   --text-main:#e2e8f0; --text-muted:#94a3b8; --text-dim:#526079;
   --accent:#06b6d4; --accent-h:#0891b2; --accent-b:#3b82f6; --accent-g:#10b981;
   --accent-r:#ef4444; --accent-y:#f59e0b; --accent-p:#a855f7;
   --border:rgba(6,182,212,.16); --border-h:rgba(6,182,212,.5);
-  --font-en:'JetBrains Mono',monospace; --font-ar:'Cairo',sans-serif;
-  --r-sm:6px; --r-md:10px; --r-lg:16px;
   --glow:0 0 18px rgba(6,182,212,.28);
+  --shadow-card:none;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{
+#ajoobot-page *{box-sizing:border-box;margin:0;padding:0}
+#ajoobot-page{
+  background:
+    radial-gradient(circle at 15% 0%, rgba(8,145,178,.06), transparent 40%),
+    radial-gradient(circle at 85% 100%, rgba(37,99,235,.06), transparent 40%),
+    var(--bg-root);
+  color:var(--text-main); font-family:var(--font-ar); line-height:1.6; min-height:100vh;
+  transition:background .3s ease,color .3s ease;
+}
+#ajoobot-page[data-theme="dark"]{
   background:
     radial-gradient(circle at 15% 0%, rgba(6,182,212,.08), transparent 40%),
     radial-gradient(circle at 85% 100%, rgba(59,130,246,.08), transparent 40%),
     var(--bg-root);
-  color:var(--text-main); font-family:var(--font-ar); line-height:1.6; min-height:100vh;
 }
-::selection{background:rgba(6,182,212,.35)}
-a{color:inherit;text-decoration:none}
-input,select,button,textarea{font-family:inherit;color:inherit}
-::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-thumb{background:var(--accent-h);border-radius:10px}
-::-webkit-scrollbar-track{background:var(--bg-secondary)}
+#ajoobot-page[dir="ltr"]{font-family:var(--font-en)}
+#ajoobot-page ::selection{background:rgba(8,145,178,.25)}
+#ajoobot-page a{color:inherit;text-decoration:none}
+#ajoobot-page input,#ajoobot-page select,#ajoobot-page button,#ajoobot-page textarea{font-family:inherit;color:inherit}
+#ajoobot-page ::-webkit-scrollbar{width:8px;height:8px}
+#ajoobot-page ::-webkit-scrollbar-thumb{background:var(--accent-h);border-radius:10px}
+#ajoobot-page ::-webkit-scrollbar-track{background:var(--bg-secondary)}
 
 /* ═══ TOP BAR ═══ */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
-  padding:16px 24px;background:rgba(8,13,26,.85);backdrop-filter:blur(10px);
+  padding:16px 24px;background:var(--bg-primary);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;
 }
 .brand{display:flex;align-items:center;gap:12px}
 .brand-icon{
   width:42px;height:42px;border-radius:var(--r-md);
   background:linear-gradient(135deg,var(--accent-b),var(--accent));
-  display:flex;align-items:center;justify-content:center;font-size:19px;color:#04101c;
+  display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff;
   box-shadow:var(--glow);
 }
 .brand-text h1{font-size:17px;font-weight:800;font-family:var(--font-en);color:var(--text-main);letter-spacing:.5px}
 .brand-text h1 span{color:var(--accent)}
 .brand-text p{font-size:11px;color:var(--text-muted);margin-top:1px}
+.topbar-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.icon-toggle-btn{
+  display:flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid var(--border);
+  border-radius:var(--r-sm);font-size:12.5px;font-weight:700;color:var(--text-muted);cursor:pointer;transition:.2s;
+  background:var(--bg-card);font-family:var(--font-en);
+}
+.icon-toggle-btn:hover{color:var(--accent);border-color:var(--border-h);box-shadow:var(--glow)}
 .back-home{
   display:flex;align-items:center;gap:7px;padding:9px 16px;border:1px solid var(--border);
   border-radius:var(--r-sm);font-size:12.5px;font-weight:600;color:var(--text-muted);transition:.25s;
+  background:var(--bg-card);
 }
 .back-home:hover{color:var(--accent);border-color:var(--border-h);box-shadow:var(--glow)}
 
 /* ═══ LAYOUT ═══ */
 .layout{display:flex;max-width:1400px;margin:0 auto;min-height:calc(100vh - 73px)}
+[dir="rtl"] .tool-nav{border-left:1px solid var(--border);border-right:none}
+[dir="ltr"] .tool-nav{border-right:1px solid var(--border);border-left:none}
 .tool-nav{
-  width:230px;flex-shrink:0;padding:20px 14px;border-left:1px solid var(--border);
+  width:230px;flex-shrink:0;padding:20px 14px;
   display:flex;flex-direction:column;gap:6px;position:sticky;top:73px;height:calc(100vh - 73px);overflow-y:auto;
 }
 .tool-nav-label{font-size:10.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;font-family:var(--font-en);padding:10px 10px 6px}
 .nav-btn{
   display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:var(--r-sm);
   font-size:13.5px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:.2s;border:1px solid transparent;
-  background:none;text-align:right;width:100%;
+  background:none;text-align:start;width:100%;
 }
 .nav-btn i{width:18px;text-align:center;font-size:14px;color:var(--text-dim);transition:.2s}
-.nav-btn:hover{background:rgba(6,182,212,.06);color:var(--text-main)}
+.nav-btn:hover{background:rgba(8,145,178,.06);color:var(--text-main)}
 .nav-btn:hover i{color:var(--accent)}
-.nav-btn.active{background:rgba(6,182,212,.1);color:var(--accent);border-color:var(--border)}
+.nav-btn.active{background:rgba(8,145,178,.1);color:var(--accent);border-color:var(--border)}
 .nav-btn.active i{color:var(--accent)}
 
 .tool-panels{flex:1;padding:26px 30px;min-width:0}
@@ -86,7 +107,7 @@ input,select,button,textarea{font-family:inherit;color:inherit}
 
 .card{
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
-  padding:22px;margin-bottom:18px;
+  padding:22px;margin-bottom:18px;box-shadow:var(--shadow-card);
 }
 .card h3{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--text-main);display:flex;align-items:center;gap:8px}
 .card h3 i{color:var(--accent);font-size:13px}
@@ -98,7 +119,7 @@ input,select,button,textarea{font-family:inherit;color:inherit}
   width:100%;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-sm);
   padding:10px 13px;font-size:14px;color:var(--text-main);font-family:var(--font-en);transition:.2s;
 }
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(6,182,212,.12)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(8,145,178,.12)}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field-row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .field-row4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
@@ -106,11 +127,11 @@ input,select,button,textarea{font-family:inherit;color:inherit}
 
 .btn{
   display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:var(--r-sm);
-  font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.25s;font-family:var(--font-ar);
-  background:linear-gradient(135deg,var(--accent),var(--accent-h));color:#04101c;box-shadow:var(--glow);
+  font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.25s;font-family:inherit;
+  background:linear-gradient(135deg,var(--accent),var(--accent-h));color:#fff;box-shadow:var(--glow);
 }
-.btn:hover{transform:translateY(-2px);box-shadow:0 0 25px rgba(6,182,212,.5)}
-.btn.btn-blue{background:linear-gradient(135deg,var(--accent-b),#1d4ed8);color:#fff;box-shadow:0 0 18px rgba(59,130,246,.3)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 25px rgba(8,145,178,.4)}
+.btn.btn-blue{background:linear-gradient(135deg,var(--accent-b),#1d4ed8);color:#fff;box-shadow:0 0 18px rgba(37,99,235,.25)}
 .btn.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-muted);box-shadow:none}
 .btn.btn-ghost:hover{color:var(--accent);border-color:var(--border-h);transform:none}
 .btn.btn-sm{padding:7px 14px;font-size:12px}
@@ -135,42 +156,99 @@ input,select,button,textarea{font-family:inherit;color:inherit}
 .result-item{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 13px}
 .result-item .rk{font-size:10.5px;color:var(--text-dim);margin-bottom:3px}
 .result-item .rv{font-size:14px;font-weight:700;color:var(--text-main);font-family:var(--font-en)}
-.error-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.35);color:#fca5a5;border-radius:var(--r-sm);padding:11px 15px;margin-top:12px;font-size:13px}
+.error-box{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.3);color:var(--accent-r);border-radius:var(--r-sm);padding:11px 15px;margin-top:12px;font-size:13px}
 
 table{width:100%;border-collapse:collapse;font-family:var(--font-en);font-size:13px}
 table th,table td{padding:8px 10px;text-align:center;border:1px solid var(--border)}
 table th{background:var(--bg-secondary);color:var(--accent);font-size:11.5px}
-table tbody tr:hover{background:rgba(6,182,212,.05)}
+table tbody tr:hover{background:rgba(8,145,178,.05)}
 .tbl-wrap{overflow-x:auto;border-radius:var(--r-sm)}
 
 .hint{font-size:11.5px;color:var(--text-dim);margin-top:8px;line-height:1.7}
 .hint code{background:var(--bg-secondary);padding:1px 6px;border-radius:4px;color:var(--accent);font-family:var(--font-en)}
-</style>
-</head>
-<body>
 
+/* flag register display */
+.flags-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.flag-chip{
+  min-width:56px;text-align:center;padding:9px 6px;border-radius:var(--r-sm);border:1px solid var(--border);
+  background:var(--bg-secondary);font-family:var(--font-en);
+}
+.flag-chip .fname{font-size:10px;color:var(--text-dim);letter-spacing:.5px}
+.flag-chip .fval{font-size:17px;font-weight:800;margin-top:3px;color:var(--text-dim)}
+.flag-chip.set{border-color:var(--border-h);background:rgba(8,145,178,.08)}
+.flag-chip.set .fval{color:var(--accent)}
+.flag-chip.undef .fval{color:var(--text-dim);font-size:13px}
+
+/* machine code byte breakdown */
+.mc-bytes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.mc-byte{background:var(--bg-secondary);border:1px solid var(--border-h);border-radius:var(--r-sm);padding:10px 14px;text-align:center;font-family:var(--font-en)}
+.mc-byte .mcv{font-size:19px;font-weight:800;color:var(--accent)}
+.mc-byte .mcl{font-size:10px;color:var(--text-dim);margin-top:3px}
+.mc-bin-breakdown{display:flex;gap:1px;margin-top:6px;font-family:var(--font-en);font-size:11px}
+.mc-bin-breakdown span{padding:2px 3px;border-radius:2px}
+.mc-bit-op{background:rgba(217,119,6,.18);color:var(--accent-y)}
+.mc-bit-reg{background:rgba(8,145,178,.18);color:var(--accent)}
+.mc-bit-rm{background:rgba(147,51,234,.18);color:var(--accent-p)}
+.mc-bit-mod{background:rgba(5,150,105,.18);color:var(--accent-g)}
+</style>
+<style>
+/* Sci calculator */
+.sci-switch{position:relative;display:inline-block;width:38px;height:20px}
+.sci-switch input{opacity:0;width:0;height:0}
+.sci-slider{position:absolute;cursor:pointer;inset:0;background:var(--bg-secondary);border:1px solid var(--border);border-radius:20px;transition:.2s}
+.sci-slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:2px;background:var(--text-muted);border-radius:50%;transition:.2s}
+.sci-switch input:checked + .sci-slider{background:rgba(8,145,178,.2);border-color:var(--accent)}
+.sci-switch input:checked + .sci-slider:before{transform:translateX(17px);background:var(--accent)}
+.sci-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.sci-btn{
+  padding:13px 0;border-radius:var(--r-sm);background:var(--bg-secondary);border:1px solid var(--border);
+  color:var(--text-main);font-family:var(--font-en);font-size:14px;font-weight:600;cursor:pointer;transition:.15s;
+}
+.sci-btn:hover{border-color:var(--border-h);color:var(--accent)}
+.sci-btn.op{color:var(--accent)}
+.sci-btn.eq{background:linear-gradient(135deg,var(--accent),var(--accent-h));color:#fff;grid-column:span 2}
+.sci-btn.clr{color:var(--accent-r)}
+
+/* Resistor visual */
+.resistor-body{
+  display:flex;align-items:center;gap:2px;height:52px;background:linear-gradient(180deg,#d9c39a,#c2a877);
+  border-radius:26px;padding:0 26px;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.25);
+}
+.resistor-body::before,.resistor-body::after{content:'';position:absolute;top:50%;transform:translateY(-50%);width:34px;height:6px;background:#8a8a8a}
+.resistor-body::before{right:-34px}
+.resistor-body::after{left:-34px}
+.resistor-band{width:12px;height:100%}
+</style>
+
+<div id="ajoobot-page" dir="ltr" lang="en">
 <div class="topbar">
   <div class="brand">
     <div class="brand-icon"><i class="fa-solid fa-robot"></i></div>
     <div class="brand-text">
       <h1>Ajoo<span>Bot</span></h1>
-      <p>أدوات هندسية سريعة لمساعدتك في مذاكرتك</p>
+      <p data-i18n="brand_tag">Quick engineering tools to help you study</p>
     </div>
   </div>
-  <a class="back-home" href="https://www.ajoo.dpdns.org/"><i class="fa-solid fa-arrow-right-to-bracket"></i> رجوع للموقع الرئيسي</a>
+  <div class="topbar-actions">
+    <button class="icon-toggle-btn" id="langToggleBtn" onclick="toggleLang()"><i class="fa-solid fa-language"></i> <span id="langToggleLabel">العربية</span></button>
+    <button class="icon-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="themeToggleIcon"></i> <span id="themeToggleLabel" data-i18n="theme_dark">Dark</span></button>
+    <a class="back-home" href="https://www.ajoo.dpdns.org/"><i class="fa-solid fa-arrow-right-to-bracket"></i> <span data-i18n="back_home">Back to main site</span></a>
+  </div>
 </div>
 
 <div class="layout">
   <nav class="tool-nav" id="toolNav">
-    <div class="tool-nav-label">الأدوات</div>
-    <button class="nav-btn active" data-tool="baseconv"><i class="fa-solid fa-code"></i>Numeral System Converter</button>
-    <button class="nav-btn" data-tool="kmap"><i class="fa-solid fa-table-cells"></i>K-Map Solver</button>
-    <button class="nav-btn" data-tool="truth"><i class="fa-solid fa-list-check"></i>Truth table</button>
-    <button class="nav-btn" data-tool="boolexpr"><i class="fa-solid fa-square-root-variable"></i> اختبار معادلة منطقية</button>
-    <button class="nav-btn" data-tool="resistor"><i class="fa-solid fa-bolt"></i> ألوان المقاومة</button>
-    <button class="nav-btn" data-tool="subnet"><i class="fa-solid fa-network-wired"></i> Subnet Calculator</button>
-    <button class="nav-btn" data-tool="matrix"><i class="fa-solid fa-table-cells-large"></i> حاسبة المصفوفات</button>
-    <button class="nav-btn" data-tool="sci"><i class="fa-solid fa-calculator"></i> آلة حاسبة علمية</button>
+    <div class="tool-nav-label" data-i18n="nav_label">TOOLS</div>
+    <button class="nav-btn active" data-tool="baseconv"><i class="fa-solid fa-code"></i> <span data-i18n="nav_baseconv">Number System Converter</span></button>
+    <button class="nav-btn" data-tool="kmap"><i class="fa-solid fa-table-cells"></i> <span data-i18n="nav_kmap">K-Map Solver</span></button>
+    <button class="nav-btn" data-tool="truth"><i class="fa-solid fa-list-check"></i> <span data-i18n="nav_truth">Truth Table</span></button>
+    <button class="nav-btn" data-tool="boolexpr"><i class="fa-solid fa-square-root-variable"></i> <span data-i18n="nav_boolexpr">Boolean Evaluator</span></button>
+    <button class="nav-btn" data-tool="resistor"><i class="fa-solid fa-bolt"></i> <span data-i18n="nav_resistor">Resistor Color Code</span></button>
+    <button class="nav-btn" data-tool="subnet"><i class="fa-solid fa-network-wired"></i> <span data-i18n="nav_subnet">Subnet Calculator</span></button>
+    <button class="nav-btn" data-tool="binsys"><i class="fa-solid fa-microchip"></i> <span data-i18n="nav_binsys">Binary System</span></button>
+    <button class="nav-btn" data-tool="mcode"><i class="fa-solid fa-hashtag"></i> <span data-i18n="nav_mcode">Machine Code</span></button>
+    <button class="nav-btn" data-tool="matrix"><i class="fa-solid fa-table-cells-large"></i> <span data-i18n="nav_matrix">Matrix Calculator</span></button>
+    <button class="nav-btn" data-tool="sci"><i class="fa-solid fa-calculator"></i> <span data-i18n="nav_sci">Scientific Calculator</span></button>
   </nav>
 
   <main class="tool-panels" id="toolPanels">
@@ -178,29 +256,29 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
     <!-- ═══════════════ 1) BASE CONVERTER ═══════════════ -->
     <section class="tool-panel active" id="tool-baseconv">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-code"></i> محول الأنظمة العددية</h2>
-        <p>اكتب رقم في أي خانة وهيتحول تلقائي للباقي (Binary / Octal / Decimal / Hex)</p>
+        <h2><i class="fa-solid fa-code"></i> <span data-i18n="nav_baseconv">Number System Converter</span></h2>
+        <p data-i18n="bc_desc">Type a number in any field and it converts automatically to the rest (Binary / Octal / Decimal / Hex)</p>
       </div>
       <div class="card">
         <div class="field">
           <label>Binary (Base 2)</label>
-          <input type="text" id="bc-bin" placeholder="مثال: 11111111" oninput="bcOnInput('bin')"/>
+          <input type="text" id="bc-bin" placeholder="e.g. 11111111" oninput="bcOnInput('bin')"/>
         </div>
         <div class="field">
           <label>Octal (Base 8)</label>
-          <input type="text" id="bc-oct" placeholder="مثال: 377" oninput="bcOnInput('oct')"/>
+          <input type="text" id="bc-oct" placeholder="e.g. 377" oninput="bcOnInput('oct')"/>
         </div>
         <div class="field">
           <label>Decimal (Base 10)</label>
-          <input type="text" id="bc-dec" placeholder="مثال: 255" oninput="bcOnInput('dec')"/>
+          <input type="text" id="bc-dec" placeholder="e.g. 255" oninput="bcOnInput('dec')"/>
         </div>
         <div class="field">
           <label>Hexadecimal (Base 16)</label>
-          <input type="text" id="bc-hex" placeholder="مثال: FF" oninput="bcOnInput('hex')"/>
+          <input type="text" id="bc-hex" placeholder="e.g. FF" oninput="bcOnInput('hex')"/>
         </div>
         <div id="bc-error"></div>
-        <div class="hint">تقدر تكتب رقم سالب بحط <code>-</code> في الأول. الأرقام السداسية عشرية اكتبها بحروف إنجليزية A-F.</div>
-        <button class="btn btn-ghost btn-sm" onclick="bcClear()" style="margin-top:12px"><i class="fa-solid fa-eraser"></i> مسح الكل</button>
+        <div class="hint" data-i18n="bc_hint">You can enter a negative number by starting with <code>-</code>. Write hexadecimal digits using English letters A-F.</div>
+        <button class="btn btn-ghost btn-sm" onclick="bcClear()" style="margin-top:12px"><i class="fa-solid fa-eraser"></i> <span data-i18n="clear_all">Clear All</span></button>
       </div>
     </section>
 
@@ -208,50 +286,50 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
     <section class="tool-panel" id="tool-kmap">
       <div class="panel-head">
         <h2><i class="fa-solid fa-table-cells"></i> K-Map Solver</h2>
-        <p>اختار عدد المتغيرات، ودوس على أي خانة عشان تدور بين 0 و 1 و X (Don't Care)، وبعدين دوس حل</p>
+        <p data-i18n="km_desc">Choose the number of variables, click any cell to cycle through 0, 1, and X (Don't Care), then click Solve</p>
       </div>
       <div class="card">
         <div class="field" style="max-width:220px">
-          <label>عدد المتغيرات</label>
+          <label data-i18n="numvars_label">Number of Variables</label>
           <select id="km-numvars" onchange="kmapBuildGrid()">
-            <option value="2">2 متغيرات (A,B)</option>
-            <option value="3" selected>3 متغيرات (A,B,C)</option>
-            <option value="4">4 متغيرات (A,B,C,D)</option>
+            <option value="2" data-i18n="vars2">2 variables (A,B)</option>
+            <option value="3" selected data-i18n="vars3">3 variables (A,B,C)</option>
+            <option value="4" data-i18n="vars4">4 variables (A,B,C,D)</option>
           </select>
         </div>
         <div id="kmap-grid-wrap"></div>
         <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn" onclick="kmapSolve()"><i class="fa-solid fa-wand-magic-sparkles"></i> حل (Simplify)</button>
-          <button class="btn btn-ghost" onclick="kmapReset()"><i class="fa-solid fa-rotate-left"></i> تصفير الخريطة</button>
+          <button class="btn" onclick="kmapSolve()"><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="solve_btn">Solve</span></button>
+          <button class="btn btn-ghost" onclick="kmapReset()"><i class="fa-solid fa-rotate-left"></i> <span data-i18n="reset_map">Reset Map</span></button>
         </div>
         <div id="kmap-result"></div>
-        <div class="hint">دوس على أي خلية: أول دوسة = 1، تاني دوسة = 0، تالت دوسة = X (Don't Care)، ورابع دوسة ترجع 0 (فاضية).</div>
+        <div class="hint" data-i18n="km_hint">Click any cell: 1st click = 1, 2nd click = 0, 3rd click = X (Don't Care), 4th click back to 0 (empty).</div>
       </div>
     </section>
 
     <!-- ═══════════════ 3) TRUTH TABLE ═══════════════ -->
     <section class="tool-panel" id="tool-truth">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-list-check"></i> جدول الصواب (Truth Table)</h2>
-        <p>اعمل جدول الصواب من معادلة، أو اعمل العكس: هات المعادلة المبسطة من جدول</p>
+        <h2><i class="fa-solid fa-list-check"></i> <span data-i18n="nav_truth">Truth Table</span></h2>
+        <p data-i18n="tt_desc">Build a truth table from an expression, or the reverse: get a simplified expression from a table</p>
       </div>
       <div class="subtabs">
-        <div class="subtab-btn active" data-sub="tt-fromexpr" onclick="switchSubtab('tt','tt-fromexpr')">من المعادلة → جدول</div>
-        <div class="subtab-btn" data-sub="tt-toexpr" onclick="switchSubtab('tt','tt-toexpr')">من الجدول → معادلة</div>
+        <div class="subtab-btn active" data-sub="tt-fromexpr" onclick="switchSubtab('tt','tt-fromexpr')" data-i18n="tt_sub1">Expression → Table</div>
+        <div class="subtab-btn" data-sub="tt-toexpr" onclick="switchSubtab('tt','tt-toexpr')" data-i18n="tt_sub2">Table → Expression</div>
       </div>
 
       <div class="subpanel active" id="tt-fromexpr">
         <div class="card">
           <div class="field">
-            <label>اكتب المعادلة المنطقية</label>
-            <input type="text" id="tt-expr" placeholder="مثال: A.B + C'  أو  AB+C'"/>
+            <label data-i18n="expr_label">Boolean Expression</label>
+            <input type="text" id="tt-expr" placeholder="e.g. A.B + C'  or  AB+C'"/>
           </div>
-          <div class="hint">
-            الرموز المتاحة: AND = <code>.</code> أو <code>*</code> أو <code>&amp;</code> أو مجاورة الحروف زي <code>AB</code> — 
-            OR = <code>+</code> أو <code>|</code> — NOT = <code>'</code> بعد الحرف أو <code>!</code> قبله — XOR = <code>^</code>. 
-            كل متغير لازم يكون حرف واحد بس (A, B, C...).
+          <div class="hint" data-i18n="expr_syntax_hint">
+            Available symbols: AND = <code>.</code> or <code>*</code> or <code>&amp;</code> or just placing letters next to each other like <code>AB</code> —
+            OR = <code>+</code> or <code>|</code> — NOT = <code>'</code> after the letter or <code>!</code> before it — XOR = <code>^</code>.
+            Each variable must be a single letter (A, B, C...).
           </div>
-          <button class="btn" onclick="ttFromExpr()" style="margin-top:14px"><i class="fa-solid fa-play"></i> اعرض الجدول</button>
+          <button class="btn" onclick="ttFromExpr()" style="margin-top:14px"><i class="fa-solid fa-play"></i> <span data-i18n="show_table">Show Table</span></button>
           <div id="tt-fromexpr-result"></div>
         </div>
       </div>
@@ -259,18 +337,18 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
       <div class="subpanel" id="tt-toexpr">
         <div class="card">
           <div class="field" style="max-width:220px">
-            <label>عدد المتغيرات</label>
+            <label data-i18n="numvars_label">Number of Variables</label>
             <select id="tt2-numvars" onchange="tt2BuildTable()">
-              <option value="2">2 متغيرات (A,B)</option>
-              <option value="3" selected>3 متغيرات (A,B,C)</option>
-              <option value="4">4 متغيرات (A,B,C,D)</option>
-              <option value="5">5 متغيرات (A,B,C,D,E)</option>
+              <option value="2" data-i18n="vars2">2 variables (A,B)</option>
+              <option value="3" selected data-i18n="vars3">3 variables (A,B,C)</option>
+              <option value="4" data-i18n="vars4">4 variables (A,B,C,D)</option>
+              <option value="5" data-i18n="vars5">5 variables (A,B,C,D,E)</option>
             </select>
           </div>
           <div id="tt2-table-wrap"></div>
-          <button class="btn" onclick="tt2Solve()" style="margin-top:14px"><i class="fa-solid fa-wand-magic-sparkles"></i> هات المعادلة المبسطة</button>
+          <button class="btn" onclick="tt2Solve()" style="margin-top:14px"><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="get_simplified">Get Simplified Expression</span></button>
           <div id="tt2-result"></div>
-          <div class="hint">دوس على قيمة الـ Output لأي صف عشان تدور بين 0 و 1 و X.</div>
+          <div class="hint" data-i18n="tt2_hint">Click any Output value to cycle through 0, 1, and X.</div>
         </div>
       </div>
     </section>
@@ -278,16 +356,16 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
     <!-- ═══════════════ 4) BOOLEAN EXPRESSION EVALUATOR ═══════════════ -->
     <section class="tool-panel" id="tool-boolexpr">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-square-root-variable"></i> تقييم معادلة منطقية</h2>
-        <p>اكتب المعادلة وحط قيمة كل متغير (0 أو 1) وشوف الناتج على طول</p>
+        <h2><i class="fa-solid fa-square-root-variable"></i> <span data-i18n="nav_boolexpr">Boolean Expression Evaluator</span></h2>
+        <p data-i18n="be_desc">Write the expression, set each variable to 0 or 1, and see the result instantly</p>
       </div>
       <div class="card">
         <div class="field">
-          <label>المعادلة المنطقية</label>
-          <input type="text" id="be-expr" placeholder="مثال: A.B + C'" oninput="beDetectVars()"/>
+          <label data-i18n="expr_label">Boolean Expression</label>
+          <input type="text" id="be-expr" placeholder="e.g. A.B + C'" oninput="beDetectVars()"/>
         </div>
         <div id="be-vars-wrap"></div>
-        <button class="btn" onclick="beEvaluate()" style="margin-top:14px"><i class="fa-solid fa-play"></i> احسب الناتج</button>
+        <button class="btn" onclick="beEvaluate()" style="margin-top:14px"><i class="fa-solid fa-play"></i> <span data-i18n="calc_result">Calculate Result</span></button>
         <div id="be-result"></div>
       </div>
     </section>
@@ -295,20 +373,20 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
     <!-- ═══════════════ 5) RESISTOR COLOR CODE ═══════════════ -->
     <section class="tool-panel" id="tool-resistor">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-bolt"></i> حاسبة ألوان المقاومة</h2>
-        <p>اختار الألوان واحسب قيمة المقاومة وهامش الخطأ</p>
+        <h2><i class="fa-solid fa-bolt"></i> <span data-i18n="nav_resistor">Resistor Color Code Calculator</span></h2>
+        <p data-i18n="rc_desc">Choose the colors and calculate the resistance value and tolerance</p>
       </div>
       <div class="card">
         <div class="field" style="max-width:260px">
-          <label>عدد الحلقات (Bands)</label>
+          <label data-i18n="band_count">Number of Bands</label>
           <select id="rc-bandcount" onchange="rcBuildInputs()">
-            <option value="4">4 حلقات</option>
-            <option value="5">5 حلقات</option>
+            <option value="4" data-i18n="bands4">4 bands</option>
+            <option value="5" data-i18n="bands5">5 bands</option>
           </select>
         </div>
         <div id="rc-inputs" class="field-row4"></div>
         <div id="rc-visual" style="margin-top:20px"></div>
-        <button class="btn" onclick="rcCalculate()" style="margin-top:16px"><i class="fa-solid fa-bolt"></i> احسب القيمة</button>
+        <button class="btn" onclick="rcCalculate()" style="margin-top:16px"><i class="fa-solid fa-bolt"></i> <span data-i18n="calc_value">Calculate Value</span></button>
         <div id="rc-result"></div>
       </div>
     </section>
@@ -317,12 +395,11 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
     <section class="tool-panel" id="tool-subnet">
       <div class="panel-head">
         <h2><i class="fa-solid fa-network-wired"></i> Subnet Calculator</h2>
-        <p>مجموعة أدوات الشبكات: حساب السبنت، الآلة الحاسبة الثنائية، حساب العناوين، والتحويل بين IPv4 والثنائي</p>
+        <p data-i18n="sn_desc">A set of networking tools: subnet calculation, address calculation, and IPv4 ↔ Binary conversion</p>
       </div>
       <div class="subtabs">
         <div class="subtab-btn active" data-sub="sn-main" onclick="switchSubtab('sn','sn-main')">IPv4 Subnet</div>
-        <div class="subtab-btn" data-sub="sn-bincalc" onclick="switchSubtab('sn','sn-bincalc')">Binary Calculator</div>
-        <div class="subtab-btn" data-sub="sn-addr" onclick="switchSubtab('sn','sn-addr')">Address Calculation</div>
+        <div class="subtab-btn" data-sub="sn-addr" onclick="switchSubtab('sn','sn-addr')" data-i18n="sn_sub_addr">Address Calculation</div>
         <div class="subtab-btn" data-sub="sn-ipbin" onclick="switchSubtab('sn','sn-ipbin')">IPv4 ↔ Binary</div>
       </div>
 
@@ -330,7 +407,7 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
         <div class="card">
           <div class="field-row">
             <div class="field">
-              <label>عنوان الـ IP</label>
+              <label data-i18n="ip_address">IP Address</label>
               <input type="text" id="sn-ip" placeholder="192.168.1.10"/>
             </div>
             <div class="field">
@@ -338,45 +415,23 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
               <input type="number" id="sn-cidr" min="0" max="32" placeholder="24"/>
             </div>
           </div>
-          <button class="btn" onclick="subnetCalculate()"><i class="fa-solid fa-play"></i> احسب</button>
+          <button class="btn" onclick="subnetCalculate()"><i class="fa-solid fa-play"></i> <span data-i18n="calculate">Calculate</span></button>
           <div id="sn-result"></div>
-        </div>
-      </div>
-
-      <div class="subpanel" id="sn-bincalc">
-        <div class="card">
-          <div class="field-row">
-            <div class="field"><label>الرقم الأول (Decimal أو Binary)</label><input type="text" id="bcalc-a" placeholder="مثال: 12 أو 1100"/></div>
-            <div class="field"><label>الرقم الثاني</label><input type="text" id="bcalc-b" placeholder="مثال: 5 أو 0101"/></div>
-          </div>
-          <div class="field" style="max-width:220px">
-            <label>العملية</label>
-            <select id="bcalc-op">
-              <option value="add">جمع (+)</option>
-              <option value="sub">طرح (-)</option>
-              <option value="mul">ضرب (×)</option>
-              <option value="and">AND</option>
-              <option value="or">OR</option>
-              <option value="xor">XOR</option>
-            </select>
-          </div>
-          <button class="btn" onclick="binCalcRun()"><i class="fa-solid fa-play"></i> احسب</button>
-          <div id="bcalc-result"></div>
         </div>
       </div>
 
       <div class="subpanel" id="sn-addr">
         <div class="card">
-          <h3><i class="fa-solid fa-diagram-project"></i> حساب عدد السبنتات المطلوبة (VLSM)</h3>
+          <h3><i class="fa-solid fa-diagram-project"></i> <span data-i18n="vlsm_title">Required Subnets Calculation (VLSM)</span></h3>
           <div class="field-row">
-            <div class="field"><label>الشبكة الأساسية (Network/CIDR)</label><input type="text" id="addr-net" placeholder="192.168.1.0"/></div>
-            <div class="field"><label>CIDR الأساسي</label><input type="number" id="addr-cidr" placeholder="24"/></div>
+            <div class="field"><label data-i18n="base_network">Base Network</label><input type="text" id="addr-net" placeholder="192.168.1.0"/></div>
+            <div class="field"><label data-i18n="base_cidr">Base CIDR</label><input type="number" id="addr-cidr" placeholder="24"/></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>عدد السبنتات المطلوبة</label><input type="number" id="addr-subnets" placeholder="4"/></div>
-            <div class="field"><label>أو عدد الأجهزة (Hosts) المطلوبة في كل سبنت</label><input type="number" id="addr-hosts" placeholder="اختياري"/></div>
+            <div class="field"><label data-i18n="subnets_needed">Number of Subnets Needed</label><input type="number" id="addr-subnets" placeholder="4"/></div>
+            <div class="field"><label data-i18n="hosts_needed">Or Hosts Needed per Subnet</label><input type="number" id="addr-hosts" data-i18n-ph="optional" placeholder="Optional"/></div>
           </div>
-          <button class="btn" onclick="addrCalcRun()"><i class="fa-solid fa-play"></i> احسب السبنتات</button>
+          <button class="btn" onclick="addrCalcRun()"><i class="fa-solid fa-play"></i> <span data-i18n="calc_subnets">Calculate Subnets</span></button>
           <div id="addr-result"></div>
         </div>
       </div>
@@ -384,11 +439,11 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
       <div class="subpanel" id="sn-ipbin">
         <div class="card">
           <div class="field">
-            <label>IPv4 (مثال: 192.168.1.1)</label>
+            <label data-i18n="ipv4_label">IPv4 (e.g. 192.168.1.1)</label>
             <input type="text" id="ipbin-ip" placeholder="192.168.1.1" oninput="ipToBinLive()"/>
           </div>
           <div class="field">
-            <label>Binary (32 bit، ممكن تفصل كل 8 بمسافة)</label>
+            <label data-i18n="binary_32bit">Binary (32 bit, you can separate every 8 with a space)</label>
             <input type="text" id="ipbin-bin" placeholder="11000000.10101000.00000001.00000001" oninput="binToIpLive()"/>
           </div>
           <div id="ipbin-error"></div>
@@ -396,23 +451,161 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
       </div>
     </section>
 
-    <!-- ═══════════════ 7) MATRIX CALCULATOR ═══════════════ -->
+    <!-- ═══════════════ 7) BINARY SYSTEM ═══════════════ -->
+    <section class="tool-panel" id="tool-binsys">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-microchip"></i> <span data-i18n="nav_binsys">Binary System</span></h2>
+        <p data-i18n="bs_desc">Binary arithmetic/logic with a full flag register, plus shift and rotate operations</p>
+      </div>
+      <div class="subtabs">
+        <div class="subtab-btn active" data-sub="bs-calc" onclick="switchSubtab('bs','bs-calc')" data-i18n="bs_sub_calc">Binary Calculator</div>
+        <div class="subtab-btn" data-sub="bs-shift" onclick="switchSubtab('bs','bs-shift')" data-i18n="bs_sub_shift">Shift / Rotate</div>
+      </div>
+
+      <div class="subpanel active" id="bs-calc">
+        <div class="card">
+          <div class="field-row">
+            <div class="field"><label data-i18n="first_number">First Number (Decimal or Binary)</label><input type="text" id="bcalc-a" placeholder="e.g. 12 or 1100"/></div>
+            <div class="field"><label data-i18n="second_number">Second Number</label><input type="text" id="bcalc-b" placeholder="e.g. 5 or 0101"/></div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label data-i18n="operation">Operation</label>
+              <select id="bcalc-op">
+                <option value="add" data-i18n="op_add">Add (+)</option>
+                <option value="sub" data-i18n="op_sub">Subtract (-)</option>
+                <option value="mul" data-i18n="op_mul">Multiply (×)</option>
+                <option value="and">AND</option>
+                <option value="or">OR</option>
+                <option value="xor">XOR</option>
+              </select>
+            </div>
+            <div class="field">
+              <label data-i18n="bit_width">Register Width</label>
+              <select id="bcalc-width">
+                <option value="8">8-bit</option>
+                <option value="16">16-bit</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn" onclick="binCalcRun()"><i class="fa-solid fa-play"></i> <span data-i18n="calculate">Calculate</span></button>
+          <div id="bcalc-result"></div>
+          <div id="bcalc-flags"></div>
+          <div class="hint" data-i18n="flags_hint">The flag register (CF, ZF, SF, OF, PF) shows automatically after every operation, just like a real CPU.</div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="bs-shift">
+        <div class="card">
+          <div class="field-row3">
+            <div class="field"><label data-i18n="number_label">Number (Decimal or Binary)</label><input type="text" id="shift-num" placeholder="e.g. 177 or 10110001"/></div>
+            <div class="field">
+              <label data-i18n="operation">Operation</label>
+              <select id="shift-op">
+                <option value="shl" data-i18n="op_shl">SHL — Shift Left</option>
+                <option value="shr" data-i18n="op_shr">SHR — Shift Right (Logical)</option>
+                <option value="sar" data-i18n="op_sar">SAR — Shift Right (Arithmetic)</option>
+                <option value="rol" data-i18n="op_rol">ROL — Rotate Left</option>
+                <option value="ror" data-i18n="op_ror">ROR — Rotate Right</option>
+              </select>
+            </div>
+            <div class="field"><label data-i18n="shift_count">Shift Count</label><input type="number" id="shift-count" value="1" min="0" max="31"/></div>
+          </div>
+          <div class="field" style="max-width:220px">
+            <label data-i18n="bit_width">Register Width</label>
+            <select id="shift-width">
+              <option value="8">8-bit</option>
+              <option value="16">16-bit</option>
+            </select>
+          </div>
+          <button class="btn" onclick="shiftRotateRun()"><i class="fa-solid fa-play"></i> <span data-i18n="calculate">Calculate</span></button>
+          <div id="shift-result"></div>
+          <div id="shift-flags"></div>
+          <div class="hint" data-i18n="shift_hint">OF is only meaningful for a shift/rotate count of exactly 1 — for any other count it's shown as undefined, exactly like on real 8086 hardware.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 8) MACHINE CODE (Intel 8086) ═══════════════ -->
+    <section class="tool-panel" id="tool-mcode">
+      <div class="panel-head">
+        <h2><i class="fa-solid fa-hashtag"></i> <span data-i18n="nav_mcode">Machine Code (Intel 8086)</span></h2>
+        <p data-i18n="mc_desc">Pick an instruction and its operands, and see the exact machine code bytes with a bit-level breakdown</p>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label data-i18n="instruction_label">Instruction</label>
+          <select id="mc-instr" onchange="mcOnInstrChange()">
+            <optgroup data-i18n="mc_group_data" label="Data Transfer">
+              <option value="MOV">MOV</option>
+            </optgroup>
+            <optgroup data-i18n="mc_group_alu" label="Arithmetic / Logic">
+              <option value="ADD">ADD</option>
+              <option value="SUB">SUB</option>
+              <option value="ADC">ADC</option>
+              <option value="SBB">SBB</option>
+              <option value="AND">AND</option>
+              <option value="OR">OR</option>
+              <option value="XOR">XOR</option>
+              <option value="CMP">CMP</option>
+            </optgroup>
+            <optgroup data-i18n="mc_group_incdec" label="Increment / Decrement">
+              <option value="INC">INC</option>
+              <option value="DEC">DEC</option>
+            </optgroup>
+            <optgroup data-i18n="mc_group_stack" label="Stack">
+              <option value="PUSH">PUSH</option>
+              <option value="POP">POP</option>
+            </optgroup>
+            <optgroup data-i18n="mc_group_ctrl" label="Control / Interrupt">
+              <option value="JMP">JMP short</option>
+              <option value="INT">INT</option>
+            </optgroup>
+            <optgroup data-i18n="mc_group_misc" label="No-operand">
+              <option value="NOP">NOP</option>
+              <option value="HLT">HLT</option>
+              <option value="CLC">CLC</option>
+              <option value="STC">STC</option>
+              <option value="CMC">CMC</option>
+              <option value="CLI">CLI</option>
+              <option value="STI">STI</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="field" id="mc-size-field" style="max-width:220px">
+          <label data-i18n="operand_size">Operand Size</label>
+          <select id="mc-size" onchange="mcBuildOperandFields()">
+            <option value="8" data-i18n="size_8">8-bit</option>
+            <option value="16" selected data-i18n="size_16">16-bit</option>
+          </select>
+        </div>
+
+        <div id="mc-operand-fields" class="field-row"></div>
+
+        <button class="btn" onclick="mcConvert()"><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="convert_btn">Convert</span></button>
+        <div id="mc-result"></div>
+        <div class="hint" data-i18n="mc_hint">This tool covers the most commonly taught 8086 instructions (MOV, ALU ops, INC/DEC, PUSH/POP, INT, JMP short, and flag instructions) with register-direct and immediate addressing — not a full assembler with label resolution or memory operands.</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 9) MATRIX CALCULATOR ═══════════════ -->
     <section class="tool-panel" id="tool-matrix">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-table-cells-large"></i> حاسبة المصفوفات</h2>
-        <p>اجمع، اطرح، اضرب، حول (Transpose)، احسب المحدد (Determinant) والمعكوس (Inverse)</p>
+        <h2><i class="fa-solid fa-table-cells-large"></i> <span data-i18n="nav_matrix">Matrix Calculator</span></h2>
+        <p data-i18n="mx_desc">Add, subtract, multiply, transpose, and calculate the determinant and inverse</p>
       </div>
       <div class="card">
         <div class="field-row3">
-          <div class="field"><label>عدد صفوف A</label><input type="number" id="mx-a-rows" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
-          <div class="field"><label>عدد أعمدة A</label><input type="number" id="mx-a-cols" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
+          <div class="field"><label data-i18n="rows_a">Rows of A</label><input type="number" id="mx-a-rows" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
+          <div class="field"><label data-i18n="cols_a">Columns of A</label><input type="number" id="mx-a-cols" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
           <div></div>
         </div>
         <div id="mx-a-grid"></div>
         <hr style="border-color:var(--border);margin:18px 0"/>
         <div class="field-row3">
-          <div class="field"><label>عدد صفوف B</label><input type="number" id="mx-b-rows" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
-          <div class="field"><label>عدد أعمدة B</label><input type="number" id="mx-b-cols" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
+          <div class="field"><label data-i18n="rows_b">Rows of B</label><input type="number" id="mx-b-rows" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
+          <div class="field"><label data-i18n="cols_b">Columns of B</label><input type="number" id="mx-b-cols" value="2" min="1" max="6" onchange="mxBuildGrids()"/></div>
           <div></div>
         </div>
         <div id="mx-b-grid"></div>
@@ -431,11 +624,11 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
       </div>
     </section>
 
-    <!-- ═══════════════ 8) SCIENTIFIC CALCULATOR ═══════════════ -->
+    <!-- ═══════════════ 10) SCIENTIFIC CALCULATOR ═══════════════ -->
     <section class="tool-panel" id="tool-sci">
       <div class="panel-head">
-        <h2><i class="fa-solid fa-calculator"></i> آلة حاسبة علمية</h2>
-        <p>دوال مثلثية ولوغاريتمات وأقواس — تقدر كمان تكتب أي تعبير رياضي في الشاشة مباشرة</p>
+        <h2><i class="fa-solid fa-calculator"></i> <span data-i18n="nav_sci">Scientific Calculator</span></h2>
+        <p data-i18n="sci_desc">Trig functions, logarithms, and parentheses — you can also type any math expression directly on the display</p>
       </div>
       <div class="card" style="max-width:420px">
         <div class="field-row" style="margin-bottom:10px">
@@ -456,39 +649,205 @@ table tbody tr:hover{background:rgba(6,182,212,.05)}
 
   </main>
 </div>
-
-<style>
-/* Sci calculator */
-.sci-switch{position:relative;display:inline-block;width:38px;height:20px}
-.sci-switch input{opacity:0;width:0;height:0}
-.sci-slider{position:absolute;cursor:pointer;inset:0;background:var(--bg-secondary);border:1px solid var(--border);border-radius:20px;transition:.2s}
-.sci-slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:2px;background:var(--text-muted);border-radius:50%;transition:.2s}
-.sci-switch input:checked + .sci-slider{background:rgba(6,182,212,.25);border-color:var(--accent)}
-.sci-switch input:checked + .sci-slider:before{transform:translateX(17px);background:var(--accent)}
-.sci-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
-.sci-btn{
-  padding:13px 0;border-radius:var(--r-sm);background:var(--bg-secondary);border:1px solid var(--border);
-  color:var(--text-main);font-family:var(--font-en);font-size:14px;font-weight:600;cursor:pointer;transition:.15s;
-}
-.sci-btn:hover{border-color:var(--border-h);color:var(--accent)}
-.sci-btn.op{color:var(--accent)}
-.sci-btn.eq{background:linear-gradient(135deg,var(--accent),var(--accent-h));color:#04101c;grid-column:span 2}
-.sci-btn.clr{color:var(--accent-r)}
-
-/* Resistor visual */
-.resistor-body{
-  display:flex;align-items:center;gap:2px;height:52px;background:linear-gradient(180deg,#d9c39a,#c2a877);
-  border-radius:26px;padding:0 26px;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.35);
-}
-.resistor-body::before,.resistor-body::after{content:'';position:absolute;top:50%;transform:translateY(-50%);width:34px;height:6px;background:#8a8a8a}
-.resistor-body::before{right:-34px}
-.resistor-body::after{left:-34px}
-.resistor-band{width:12px;height:100%}
-.res-select-wrap{display:flex;flex-direction:column;gap:6px}
-.res-swatch{width:16px;height:16px;border-radius:3px;display:inline-block;vertical-align:middle;margin-left:6px;border:1px solid rgba(255,255,255,.25)}
-</style>
-
+</div>
 <script>
+/* ════════════════════════════════════════════════════════════
+   I18N (default English, toggle to Arabic)
+   ════════════════════════════════════════════════════════════ */
+var I18N = {
+  en: {
+    brand_tag:"Quick engineering tools to help you study", back_home:"Back to main site", nav_label:"TOOLS",
+    theme_dark:"Dark", theme_light:"Light",
+    nav_baseconv:"Number System Converter", nav_kmap:"K-Map Solver", nav_truth:"Truth Table",
+    nav_boolexpr:"Boolean Evaluator", nav_resistor:"Resistor Color Code", nav_subnet:"Subnet Calculator",
+    nav_binsys:"Binary System", nav_mcode:"Machine Code", nav_matrix:"Matrix Calculator", nav_sci:"Scientific Calculator",
+    clear_all:"Clear All", numvars_label:"Number of Variables",
+    vars2:"2 variables (A,B)", vars3:"3 variables (A,B,C)", vars4:"4 variables (A,B,C,D)", vars5:"5 variables (A,B,C,D,E)",
+    solve_btn:"Solve", reset_map:"Reset Map",
+    bc_desc:"Type a number in any field and it converts automatically to the rest (Binary / Octal / Decimal / Hex)",
+    bc_hint:"You can enter a negative number by starting with <code>-</code>. Write hexadecimal digits using English letters A-F.",
+    km_desc:"Choose the number of variables, click any cell to cycle through 0, 1, and X (Don't Care), then click Solve",
+    km_hint:"Click any cell: 1st click = 1, 2nd click = 0, 3rd click = X (Don't Care), 4th click back to 0 (empty).",
+    tt_desc:"Build a truth table from an expression, or the reverse: get a simplified expression from a table",
+    tt_sub1:"Expression → Table", tt_sub2:"Table → Expression",
+    expr_label:"Boolean Expression",
+    expr_syntax_hint:"Available symbols: AND = <code>.</code> or <code>*</code> or <code>&amp;</code> or just placing letters next to each other like <code>AB</code> — OR = <code>+</code> or <code>|</code> — NOT = <code>'</code> after the letter or <code>!</code> before it — XOR = <code>^</code>. Each variable must be a single letter (A, B, C...).",
+    show_table:"Show Table", get_simplified:"Get Simplified Expression",
+    tt2_hint:"Click any Output value to cycle through 0, 1, and X.",
+    be_desc:"Write the expression, set each variable to 0 or 1, and see the result instantly", calc_result:"Calculate Result",
+    rc_desc:"Choose the colors and calculate the resistance value and tolerance",
+    band_count:"Number of Bands", bands4:"4 bands", bands5:"5 bands", calc_value:"Calculate Value",
+    sn_desc:"A set of networking tools: subnet calculation, address calculation, and IPv4 ↔ Binary conversion",
+    sn_sub_addr:"Address Calculation", ip_address:"IP Address", calculate:"Calculate",
+    vlsm_title:"Required Subnets Calculation (VLSM)", base_network:"Base Network", base_cidr:"Base CIDR",
+    subnets_needed:"Number of Subnets Needed", hosts_needed:"Or Hosts Needed per Subnet", optional:"Optional",
+    calc_subnets:"Calculate Subnets", ipv4_label:"IPv4 (e.g. 192.168.1.1)",
+    binary_32bit:"Binary (32 bit, you can separate every 8 with a space)",
+    bs_desc:"Binary arithmetic/logic with a full flag register, plus shift and rotate operations",
+    bs_sub_calc:"Binary Calculator", bs_sub_shift:"Shift / Rotate",
+    first_number:"First Number (Decimal or Binary)", second_number:"Second Number", operation:"Operation",
+    op_add:"Add (+)", op_sub:"Subtract (-)", op_mul:"Multiply (×)", bit_width:"Register Width",
+    flags_hint:"The flag register (CF, ZF, SF, OF, PF) shows automatically after every operation, just like a real CPU.",
+    number_label:"Number (Decimal or Binary)",
+    op_shl:"SHL — Shift Left", op_shr:"SHR — Shift Right (Logical)", op_sar:"SAR — Shift Right (Arithmetic)",
+    op_rol:"ROL — Rotate Left", op_ror:"ROR — Rotate Right", shift_count:"Shift Count",
+    shift_hint:"OF is only meaningful for a shift/rotate count of exactly 1 — for any other count it's shown as undefined, exactly like on real 8086 hardware.",
+    mc_desc:"Pick an instruction and its operands, and see the exact machine code bytes with a bit-level breakdown",
+    instruction_label:"Instruction", mc_group_data:"Data Transfer", mc_group_alu:"Arithmetic / Logic",
+    mc_group_incdec:"Increment / Decrement", mc_group_stack:"Stack", mc_group_ctrl:"Control / Interrupt", mc_group_misc:"No-operand",
+    operand_size:"Operand Size", size_8:"8-bit", size_16:"16-bit", convert_btn:"Convert",
+    mc_hint:"This tool covers the most commonly taught 8086 instructions (MOV, ALU ops, INC/DEC, PUSH/POP, INT, JMP short, and flag instructions) with register-direct and immediate addressing — not a full assembler with label resolution or memory operands.",
+    mx_desc:"Add, subtract, multiply, transpose, and calculate the determinant and inverse",
+    rows_a:"Rows of A", cols_a:"Columns of A", rows_b:"Rows of B", cols_b:"Columns of B",
+    sci_desc:"Trig functions, logarithms, and parentheses — you can also type any math expression directly on the display",
+    dest_reg:"Destination Register", src_reg:"Source Register", operand_mode:"Operand Type",
+    mode_regreg:"Register, Register", mode_regimm:"Register, Immediate", immediate_val:"Immediate Value",
+    register_label:"Register", displacement_label:"Displacement (signed, -128 to 127)", interrupt_num:"Interrupt Number (0-255)",
+    machine_bytes:"Machine Code Bytes", bit_breakdown:"Bit-level Breakdown", byte_n:"Byte",
+    fill_all_fields:"Please fill in all fields", invalid_number:"Invalid number for this base",
+    error_generic_calc:"Please enter two valid numbers (decimal or binary)",
+    error_write_expr:"Please write an expression first", error_write_ip:"Please enter a valid IP like 192.168.1.10",
+    error_write_cidr:"Please enter a CIDR from 0 to 32", error_valid_net_cidr:"Please enter a valid network and CIDR",
+    error_subnets_or_hosts:"Please enter the number of subnets or hosts needed",
+    error_calc_not_possible:"This calculation isn't possible with these numbers (make sure the number of subnets/hosts makes sense for the base network)",
+    error_valid_ip:"Invalid IP", error_32bit:"Must be exactly 32 bits (0s and 1s only)",
+    subnets_shown_note:"Showing the first 16 subnets out of",
+    result:"Result", simplified_expr:"Simplified Expression", groups_used:"Prime implicant groups used:",
+    network_address:"Network Address", broadcast_address:"Broadcast Address", subnet_mask:"Subnet Mask",
+    wildcard_mask:"Wildcard Mask", first_host:"First Usable Host", last_host:"Last Usable Host",
+    usable_hosts:"Usable Hosts", total_addresses:"Total Addresses", ip_class:"IP Class",
+    new_mask_prefix:"New Subnet Mask / Prefix", hosts_per_subnet:"hosts per subnet",
+    subnet_col:"Subnet", network_col:"Network", firsthost_col:"First Host", lasthost_col:"Last Host", broadcast_col:"Broadcast",
+    resistance:"Resistance", decimal_col:"Decimal", binary_col:"Binary", hex_col:"Hex",
+    count_zero_note:"count=0: no change", overflow_undefined:"undefined (count≠1)",
+    resultval:"Result", flagsreg:"Flag Register",
+  },
+  ar: {
+    brand_tag:"أدوات هندسية سريعة لمساعدتك في مذاكرتك", back_home:"رجوع للموقع الرئيسي", nav_label:"الأدوات",
+    theme_dark:"داكن", theme_light:"فاتح",
+    nav_baseconv:"محول الأنظمة العددية", nav_kmap:"K-Map Solver", nav_truth:"جدول الصواب",
+    nav_boolexpr:"تقييم معادلة منطقية", nav_resistor:"ألوان المقاومة", nav_subnet:"Subnet Calculator",
+    nav_binsys:"النظام الثنائي", nav_mcode:"الكود الآلي (Machine Code)", nav_matrix:"حاسبة المصفوفات", nav_sci:"آلة حاسبة علمية",
+    clear_all:"مسح الكل", numvars_label:"عدد المتغيرات",
+    vars2:"2 متغيرات (A,B)", vars3:"3 متغيرات (A,B,C)", vars4:"4 متغيرات (A,B,C,D)", vars5:"5 متغيرات (A,B,C,D,E)",
+    solve_btn:"حل", reset_map:"تصفير الخريطة",
+    bc_desc:"اكتب رقم في أي خانة وهيتحول تلقائي للباقي (Binary / Octal / Decimal / Hex)",
+    bc_hint:"تقدر تكتب رقم سالب بحط <code>-</code> في الأول. الأرقام السداسية عشرية اكتبها بحروف إنجليزية A-F.",
+    km_desc:"اختار عدد المتغيرات، ودوس على أي خانة عشان تدور بين 0 و 1 و X (Don't Care)، وبعدين دوس حل",
+    km_hint:"دوس على أي خلية: أول دوسة = 1، تاني دوسة = 0، تالت دوسة = X (Don't Care)، ورابع دوسة ترجع 0 (فاضية).",
+    tt_desc:"اعمل جدول الصواب من معادلة، أو اعمل العكس: هات المعادلة المبسطة من جدول",
+    tt_sub1:"من المعادلة → جدول", tt_sub2:"من الجدول → معادلة",
+    expr_label:"اكتب المعادلة المنطقية",
+    expr_syntax_hint:"الرموز المتاحة: AND = <code>.</code> أو <code>*</code> أو <code>&amp;</code> أو مجاورة الحروف زي <code>AB</code> — OR = <code>+</code> أو <code>|</code> — NOT = <code>'</code> بعد الحرف أو <code>!</code> قبله — XOR = <code>^</code>. كل متغير لازم يكون حرف واحد بس (A, B, C...).",
+    show_table:"اعرض الجدول", get_simplified:"هات المعادلة المبسطة",
+    tt2_hint:"دوس على قيمة الـ Output لأي صف عشان تدور بين 0 و 1 و X.",
+    be_desc:"اكتب المعادلة وحط قيمة كل متغير (0 أو 1) وشوف الناتج على طول", calc_result:"احسب الناتج",
+    rc_desc:"اختار الألوان واحسب قيمة المقاومة وهامش الخطأ",
+    band_count:"عدد الحلقات (Bands)", bands4:"4 حلقات", bands5:"5 حلقات", calc_value:"احسب القيمة",
+    sn_desc:"مجموعة أدوات الشبكات: حساب السبنت، حساب العناوين، والتحويل بين IPv4 والثنائي",
+    sn_sub_addr:"Address Calculation", ip_address:"عنوان الـ IP", calculate:"احسب",
+    vlsm_title:"حساب عدد السبنتات المطلوبة (VLSM)", base_network:"الشبكة الأساسية", base_cidr:"CIDR الأساسي",
+    subnets_needed:"عدد السبنتات المطلوبة", hosts_needed:"أو عدد الأجهزة المطلوبة في كل سبنت", optional:"اختياري",
+    calc_subnets:"احسب السبنتات", ipv4_label:"IPv4 (مثال: 192.168.1.1)",
+    binary_32bit:"Binary (32 bit، ممكن تفصل كل 8 بمسافة)",
+    bs_desc:"عمليات ثنائية حسابية ومنطقية مع سجل أعلام (Flags) كامل، وكمان عمليات إزاحة ودوران",
+    bs_sub_calc:"الآلة الحاسبة الثنائية", bs_sub_shift:"إزاحة / دوران (Shift / Rotate)",
+    first_number:"الرقم الأول (عشري أو ثنائي)", second_number:"الرقم الثاني", operation:"العملية",
+    op_add:"جمع (+)", op_sub:"طرح (-)", op_mul:"ضرب (×)", bit_width:"عرض المسجل (Register)",
+    flags_hint:"سجل الأعلام (CF, ZF, SF, OF, PF) بيظهر تلقائي بعد كل عملية، بالظبط زي المعالج الحقيقي.",
+    number_label:"الرقم (عشري أو ثنائي)",
+    op_shl:"SHL — إزاحة لليسار", op_shr:"SHR — إزاحة لليمين (منطقية)", op_sar:"SAR — إزاحة لليمين (حسابية)",
+    op_rol:"ROL — دوران لليسار", op_ror:"ROR — دوران لليمين", shift_count:"عدد مرات الإزاحة",
+    shift_hint:"علم الـ OF له معنى بس لما عدد الإزاحات يساوي 1 بالظبط — لأي عدد تاني بيتحط 'غير محدد'، بالظبط زي معالج 8086 الحقيقي.",
+    mc_desc:"اختار التعليمة (Instruction) والعوامل بتاعتها، وشوف بايتات الكود الآلي بالظبط مع تفصيل البتات",
+    instruction_label:"التعليمة (Instruction)", mc_group_data:"نقل البيانات", mc_group_alu:"حسابية / منطقية",
+    mc_group_incdec:"زيادة / نقصان", mc_group_stack:"المكدس (Stack)", mc_group_ctrl:"تحكم / مقاطعة", mc_group_misc:"بدون عوامل",
+    operand_size:"حجم العامل (Operand Size)", size_8:"8-bit", size_16:"16-bit", convert_btn:"حوّل",
+    mc_hint:"الأداة دي بتغطي أشهر تعليمات 8086 اللي بتتدرس (MOV، العمليات الحسابية/المنطقية، INC/DEC، PUSH/POP، INT، JMP short، وتعليمات الأعلام) بعنونة السجلات المباشرة والقيم الفورية — مش Assembler كامل بيحل الـ labels أو عمليات الذاكرة.",
+    mx_desc:"اجمع، اطرح، اضرب، حول (Transpose)، احسب المحدد (Determinant) والمعكوس (Inverse)",
+    rows_a:"عدد صفوف A", cols_a:"عدد أعمدة A", rows_b:"عدد صفوف B", cols_b:"عدد أعمدة B",
+    sci_desc:"دوال مثلثية ولوغاريتمات وأقواس — تقدر كمان تكتب أي تعبير رياضي في الشاشة مباشرة",
+    dest_reg:"سجل الوجهة (Destination)", src_reg:"سجل المصدر (Source)", operand_mode:"نوع العوامل",
+    mode_regreg:"سجل، سجل", mode_regimm:"سجل، قيمة فورية", immediate_val:"القيمة الفورية (Immediate)",
+    register_label:"السجل (Register)", displacement_label:"الإزاحة (Displacement) (تتراوح من -128 إلى 127)", interrupt_num:"رقم المقاطعة (0-255)",
+    machine_bytes:"بايتات الكود الآلي", bit_breakdown:"تفصيل البتات", byte_n:"بايت",
+    fill_all_fields:"من فضلك أكمل كل الحقول", invalid_number:"رقم مش صحيح لنظام العد ده",
+    error_generic_calc:"اكتب رقمين صحيحين (عشري أو ثنائي)",
+    error_write_expr:"اكتب معادلة الأول", error_write_ip:"اكتب IP صحيح زي 192.168.1.10",
+    error_write_cidr:"اكتب CIDR من 0 لـ 32", error_valid_net_cidr:"اكتب شبكة وCIDR صحيحين",
+    error_subnets_or_hosts:"اكتب عدد السبنتات أو عدد الأجهزة المطلوبة",
+    error_calc_not_possible:"مينفعش نعمل الحسبة دي بالأرقام اللي انت كاتبها (اتأكد إن عدد السبنتات/الأجهزة منطقي بالنسبة للشبكة الأساسية)",
+    error_valid_ip:"IP مش صحيح", error_32bit:"لازم يكون 32 بت بالظبط (0 و 1 بس)",
+    subnets_shown_note:"تم عرض أول 16 سبنت بس من إجمالي",
+    result:"Result", simplified_expr:"Simplified Expression", groups_used:"المجموعات (Prime Implicants) المستخدمة:",
+    network_address:"Network Address", broadcast_address:"Broadcast Address", subnet_mask:"Subnet Mask",
+    wildcard_mask:"Wildcard Mask", first_host:"First Usable Host", last_host:"Last Usable Host",
+    usable_hosts:"Usable Hosts", total_addresses:"Total Addresses", ip_class:"IP Class",
+    new_mask_prefix:"New Subnet Mask / Prefix", hosts_per_subnet:"host لكل سبنت",
+    subnet_col:"Subnet", network_col:"Network", firsthost_col:"First Host", lasthost_col:"Last Host", broadcast_col:"Broadcast",
+    resistance:"Resistance", decimal_col:"Decimal", binary_col:"Binary", hex_col:"Hex",
+    count_zero_note:"عدد=0: من غير تغيير", overflow_undefined:"غير محدد (العدد≠1)",
+    resultval:"Result", flagsreg:"سجل الأعلام",
+  }
+};
+var currentLang = localStorage.getItem('ajoobot_lang') || 'en';
+var currentTheme = localStorage.getItem('ajoobot_theme') || 'light';
+
+function t(key){ return (I18N[currentLang] && I18N[currentLang][key]) || (I18N.en[key]) || key; }
+
+function applyLang(){
+  var root = document.getElementById('ajoobot-page');
+  root.setAttribute('dir', currentLang==='ar' ? 'rtl' : 'ltr');
+  root.setAttribute('lang', currentLang);
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key = el.getAttribute('data-i18n');
+    if(el.tagName === 'OPTGROUP'){ el.setAttribute('label', t(key)); }
+    else { el.innerHTML = t(key); }
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+    el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
+  });
+  document.getElementById('langToggleLabel').textContent = currentLang==='en' ? 'العربية' : 'English';
+  localStorage.setItem('ajoobot_lang', currentLang);
+  // Rebuild any dynamically-generated UI pieces so their labels refresh in the new language
+  if(typeof kmapBuildGrid==='function') kmapBuildGrid();
+  if(typeof tt2BuildTable==='function') tt2BuildTable();
+  if(typeof rcBuildInputs==='function') rcBuildInputs();
+  if(typeof mxBuildGrids==='function') mxBuildGrids();
+  if(typeof sciBuildGrid==='function') sciBuildGrid();
+  if(typeof mcBuildOperandFields==='function') mcBuildOperandFields();
+  ['bc-error','kmap-result','tt-fromexpr-result','tt2-result','be-vars-wrap','be-result','rc-result',
+   'sn-result','addr-result','ipbin-error','bcalc-result','bcalc-flags','shift-result','shift-flags',
+   'mc-result','mx-result'].forEach(function(id){ var el=document.getElementById(id); if(el) el.innerHTML=''; });
+}
+function toggleLang(){
+  currentLang = currentLang==='en' ? 'ar' : 'en';
+  applyLang();
+}
+
+/* ════════════════════════════════════════════════════════════
+   THEME (default light)
+   ════════════════════════════════════════════════════════════ */
+function applyTheme(){
+  var root = document.getElementById('ajoobot-page');
+  root.setAttribute('data-theme', currentTheme);
+  var icon = document.getElementById('themeToggleIcon');
+  var label = document.getElementById('themeToggleLabel');
+  if(currentTheme==='dark'){
+    icon.className = 'fa-solid fa-sun';
+    label.setAttribute('data-i18n','theme_light');
+  } else {
+    icon.className = 'fa-solid fa-moon';
+    label.setAttribute('data-i18n','theme_dark');
+  }
+  label.textContent = currentTheme==='dark' ? t('theme_light') : t('theme_dark');
+  localStorage.setItem('ajoobot_theme', currentTheme);
+}
+function toggleTheme(){
+  currentTheme = currentTheme==='light' ? 'dark' : 'light';
+  applyTheme();
+}
+
 /* ════════════════════════════════════════════════════════════
    SHARED HELPERS: navigation + subtabs
    ════════════════════════════════════════════════════════════ */
@@ -510,7 +869,6 @@ function switchSubtab(group, id){
 
 /* ════════════════════════════════════════════════════════════
    BOOLEAN EXPRESSION ENGINE (parser + evaluator + Quine-McCluskey)
-   شغالة على متغيرات حرف واحد بس: A,B,C,D...
    ════════════════════════════════════════════════════════════ */
 function boolTokenize(expr){
   var tokens = []; var i = 0; var s = expr.replace(/\s+/g,'');
@@ -524,7 +882,7 @@ function boolTokenize(expr){
     if(c==='.' || c==='*' || c==='&'){ tokens.push({t:'AND'}); i++; continue; }
     if(c==='+' || c==='|'){ tokens.push({t:'OR'}); i++; continue; }
     if(c==='^'){ tokens.push({t:'XOR'}); i++; continue; }
-    throw new Error("رمز غير مفهوم: '" + c + "'");
+    throw new Error((currentLang==='ar'?"رمز غير مفهوم: '":"Unrecognized symbol: '") + c + "'");
   }
   return tokens;
 }
@@ -548,13 +906,13 @@ function boolParse(tokens){
   function parsePostfix(){ var n=parsePrimary(); while(peek()&&peek().t==='PRIME'){ next(); n={op:'NOT',a:n}; } return n; }
   function parsePrimary(){
     var tok = next();
-    if(!tok) throw new Error('نهاية غير متوقعة للمعادلة');
+    if(!tok) throw new Error(currentLang==='ar'?'نهاية غير متوقعة للمعادلة':'Unexpected end of expression');
     if(tok.t==='VAR') return {op:'VAR', name:tok.name};
-    if(tok.t==='LP'){ var n=parseOr(); if(!peek()||peek().t!=='RP') throw new Error('في قوس ناقص )'); next(); return n; }
-    throw new Error('في رمز مش متوقع في المعادلة');
+    if(tok.t==='LP'){ var n=parseOr(); if(!peek()||peek().t!=='RP') throw new Error(currentLang==='ar'?'في قوس ناقص )':'Missing closing parenthesis )'); next(); return n; }
+    throw new Error(currentLang==='ar'?'في رمز مش متوقع في المعادلة':'Unexpected symbol in expression');
   }
   var result = parseOr();
-  if(pos !== tokens.length) throw new Error('في رموز زيادة في آخر المعادلة');
+  if(pos !== tokens.length) throw new Error(currentLang==='ar'?'في رموز زيادة في آخر المعادلة':'Extra symbols at the end of the expression');
   return result;
 }
 function boolGetVars(ast, set){
@@ -582,8 +940,8 @@ function boolCompile(exprStr){
 function boolBuildTruthTable(exprStr){
   var c = boolCompile(exprStr);
   var n = c.vars.length;
-  if(n===0) throw new Error('محتاج تكتب متغير واحد على الأقل (زي A أو B)');
-  if(n>8) throw new Error('عدد المتغيرات كبير جدًا (الحد الأقصى 8)');
+  if(n===0) throw new Error(currentLang==='ar'?'محتاج تكتب متغير واحد على الأقل (زي A أو B)':'You need at least one variable (like A or B)');
+  if(n>8) throw new Error(currentLang==='ar'?'عدد المتغيرات كبير جدًا (الحد الأقصى 8)':'Too many variables (max 8)');
   var rows = [];
   for(var i=0;i<Math.pow(2,n);i++){
     var env = {};
@@ -713,7 +1071,7 @@ function bcOnInput(source){
   }
   var val = bcParseBase(el.value, bcFields[source]);
   if(val===null){
-    errBox.innerHTML = '<div class="error-box">في رقم مش صحيح لنظام العد ده</div>';
+    errBox.innerHTML = '<div class="error-box">'+t('invalid_number')+'</div>';
     return;
   }
   Object.keys(bcFields).forEach(function(k){
@@ -729,24 +1087,24 @@ function bcClear(){
 /* ════════════════════════════════════════════════════════════
    2) K-MAP SOLVER
    ════════════════════════════════════════════════════════════ */
-var kmapState = {}; // cellIndex(minterm) -> 0/1/2(X)
+var kmapState = {};
 var kmapLayouts = {
   2: {rowVar:['A'], colVar:['B'], rows:['0','1'], cols:['0','1']},
   3: {rowVar:['A'], colVar:['B','C'], rows:['0','1'], cols:['00','01','11','10']},
   4: {rowVar:['A','B'], colVar:['C','D'], rows:['00','01','11','10'], cols:['00','01','11','10']}
 };
-function kmapCellMinterm(numVars, rowBits, colBits){
-  if(numVars===2) return parseInt(rowBits+colBits,2);
-  if(numVars===3) return parseInt(rowBits+colBits,2);
-  return parseInt(rowBits+colBits,2);
-}
+function kmapCellMinterm(numVars, rowBits, colBits){ return parseInt(rowBits+colBits,2); }
 function kmapBuildGrid(){
-  var numVars = parseInt(document.getElementById('km-numvars').value,10);
+  var el = document.getElementById('km-numvars');
+  if(!el) return;
+  var numVars = parseInt(el.value,10);
   var layout = kmapLayouts[numVars];
-  kmapState = {};
-  var total = Math.pow(2,numVars);
-  for(var i=0;i<total;i++) kmapState[i]=0;
-
+  var preserveState = kmapState && Object.keys(kmapState).length===Math.pow(2,numVars);
+  if(!preserveState){
+    kmapState = {};
+    var total = Math.pow(2,numVars);
+    for(var i=0;i<total;i++) kmapState[i]=0;
+  }
   var vars = numVars===2? ['A','B'] : numVars===3? ['A','B','C'] : ['A','B','C','D'];
   var html = '<div class="tbl-wrap"><table><thead><tr><th>'+vars.join('')+'</th>';
   layout.cols.forEach(function(c){ html += '<th>'+layout.colVar.join('')+'='+c+'</th>'; });
@@ -755,16 +1113,17 @@ function kmapBuildGrid(){
     html += '<tr><th>'+layout.rowVar.join('')+'='+r+'</th>';
     layout.cols.forEach(function(c){
       var m = kmapCellMinterm(numVars, r, c);
-      html += '<td style="cursor:pointer;font-weight:800;font-size:16px;padding:14px" id="km-cell-'+m+'" onclick="kmapToggleCell('+m+')">0</td>';
+      var v = kmapState[m]||0;
+      var labels=['0','1','X']; var colors=['var(--text-dim)','var(--accent)','var(--accent-y)'];
+      html += '<td style="cursor:pointer;font-weight:800;font-size:16px;padding:14px;color:'+colors[v]+'" id="km-cell-'+m+'" onclick="kmapToggleCell('+m+')">'+labels[v]+'</td>';
     });
     html += '</tr>';
   });
   html += '</tbody></table></div>';
   document.getElementById('kmap-grid-wrap').innerHTML = html;
-  document.getElementById('kmap-result').innerHTML = '';
 }
 function kmapToggleCell(m){
-  kmapState[m] = (kmapState[m]+1) % 3; // 0 -> 1 -> 2(X) -> 0
+  kmapState[m] = (kmapState[m]+1) % 3;
   var el = document.getElementById('km-cell-'+m);
   var labels = ['0','1','X'];
   var colors = ['var(--text-dim)','var(--accent)','var(--accent-y)'];
@@ -787,15 +1146,15 @@ function kmapSolve(){
   });
   var resDiv = document.getElementById('kmap-result');
   if(minterms.length===0){
-    resDiv.innerHTML = '<div class="result-box"><div class="rlabel">Result</div><div class="rvalue">F = 0</div></div>';
+    resDiv.innerHTML = '<div class="result-box"><div class="rlabel">'+t('result')+'</div><div class="rvalue">F = 0</div></div>';
     return;
   }
   var result = qmMinimize(numVars, minterms, dontcares);
   var expr = qmToExpr(result, vars);
-  var termsHtml = (result.terms||[]).map(function(t){ return '<span style="background:var(--bg-secondary);padding:4px 10px;border-radius:6px;margin-inline-end:6px;display:inline-block;margin-top:6px;color:var(--accent-g)">'+qmTermToExpr(t,vars)+'</span>'; }).join('');
+  var termsHtml = (result.terms||[]).map(function(tm){ return '<span style="background:var(--bg-secondary);padding:4px 10px;border-radius:6px;margin-inline-end:6px;display:inline-block;margin-top:6px;color:var(--accent-g)">'+qmTermToExpr(tm,vars)+'</span>'; }).join('');
   resDiv.innerHTML =
-    '<div class="result-box"><div class="rlabel">Simplified Expression (SOP)</div><div class="rvalue">F = '+expr+'</div></div>'+
-    (termsHtml? '<div style="margin-top:10px"><div class="hint" style="margin-bottom:4px">المجموعات (Prime Implicants) المستخدمة:</div>'+termsHtml+'</div>' : '');
+    '<div class="result-box"><div class="rlabel">'+t('simplified_expr')+'</div><div class="rvalue">F = '+expr+'</div></div>'+
+    (termsHtml? '<div style="margin-top:10px"><div class="hint" style="margin-bottom:4px">'+t('groups_used')+'</div>'+termsHtml+'</div>' : '');
 }
 kmapBuildGrid();
 
@@ -805,7 +1164,7 @@ kmapBuildGrid();
 function ttFromExpr(){
   var exprStr = document.getElementById('tt-expr').value.trim();
   var resDiv = document.getElementById('tt-fromexpr-result');
-  if(!exprStr){ resDiv.innerHTML = '<div class="error-box">اكتب معادلة الأول</div>'; return; }
+  if(!exprStr){ resDiv.innerHTML = '<div class="error-box">'+t('error_write_expr')+'</div>'; return; }
   try{
     var tt = boolBuildTruthTable(exprStr);
     var html = '<div class="tbl-wrap" style="margin-top:16px"><table><thead><tr>';
@@ -825,22 +1184,25 @@ function ttFromExpr(){
 
 var tt2State = {};
 function tt2BuildTable(){
-  var numVars = parseInt(document.getElementById('tt2-numvars').value,10);
+  var el = document.getElementById('tt2-numvars');
+  if(!el) return;
+  var numVars = parseInt(el.value,10);
   var vars = ['A','B','C','D','E'].slice(0,numVars);
-  tt2State = {};
+  var preserve = tt2State && Object.keys(tt2State).length===Math.pow(2,numVars);
+  if(!preserve) tt2State = {};
   var total = Math.pow(2,numVars);
   var html = '<div class="tbl-wrap"><table><thead><tr>';
   vars.forEach(function(v){ html += '<th>'+v+'</th>'; });
   html += '<th>Output</th></tr></thead><tbody>';
+  var labels=['0','1','X']; var colors=['var(--text-dim)','var(--accent)','var(--accent-y)'];
   for(var i=0;i<total;i++){
-    tt2State[i] = 0;
+    if(!(i in tt2State)) tt2State[i] = 0;
     html += '<tr>';
     for(var b=0;b<numVars;b++){ html += '<td>'+((i>>(numVars-1-b))&1)+'</td>'; }
-    html += '<td style="cursor:pointer;font-weight:800" id="tt2-out-'+i+'" onclick="tt2Toggle('+i+')">0</td></tr>';
+    html += '<td style="cursor:pointer;font-weight:800;color:'+colors[tt2State[i]]+'" id="tt2-out-'+i+'" onclick="tt2Toggle('+i+')">'+labels[tt2State[i]]+'</td></tr>';
   }
   html += '</tbody></table></div>';
   document.getElementById('tt2-table-wrap').innerHTML = html;
-  document.getElementById('tt2-result').innerHTML = '';
 }
 function tt2Toggle(i){
   tt2State[i] = (tt2State[i]+1)%3;
@@ -859,10 +1221,10 @@ function tt2Solve(){
     else if(v===2) dontcares.push(parseInt(k,10));
   });
   var resDiv = document.getElementById('tt2-result');
-  if(minterms.length===0){ resDiv.innerHTML = '<div class="result-box"><div class="rlabel">Result</div><div class="rvalue">F = 0</div></div>'; return; }
+  if(minterms.length===0){ resDiv.innerHTML = '<div class="result-box"><div class="rlabel">'+t('result')+'</div><div class="rvalue">F = 0</div></div>'; return; }
   var result = qmMinimize(numVars, minterms, dontcares);
   var expr = qmToExpr(result, vars);
-  resDiv.innerHTML = '<div class="result-box"><div class="rlabel">Simplified Expression</div><div class="rvalue">F = '+expr+'</div></div>';
+  resDiv.innerHTML = '<div class="result-box"><div class="rlabel">'+t('simplified_expr')+'</div><div class="rvalue">F = '+expr+'</div></div>';
 }
 tt2BuildTable();
 
@@ -895,7 +1257,7 @@ function beDetectVars(){
 function beEvaluate(){
   var exprStr = document.getElementById('be-expr').value.trim();
   var resDiv = document.getElementById('be-result');
-  if(!exprStr){ resDiv.innerHTML='<div class="error-box">اكتب معادلة الأول</div>'; return; }
+  if(!exprStr){ resDiv.innerHTML='<div class="error-box">'+t('error_write_expr')+'</div>'; return; }
   try{
     var tokens = boolTokenize(exprStr);
     var ast = boolParse(tokens);
@@ -903,7 +1265,7 @@ function beEvaluate(){
     var env = {};
     vars.forEach(function(v){ env[v] = beVarState[v]||0; });
     var out = boolEval(ast, env);
-    resDiv.innerHTML = '<div class="result-box"><div class="rlabel">Result</div><div class="rvalue" style="color:'+(out? 'var(--accent-g)':'var(--accent-r)')+'">F = '+out+' ('+(out?'TRUE':'FALSE')+')</div></div>';
+    resDiv.innerHTML = '<div class="result-box"><div class="rlabel">'+t('result')+'</div><div class="rvalue" style="color:'+(out? 'var(--accent-g)':'var(--accent-r)')+'">F = '+out+' ('+(out?'TRUE':'FALSE')+')</div></div>';
   }catch(e){ resDiv.innerHTML = '<div class="error-box">'+e.message+'</div>'; }
 }
 
@@ -911,45 +1273,52 @@ function beEvaluate(){
    5) RESISTOR COLOR CODE CALCULATOR
    ════════════════════════════════════════════════════════════ */
 var RC_DIGIT_COLORS = [
-  {name:'black', ar:'أسود', hex:'#1a1a1a', val:0},
-  {name:'brown', ar:'بني', hex:'#8b4513', val:1},
-  {name:'red', ar:'أحمر', hex:'#e53935', val:2},
-  {name:'orange', ar:'برتقالي', hex:'#f4841a', val:3},
-  {name:'yellow', ar:'أصفر', hex:'#fdd835', val:4},
-  {name:'green', ar:'أخضر', hex:'#43a047', val:5},
-  {name:'blue', ar:'أزرق', hex:'#1e88e5', val:6},
-  {name:'violet', ar:'بنفسجي', hex:'#8e24aa', val:7},
-  {name:'grey', ar:'رمادي', hex:'#9e9e9e', val:8},
-  {name:'white', ar:'أبيض', hex:'#f5f5f5', val:9}
+  {name:'black', en:'Black', ar:'أسود', hex:'#1a1a1a', val:0},
+  {name:'brown', en:'Brown', ar:'بني', hex:'#8b4513', val:1},
+  {name:'red', en:'Red', ar:'أحمر', hex:'#e53935', val:2},
+  {name:'orange', en:'Orange', ar:'برتقالي', hex:'#f4841a', val:3},
+  {name:'yellow', en:'Yellow', ar:'أصفر', hex:'#fdd835', val:4},
+  {name:'green', en:'Green', ar:'أخضر', hex:'#43a047', val:5},
+  {name:'blue', en:'Blue', ar:'أزرق', hex:'#1e88e5', val:6},
+  {name:'violet', en:'Violet', ar:'بنفسجي', hex:'#8e24aa', val:7},
+  {name:'grey', en:'Grey', ar:'رمادي', hex:'#9e9e9e', val:8},
+  {name:'white', en:'White', ar:'أبيض', hex:'#f5f5f5', val:9}
 ];
 var RC_MULT_COLORS = RC_DIGIT_COLORS.concat([
-  {name:'gold', ar:'ذهبي', hex:'#d4af37', val:-1},
-  {name:'silver', ar:'فضي', hex:'#c0c0c0', val:-2}
+  {name:'gold', en:'Gold', ar:'ذهبي', hex:'#d4af37', val:-1},
+  {name:'silver', en:'Silver', ar:'فضي', hex:'#c0c0c0', val:-2}
 ]);
 var RC_TOL_COLORS = [
-  {name:'brown', ar:'بني (±1%)', hex:'#8b4513', tol:'±1%'},
-  {name:'red', ar:'أحمر (±2%)', hex:'#e53935', tol:'±2%'},
-  {name:'green', ar:'أخضر (±0.5%)', hex:'#43a047', tol:'±0.5%'},
-  {name:'blue', ar:'أزرق (±0.25%)', hex:'#1e88e5', tol:'±0.25%'},
-  {name:'gold', ar:'ذهبي (±5%)', hex:'#d4af37', tol:'±5%'},
-  {name:'silver', ar:'فضي (±10%)', hex:'#c0c0c0', tol:'±10%'}
+  {name:'brown', en:'Brown (±1%)', ar:'بني (±1%)', hex:'#8b4513', tol:'±1%'},
+  {name:'red', en:'Red (±2%)', ar:'أحمر (±2%)', hex:'#e53935', tol:'±2%'},
+  {name:'green', en:'Green (±0.5%)', ar:'أخضر (±0.5%)', hex:'#43a047', tol:'±0.5%'},
+  {name:'blue', en:'Blue (±0.25%)', ar:'أزرق (±0.25%)', hex:'#1e88e5', tol:'±0.25%'},
+  {name:'gold', en:'Gold (±5%)', ar:'ذهبي (±5%)', hex:'#d4af37', tol:'±5%'},
+  {name:'silver', en:'Silver (±10%)', ar:'فضي (±10%)', hex:'#c0c0c0', tol:'±10%'}
 ];
 function rcColorOptions(list, selectedIdx){
   return list.map(function(c,i){
-    return '<option value="'+i+'"'+(i===selectedIdx?' selected':'')+'>'+c.ar+'</option>';
+    return '<option value="'+i+'"'+(i===selectedIdx?' selected':'')+'>'+(currentLang==='ar'?c.ar:c.en)+'</option>';
   }).join('');
 }
 function rcBuildInputs(){
-  var n = parseInt(document.getElementById('rc-bandcount').value,10);
+  var bandEl = document.getElementById('rc-bandcount');
+  if(!bandEl) return;
+  var n = parseInt(bandEl.value,10);
   var wrap = document.getElementById('rc-inputs');
+  var band1Label = currentLang==='ar' ? 'الحلقة 1 (رقم)' : 'Band 1 (digit)';
+  var band2Label = currentLang==='ar' ? 'الحلقة 2 (رقم)' : 'Band 2 (digit)';
+  var band3Label = currentLang==='ar' ? 'الحلقة 3 (رقم)' : 'Band 3 (digit)';
+  var multLabel = currentLang==='ar' ? 'حلقة المضاعِف (Multiplier)' : 'Multiplier Band';
+  var tolLabel = currentLang==='ar' ? 'حلقة التفاوت (Tolerance)' : 'Tolerance Band';
   var html = '';
-  html += '<div class="field"><label>الحلقة 1 (رقم)</label><select id="rc-b1" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,1)+'</select></div>';
-  html += '<div class="field"><label>الحلقة 2 (رقم)</label><select id="rc-b2" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,0)+'</select></div>';
+  html += '<div class="field"><label>'+band1Label+'</label><select id="rc-b1" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,1)+'</select></div>';
+  html += '<div class="field"><label>'+band2Label+'</label><select id="rc-b2" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,0)+'</select></div>';
   if(n===5){
-    html += '<div class="field"><label>الحلقة 3 (رقم)</label><select id="rc-b3" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,0)+'</select></div>';
+    html += '<div class="field"><label>'+band3Label+'</label><select id="rc-b3" onchange="rcUpdateVisual()">'+rcColorOptions(RC_DIGIT_COLORS,0)+'</select></div>';
   }
-  html += '<div class="field"><label>حلقة المضاعِف (Multiplier)</label><select id="rc-mult" onchange="rcUpdateVisual()">'+rcColorOptions(RC_MULT_COLORS,2)+'</select></div>';
-  html += '<div class="field"><label>حلقة التفاوت (Tolerance)</label><select id="rc-tol" onchange="rcUpdateVisual()">'+rcColorOptions(RC_TOL_COLORS,4)+'</select></div>';
+  html += '<div class="field"><label>'+multLabel+'</label><select id="rc-mult" onchange="rcUpdateVisual()">'+rcColorOptions(RC_MULT_COLORS,2)+'</select></div>';
+  html += '<div class="field"><label>'+tolLabel+'</label><select id="rc-tol" onchange="rcUpdateVisual()">'+rcColorOptions(RC_TOL_COLORS,4)+'</select></div>';
   wrap.innerHTML = html;
   rcUpdateVisual();
 }
@@ -991,12 +1360,12 @@ function rcCalculate(){
   var tol = RC_TOL_COLORS[parseInt(document.getElementById('rc-tol').value,10)].tol;
   var ohms = digitsVal * multiplier;
   document.getElementById('rc-result').innerHTML =
-    '<div class="result-box"><div class="rlabel">Resistance</div><div class="rvalue">'+rcFormatOhms(ohms)+' <span style="font-size:14px;color:var(--text-muted)">'+tol+'</span></div></div>';
+    '<div class="result-box"><div class="rlabel">'+t('resistance')+'</div><div class="rvalue">'+rcFormatOhms(ohms)+' <span style="font-size:14px;color:var(--text-muted)">'+tol+'</span></div></div>';
 }
 rcBuildInputs();
 
 /* ════════════════════════════════════════════════════════════
-   6) SUBNET CALCULATOR SUITE
+   6) SUBNET CALCULATOR SUITE (binary calc moved to Binary System tool)
    ════════════════════════════════════════════════════════════ */
 function ipToInt(ip){
   var parts = ip.trim().split('.');
@@ -1016,8 +1385,8 @@ function subnetCalculate(){
   var cidr = parseInt(document.getElementById('sn-cidr').value,10);
   var resDiv = document.getElementById('sn-result');
   var ipInt = ipToInt(ip);
-  if(ipInt===null){ resDiv.innerHTML = '<div class="error-box">اكتب IP صحيح زي 192.168.1.10</div>'; return; }
-  if(isNaN(cidr) || cidr<0 || cidr>32){ resDiv.innerHTML = '<div class="error-box">اكتب CIDR من 0 لـ 32</div>'; return; }
+  if(ipInt===null){ resDiv.innerHTML = '<div class="error-box">'+t('error_write_ip')+'</div>'; return; }
+  if(isNaN(cidr) || cidr<0 || cidr>32){ resDiv.innerHTML = '<div class="error-box">'+t('error_write_cidr')+'</div>'; return; }
   var maskInt = cidrToMaskInt(cidr);
   var network = (ipInt & maskInt)>>>0;
   var broadcast = (network | (~maskInt>>>0))>>>0;
@@ -1027,45 +1396,15 @@ function subnetCalculate(){
   var lastHost = cidr>=31? broadcast : (broadcast-1)>>>0;
   resDiv.innerHTML =
     '<div class="result-grid">'+
-    '<div class="result-item"><div class="rk">Network Address</div><div class="rv">'+intToIp(network)+'/'+cidr+'</div></div>'+
-    '<div class="result-item"><div class="rk">Broadcast Address</div><div class="rv">'+intToIp(broadcast)+'</div></div>'+
-    '<div class="result-item"><div class="rk">Subnet Mask</div><div class="rv">'+intToIp(maskInt)+'</div></div>'+
-    '<div class="result-item"><div class="rk">Wildcard Mask</div><div class="rv">'+intToIp((~maskInt)>>>0)+'</div></div>'+
-    '<div class="result-item"><div class="rk">First Usable Host</div><div class="rv">'+intToIp(firstHost)+'</div></div>'+
-    '<div class="result-item"><div class="rk">Last Usable Host</div><div class="rv">'+intToIp(lastHost)+'</div></div>'+
-    '<div class="result-item"><div class="rk">Usable Hosts</div><div class="rv">'+usable.toLocaleString()+'</div></div>'+
-    '<div class="result-item"><div class="rk">Total Addresses</div><div class="rv">'+totalHosts.toLocaleString()+'</div></div>'+
-    '<div class="result-item"><div class="rk">IP Class</div><div class="rv">'+ipClass((ipInt>>>24)&255)+'</div></div>'+
-    '</div>';
-}
-
-/* ---- Binary Calculator ---- */
-function bcalcParse(s){
-  s = s.trim();
-  if(/^[01]+$/.test(s)) return {val: parseInt(s,2), wasBinary:true};
-  if(/^-?\d+$/.test(s)) return {val: parseInt(s,10), wasBinary:false};
-  return null;
-}
-function binCalcRun(){
-  var a = bcalcParse(document.getElementById('bcalc-a').value);
-  var b = bcalcParse(document.getElementById('bcalc-b').value);
-  var op = document.getElementById('bcalc-op').value;
-  var resDiv = document.getElementById('bcalc-result');
-  if(!a || !b){ resDiv.innerHTML = '<div class="error-box">اكتب رقمين صحيحين (عشري أو ثنائي)</div>'; return; }
-  var result;
-  switch(op){
-    case 'add': result = a.val + b.val; break;
-    case 'sub': result = a.val - b.val; break;
-    case 'mul': result = a.val * b.val; break;
-    case 'and': result = a.val & b.val; break;
-    case 'or':  result = a.val | b.val; break;
-    case 'xor': result = a.val ^ b.val; break;
-  }
-  resDiv.innerHTML =
-    '<div class="result-grid">'+
-    '<div class="result-item"><div class="rk">Decimal</div><div class="rv">'+result+'</div></div>'+
-    '<div class="result-item"><div class="rk">Binary</div><div class="rv">'+(result<0? '-'+Math.abs(result).toString(2) : result.toString(2))+'</div></div>'+
-    '<div class="result-item"><div class="rk">Hex</div><div class="rv">'+(result<0? '-'+Math.abs(result).toString(16).toUpperCase() : result.toString(16).toUpperCase())+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('network_address')+'</div><div class="rv">'+intToIp(network)+'/'+cidr+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('broadcast_address')+'</div><div class="rv">'+intToIp(broadcast)+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('subnet_mask')+'</div><div class="rv">'+intToIp(maskInt)+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('wildcard_mask')+'</div><div class="rv">'+intToIp((~maskInt)>>>0)+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('first_host')+'</div><div class="rv">'+intToIp(firstHost)+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('last_host')+'</div><div class="rv">'+intToIp(lastHost)+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('usable_hosts')+'</div><div class="rv">'+usable.toLocaleString()+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('total_addresses')+'</div><div class="rv">'+totalHosts.toLocaleString()+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('ip_class')+'</div><div class="rv">'+ipClass((ipInt>>>24)&255)+'</div></div>'+
     '</div>';
 }
 
@@ -1077,7 +1416,7 @@ function addrCalcRun(){
   var hostsNeeded = parseInt(document.getElementById('addr-hosts').value,10);
   var resDiv = document.getElementById('addr-result');
   var netInt = ipToInt(net);
-  if(netInt===null || isNaN(cidr) || cidr<0 || cidr>30){ resDiv.innerHTML = '<div class="error-box">اكتب شبكة وCIDR صحيحين</div>'; return; }
+  if(netInt===null || isNaN(cidr) || cidr<0 || cidr>30){ resDiv.innerHTML = '<div class="error-box">'+t('error_valid_net_cidr')+'</div>'; return; }
 
   var newCidr;
   if(!isNaN(hostsNeeded) && hostsNeeded>0){
@@ -1087,27 +1426,27 @@ function addrCalcRun(){
     var bitsForSubnets = Math.ceil(Math.log2(subnetsNeeded));
     newCidr = cidr + bitsForSubnets;
   } else {
-    resDiv.innerHTML = '<div class="error-box">اكتب عدد السبنتات أو عدد الأجهزة المطلوبة</div>';
+    resDiv.innerHTML = '<div class="error-box">'+t('error_subnets_or_hosts')+'</div>';
     return;
   }
   if(newCidr <= cidr || newCidr>30){
-    resDiv.innerHTML = '<div class="error-box">مينفعش نعمل الحسبة دي بالأرقام اللي انت كاتبها (اتأكد إن عدد السبنتات/الأجهزة منطقي بالنسبة للشبكة الأساسية)</div>';
+    resDiv.innerHTML = '<div class="error-box">'+t('error_calc_not_possible')+'</div>';
     return;
   }
   var blockSize = Math.pow(2, 32-newCidr);
   var totalAvailable = Math.pow(2, 32-cidr);
-  var numBlocks = Math.min(totalAvailable/blockSize, 16); // show max 16 rows
+  var numBlocks = Math.min(totalAvailable/blockSize, 16);
   var baseNet = netInt & cidrToMaskInt(cidr);
   var rows = '';
   for(var i=0;i<numBlocks;i++){
     var subNet = (baseNet + i*blockSize)>>>0;
     var subBroadcast = (subNet + blockSize - 1)>>>0;
-    rows += '<tr><td>Subnet '+(i+1)+'</td><td>'+intToIp(subNet)+'/'+newCidr+'</td><td>'+intToIp((subNet+1)>>>0)+'</td><td>'+intToIp((subBroadcast-1)>>>0)+'</td><td>'+intToIp(subBroadcast)+'</td></tr>';
+    rows += '<tr><td>'+t('subnet_col')+' '+(i+1)+'</td><td>'+intToIp(subNet)+'/'+newCidr+'</td><td>'+intToIp((subNet+1)>>>0)+'</td><td>'+intToIp((subBroadcast-1)>>>0)+'</td><td>'+intToIp(subBroadcast)+'</td></tr>';
   }
   resDiv.innerHTML =
-    '<div class="result-box" style="margin-bottom:14px"><div class="rlabel">New Subnet Mask / Prefix</div><div class="rvalue">/'+newCidr+' — '+intToIp(cidrToMaskInt(newCidr))+' — '+(blockSize-2)+' host لكل سبنت</div></div>'+
-    '<div class="tbl-wrap"><table><thead><tr><th>#</th><th>Network</th><th>First Host</th><th>Last Host</th><th>Broadcast</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
-    (Math.floor(totalAvailable/blockSize) > 16 ? '<div class="hint">تم عرض أول 16 سبنت بس من إجمالي '+Math.floor(totalAvailable/blockSize)+'</div>' : '');
+    '<div class="result-box" style="margin-bottom:14px"><div class="rlabel">'+t('new_mask_prefix')+'</div><div class="rvalue">/'+newCidr+' — '+intToIp(cidrToMaskInt(newCidr))+' — '+(blockSize-2)+' '+t('hosts_per_subnet')+'</div></div>'+
+    '<div class="tbl-wrap"><table><thead><tr><th>#</th><th>'+t('network_col')+'</th><th>'+t('firsthost_col')+'</th><th>'+t('lasthost_col')+'</th><th>'+t('broadcast_col')+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    (Math.floor(totalAvailable/blockSize) > 16 ? '<div class="hint">'+t('subnets_shown_note')+' '+Math.floor(totalAvailable/blockSize)+'</div>' : '');
 }
 
 /* ---- IPv4 <-> Binary ---- */
@@ -1116,7 +1455,7 @@ function ipToBinLive(){
   var errBox = document.getElementById('ipbin-error');
   if(ip===''){ errBox.innerHTML=''; return; }
   var ipInt = ipToInt(ip);
-  if(ipInt===null){ errBox.innerHTML = '<div class="error-box">IP مش صحيح</div>'; return; }
+  if(ipInt===null){ errBox.innerHTML = '<div class="error-box">'+t('error_valid_ip')+'</div>'; return; }
   errBox.innerHTML = '';
   var octets = [(ipInt>>>24)&255,(ipInt>>>16)&255,(ipInt>>>8)&255,ipInt&255];
   document.getElementById('ipbin-bin').value = octets.map(function(o){ return o.toString(2).padStart(8,'0'); }).join('.');
@@ -1126,7 +1465,7 @@ function binToIpLive(){
   var errBox = document.getElementById('ipbin-error');
   if(bin===''){ errBox.innerHTML=''; return; }
   if(!/^[01]+$/.test(bin) || bin.length!==32){
-    errBox.innerHTML = '<div class="error-box">لازم يكون 32 بت بالظبط (0 و 1 بس)</div>';
+    errBox.innerHTML = '<div class="error-box">'+t('error_32bit')+'</div>';
     return;
   }
   errBox.innerHTML = '';
@@ -1136,7 +1475,299 @@ function binToIpLive(){
 }
 
 /* ════════════════════════════════════════════════════════════
-   7) MATRIX CALCULATOR (mathjs)
+   7) BINARY SYSTEM: Binary Calculator (with flags) + Shift/Rotate
+   ════════════════════════════════════════════════════════════ */
+function bsMask(width){ return width===8 ? 0xFF : 0xFFFF; }
+function bsSignBit(width){ return width===8 ? 0x80 : 0x8000; }
+function bsParity(byte){
+  var b = byte & 0xFF, count=0;
+  for(var i=0;i<8;i++) if(b&(1<<i)) count++;
+  return count%2===0?1:0;
+}
+function bsParseNum(s){
+  s = s.trim();
+  if(/^[01]+$/.test(s)) return parseInt(s,2);
+  if(/^-?\d+$/.test(s)) return parseInt(s,10);
+  return null;
+}
+function computeFlags(op, a, b, width){
+  var m = bsMask(width), sb = bsSignBit(width);
+  a = a & m; b = b & m;
+  var raw, result, cf=0, of=0;
+  switch(op){
+    case 'add':
+      raw = a + b; result = raw & m; cf = raw > m ? 1 : 0;
+      of = (((a ^ result) & (b ^ result) & sb) !== 0) ? 1 : 0;
+      break;
+    case 'sub':
+      raw = a - b; result = raw & m; cf = (a < b) ? 1 : 0;
+      of = (((a ^ b) & (a ^ result) & sb) !== 0) ? 1 : 0;
+      break;
+    case 'and': result = a & b; cf=0; of=0; break;
+    case 'or':  result = a | b; cf=0; of=0; break;
+    case 'xor': result = a ^ b; cf=0; of=0; break;
+    case 'mul': {
+      raw = a * b; result = raw & m;
+      var upper = width===8 ? (raw >> 8) & 0xFF : (raw >> 16) & 0xFFFF;
+      cf = of = (upper !== 0) ? 1 : 0;
+      return {result: raw, low:result, cf:cf, of:of, sf:null, zf:null, pf:null, undefinedFlags:true};
+    }
+  }
+  var sf = (result & sb) ? 1 : 0;
+  var zf = (result === 0) ? 1 : 0;
+  var pf = bsParity(result);
+  return {result: result, cf: cf, of: of, sf: sf, zf: zf, pf: pf, undefinedFlags:false};
+}
+function renderFlags(flagsObj){
+  function chip(name, val){
+    if(val===null) return '<div class="flag-chip undef"><div class="fname">'+name+'</div><div class="fval">—</div></div>';
+    return '<div class="flag-chip'+(val?' set':'')+'"><div class="fname">'+name+'</div><div class="fval">'+val+'</div></div>';
+  }
+  return '<div class="hint" style="margin-top:16px;margin-bottom:0">'+t('flagsreg')+':</div>'+
+    '<div class="flags-row">'+
+    chip('CF',flagsObj.cf)+chip('ZF',flagsObj.zf)+chip('SF',flagsObj.sf)+chip('OF',flagsObj.of)+chip('PF',flagsObj.pf)+
+    '</div>';
+}
+function binCalcRun(){
+  var a = bsParseNum(document.getElementById('bcalc-a').value);
+  var b = bsParseNum(document.getElementById('bcalc-b').value);
+  var op = document.getElementById('bcalc-op').value;
+  var width = parseInt(document.getElementById('bcalc-width').value,10);
+  var resDiv = document.getElementById('bcalc-result');
+  var flagsDiv = document.getElementById('bcalc-flags');
+  if(a===null || b===null){ resDiv.innerHTML = '<div class="error-box">'+t('error_generic_calc')+'</div>'; flagsDiv.innerHTML=''; return; }
+  var f = computeFlags(op, a, b, width);
+  var m = bsMask(width);
+  var displayResult = f.undefinedFlags ? f.low : f.result;
+  resDiv.innerHTML =
+    '<div class="result-grid">'+
+    '<div class="result-item"><div class="rk">'+t('decimal_col')+'</div><div class="rv">'+displayResult+(f.undefinedFlags && f.result>m ? ' ('+f.result+' full)':'')+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('binary_col')+'</div><div class="rv">'+displayResult.toString(2).padStart(width,'0')+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('hex_col')+'</div><div class="rv">'+displayResult.toString(16).toUpperCase()+'</div></div>'+
+    '</div>';
+  flagsDiv.innerHTML = renderFlags(f);
+}
+
+/* ---- Shift / Rotate ---- */
+function shiftRotate(op, value, count, width){
+  var m = bsMask(width), sb = bsSignBit(width), W = width;
+  value = value & m;
+  count = ((count % W) + W) % W;
+  if(count===0) return {result:value, cf:0, of:null};
+  var result, cf, of;
+  switch(op){
+    case 'shl': {
+      var full=value, lastOut=0;
+      for(var i=0;i<count;i++){ lastOut = (full & sb) ? 1 : 0; full = (full << 1) & m; }
+      result = full; cf = lastOut;
+      of = count===1 ? (((result & sb)?1:0) ^ cf) : null;
+      break;
+    }
+    case 'shr': {
+      var full2=value, lastOut2=0, origMsb = (value & sb) ? 1 : 0;
+      for(var j=0;j<count;j++){ lastOut2 = full2 & 1; full2 = full2 >>> 1; }
+      result = full2 & m; cf = lastOut2;
+      of = count===1 ? origMsb : null;
+      break;
+    }
+    case 'sar': {
+      var full3=value, lastOut3=0, signSet = (value & sb) !== 0;
+      for(var k=0;k<count;k++){ lastOut3 = full3 & 1; full3 = full3 >>> 1; if(signSet) full3 |= sb; }
+      result = full3 & m; cf = lastOut3;
+      of = count===1 ? 0 : null;
+      break;
+    }
+    case 'rol': {
+      var full4=value, lastBitOut=0;
+      for(var l=0;l<count;l++){ var msb=(full4 & sb)?1:0; full4 = ((full4<<1)|msb) & m; lastBitOut=msb; }
+      result = full4; cf = lastBitOut;
+      of = count===1 ? (((result & sb)?1:0) ^ cf) : null;
+      break;
+    }
+    case 'ror': {
+      var full5=value, lastBitOut2=0;
+      for(var n=0;n<count;n++){ var lsb=full5&1; full5=(full5>>>1)|(lsb?sb:0); lastBitOut2=lsb; }
+      result = full5 & m; cf = lastBitOut2;
+      var topTwo = ((result & sb)?1:0) ^ ((result & (sb>>>1))?1:0);
+      of = count===1 ? topTwo : null;
+      break;
+    }
+  }
+  var sf = (result & sb) ? 1 : 0;
+  var zf = (result===0) ? 1 : 0;
+  var pf = bsParity(result);
+  return {result:result, cf:cf, of:of, sf:sf, zf:zf, pf:pf};
+}
+function shiftRotateRun(){
+  var num = bsParseNum(document.getElementById('shift-num').value);
+  var op = document.getElementById('shift-op').value;
+  var count = parseInt(document.getElementById('shift-count').value,10);
+  var width = parseInt(document.getElementById('shift-width').value,10);
+  var resDiv = document.getElementById('shift-result');
+  var flagsDiv = document.getElementById('shift-flags');
+  if(num===null || isNaN(count)){ resDiv.innerHTML = '<div class="error-box">'+t('error_generic_calc')+'</div>'; flagsDiv.innerHTML=''; return; }
+  var r = shiftRotate(op, num, count, width);
+  resDiv.innerHTML =
+    '<div class="result-grid">'+
+    '<div class="result-item"><div class="rk">'+t('decimal_col')+'</div><div class="rv">'+r.result+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('binary_col')+'</div><div class="rv">'+r.result.toString(2).padStart(width,'0')+'</div></div>'+
+    '<div class="result-item"><div class="rk">'+t('hex_col')+'</div><div class="rv">'+r.result.toString(16).toUpperCase()+'</div></div>'+
+    '</div>';
+  flagsDiv.innerHTML = renderFlags(r);
+}
+
+/* ════════════════════════════════════════════════════════════
+   8) MACHINE CODE (Intel 8086 instruction encoder)
+   ════════════════════════════════════════════════════════════ */
+var REG8 = {AL:0,CL:1,DL:2,BL:3,AH:4,CH:5,DH:6,BH:7};
+var REG16 = {AX:0,CX:1,DX:2,BX:3,SP:4,BP:5,SI:6,DI:7};
+var ALU_GROUP = {ADD:0,OR:1,ADC:2,SBB:3,AND:4,SUB:5,XOR:6,CMP:7};
+var MC_REGREG_OR_IMM = ['MOV','ADD','SUB','ADC','SBB','AND','OR','XOR','CMP'];
+var MC_REGONLY16 = ['INC','DEC','PUSH','POP'];
+var MC_NOOPERAND = {NOP:0x90, HLT:0xF4, CLC:0xF8, STC:0xF9, CMC:0xF5, CLI:0xFA, STI:0xFB};
+
+function mcOnInstrChange(){ mcBuildOperandFields(); }
+
+function mcBuildOperandFields(){
+  var instrEl = document.getElementById('mc-instr');
+  if(!instrEl) return;
+  var instr = instrEl.value;
+  var sizeField = document.getElementById('mc-size-field');
+  var wrap = document.getElementById('mc-operand-fields');
+  document.getElementById('mc-result').innerHTML = '';
+
+  if(MC_REGREG_OR_IMM.indexOf(instr)!==-1){
+    sizeField.style.display = '';
+    var is16 = document.getElementById('mc-size').value === '16';
+    var regTable = is16 ? REG16 : REG8;
+    var regKeys = Object.keys(regTable);
+    var currentMode = document.getElementById('mc-mode') ? document.getElementById('mc-mode').value : 'regreg';
+    var modeOpts =
+      '<option value="regreg"'+(currentMode==='regreg'?' selected':'')+'>'+t('mode_regreg')+'</option>'+
+      '<option value="regimm"'+(currentMode==='regimm'?' selected':'')+'>'+t('mode_regimm')+'</option>';
+    var regOpts = regKeys.map(function(r){ return '<option value="'+r+'">'+r+'</option>'; }).join('');
+    var html = '<div class="field"><label>'+t('operand_mode')+'</label><select id="mc-mode" onchange="mcBuildOperandFields()">'+modeOpts+'</select></div>';
+    html += '<div class="field"><label>'+t('dest_reg')+'</label><select id="mc-dest">'+regOpts+'</select></div>';
+    if(currentMode==='regimm'){
+      html += '<div class="field"><label>'+t('immediate_val')+'</label><input type="number" id="mc-imm" placeholder="0"/></div>';
+    } else {
+      var regOpts2 = regKeys.map(function(r,i){ return '<option value="'+r+'"'+(i===1?' selected':'')+'>'+r+'</option>'; }).join('');
+      html += '<div class="field"><label>'+t('src_reg')+'</label><select id="mc-src">'+regOpts2+'</select></div>';
+    }
+    wrap.innerHTML = html;
+  } else if(MC_REGONLY16.indexOf(instr)!==-1){
+    sizeField.style.display = 'none';
+    var regOpts3 = Object.keys(REG16).map(function(r){ return '<option value="'+r+'">'+r+'</option>'; }).join('');
+    wrap.innerHTML = '<div class="field"><label>'+t('register_label')+'</label><select id="mc-reg">'+regOpts3+'</select></div>';
+  } else if(instr==='JMP'){
+    sizeField.style.display = 'none';
+    wrap.innerHTML = '<div class="field"><label>'+t('displacement_label')+'</label><input type="number" id="mc-disp" min="-128" max="127" placeholder="5"/></div>';
+  } else if(instr==='INT'){
+    sizeField.style.display = 'none';
+    wrap.innerHTML = '<div class="field"><label>'+t('interrupt_num')+'</label><input type="number" id="mc-intnum" min="0" max="255" placeholder="33"/></div>';
+  } else {
+    sizeField.style.display = 'none';
+    wrap.innerHTML = '';
+  }
+}
+
+function toHexByte(v){ return v.toString(16).toUpperCase().padStart(2,'0'); }
+function modrmReg(regField, rmField){ return 0xC0 | (regField<<3) | rmField; }
+
+function mcConvert(){
+  var instr = document.getElementById('mc-instr').value;
+  var resDiv = document.getElementById('mc-result');
+  var bytes = [];
+  var breakdown = []; // array of {label, bits, cls}
+  try{
+    if(MC_REGREG_OR_IMM.indexOf(instr)!==-1){
+      var is16 = document.getElementById('mc-size').value === '16';
+      var regTable = is16 ? REG16 : REG8;
+      var w = is16 ? 1 : 0;
+      var mode = document.getElementById('mc-mode').value;
+      var dest = document.getElementById('mc-dest').value;
+      if(mode==='regreg'){
+        var src = document.getElementById('mc-src').value;
+        var opcode, modrm;
+        if(instr==='MOV'){
+          opcode = is16 ? 0x89 : 0x88;
+          breakdown.push({label:'Opcode', bits:opcode.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+        } else {
+          var group = ALU_GROUP[instr];
+          opcode = (group<<3) | w;
+          breakdown.push({label:'Opcode (grp='+group+',d=0,w='+w+')', bits:opcode.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+        }
+        modrm = modrmReg(regTable[src], regTable[dest]);
+        bytes = [opcode, modrm];
+        breakdown.push({label:'ModR/M (mod=11,reg='+src+','+'r/m='+dest+')', bits:modrm.toString(2).padStart(8,'0'), cls:'mc-bit-mod'});
+      } else {
+        var imm = parseInt(document.getElementById('mc-imm').value,10);
+        if(isNaN(imm)) throw new Error(t('fill_all_fields'));
+        if(instr==='MOV'){
+          var opcode2 = (is16 ? 0xB8 : 0xB0) + regTable[dest];
+          bytes = [opcode2];
+          breakdown.push({label:'Opcode (B'+(is16?'8':'0')+'+reg)', bits:opcode2.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+        } else {
+          var group2 = ALU_GROUP[instr];
+          var isAcc = is16 ? (dest==='AX') : (dest==='AL');
+          if(isAcc){
+            var opcode3 = (group2<<3) | 4 | w;
+            bytes = [opcode3];
+            breakdown.push({label:'Opcode (accumulator form)', bits:opcode3.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+          } else {
+            var opcode4 = is16 ? 0x81 : 0x80;
+            var modrm2 = modrmReg(group2, regTable[dest]);
+            bytes = [opcode4, modrm2];
+            breakdown.push({label:'Opcode (r/m,imm group)', bits:opcode4.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+            breakdown.push({label:'ModR/M (mod=11,reg=grp'+group2+',r/m='+dest+')', bits:modrm2.toString(2).padStart(8,'0'), cls:'mc-bit-mod'});
+          }
+        }
+        if(is16){ bytes.push(imm & 0xFF, (imm>>8)&0xFF); breakdown.push({label:'Immediate (low)', bits:(imm&0xFF).toString(2).padStart(8,'0'), cls:'mc-bit-rm'}); breakdown.push({label:'Immediate (high)', bits:((imm>>8)&0xFF).toString(2).padStart(8,'0'), cls:'mc-bit-rm'}); }
+        else { bytes.push(imm & 0xFF); breakdown.push({label:'Immediate', bits:(imm&0xFF).toString(2).padStart(8,'0'), cls:'mc-bit-rm'}); }
+      }
+    } else if(MC_REGONLY16.indexOf(instr)!==-1){
+      var reg = document.getElementById('mc-reg').value;
+      var base = {INC:0x40, DEC:0x48, PUSH:0x50, POP:0x58}[instr];
+      var opcode5 = base + REG16[reg];
+      bytes = [opcode5];
+      breakdown.push({label:'Opcode (base+reg)', bits:opcode5.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+    } else if(instr==='JMP'){
+      var disp = parseInt(document.getElementById('mc-disp').value,10);
+      if(isNaN(disp) || disp<-128 || disp>127) throw new Error(t('fill_all_fields'));
+      var dispByte = disp<0 ? 256+disp : disp;
+      bytes = [0xEB, dispByte];
+      breakdown.push({label:'Opcode (JMP short)', bits:'11101011', cls:'mc-bit-op'});
+      breakdown.push({label:'Displacement (rel8)', bits:dispByte.toString(2).padStart(8,'0'), cls:'mc-bit-rm'});
+    } else if(instr==='INT'){
+      var intnum = parseInt(document.getElementById('mc-intnum').value,10);
+      if(isNaN(intnum) || intnum<0 || intnum>255) throw new Error(t('fill_all_fields'));
+      bytes = [0xCD, intnum];
+      breakdown.push({label:'Opcode (INT)', bits:'11001101', cls:'mc-bit-op'});
+      breakdown.push({label:'Interrupt number', bits:intnum.toString(2).padStart(8,'0'), cls:'mc-bit-rm'});
+    } else {
+      bytes = [MC_NOOPERAND[instr]];
+      breakdown.push({label:'Opcode', bits:bytes[0].toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+    }
+
+    var bytesHtml = bytes.map(function(b,i){
+      return '<div class="mc-byte"><div class="mcv">'+toHexByte(b)+'</div><div class="mcl">'+t('byte_n')+' '+(i+1)+'</div></div>';
+    }).join('');
+    var breakdownHtml = breakdown.map(function(bd){
+      return '<div style="margin-top:8px"><div class="hint" style="margin:0 0 3px">'+bd.label+'</div>'+
+        '<div class="mc-bin-breakdown"><span class="'+bd.cls+'">'+bd.bits+'</span></div></div>';
+    }).join('');
+
+    resDiv.innerHTML =
+      '<div class="result-box"><div class="rlabel">'+t('machine_bytes')+'</div><div class="mc-bytes">'+bytesHtml+'</div></div>'+
+      '<div style="margin-top:14px"><div class="rlabel" style="margin-bottom:6px">'+t('bit_breakdown')+'</div>'+breakdownHtml+'</div>';
+  }catch(e){
+    resDiv.innerHTML = '<div class="error-box">'+e.message+'</div>';
+  }
+}
+mcBuildOperandFields();
+
+/* ════════════════════════════════════════════════════════════
+   9) MATRIX CALCULATOR (mathjs)
    ════════════════════════════════════════════════════════════ */
 function mxBuildGrid(rows, cols, gridId){
   var html = '<div style="display:inline-grid;grid-template-columns:repeat('+cols+',64px);gap:6px;margin-top:8px">';
@@ -1149,7 +1780,9 @@ function mxBuildGrid(rows, cols, gridId){
   return html;
 }
 function mxBuildGrids(){
-  var ar = parseInt(document.getElementById('mx-a-rows').value,10)||1;
+  var arEl = document.getElementById('mx-a-rows');
+  if(!arEl) return;
+  var ar = parseInt(arEl.value,10)||1;
   var ac = parseInt(document.getElementById('mx-a-cols').value,10)||1;
   var br = parseInt(document.getElementById('mx-b-rows').value,10)||1;
   var bc = parseInt(document.getElementById('mx-b-cols').value,10)||1;
@@ -1170,7 +1803,6 @@ function mxReadMatrix(prefix, rows, cols){
 }
 function mxRenderResult(m){
   if(Array.isArray(m)){
-    var rows = m.length, cols = Array.isArray(m[0])? m[0].length : 1;
     var html = '<div class="tbl-wrap"><table><tbody>';
     m.forEach(function(row){
       html += '<tr>';
@@ -1182,7 +1814,7 @@ function mxRenderResult(m){
     html += '</tbody></table></div>';
     return html;
   }
-  return '<div class="result-box"><div class="rlabel">Result</div><div class="rvalue">'+ (typeof m==='number'? +m.toFixed(6) : m) +'</div></div>';
+  return '<div class="result-box"><div class="rlabel">'+t('result')+'</div><div class="rvalue">'+ (typeof m==='number'? +m.toFixed(6) : m) +'</div></div>';
 }
 function mxOp(op){
   var ar = parseInt(document.getElementById('mx-a-rows').value,10);
@@ -1192,32 +1824,21 @@ function mxOp(op){
   var A = mxReadMatrix('mxa', ar, ac);
   var B = mxReadMatrix('mxb', br, bc);
   var resDiv = document.getElementById('mx-result');
+  var dimErr = currentLang==='ar' ?
+    {add:'لازم A و B يكونوا بنفس الأبعاد عشان تجمعهم', sub:'لازم A و B يكونوا بنفس الأبعاد عشان تطرحهم', mul:'عدد أعمدة A لازم يساوي عدد صفوف B عشان تضربهم', sqA:'لازم تكون A مربعة عشان تحسب المحدد', sqB:'لازم تكون B مربعة عشان تحسب المحدد', sqAi:'لازم تكون A مربعة عشان تحسب المعكوس', sqBi:'لازم تكون B مربعة عشان تحسب المعكوس'} :
+    {add:'A and B must have the same dimensions to add them', sub:'A and B must have the same dimensions to subtract them', mul:'Number of columns of A must equal number of rows of B to multiply them', sqA:'A must be square to calculate the determinant', sqB:'B must be square to calculate the determinant', sqAi:'A must be square to calculate the inverse', sqBi:'B must be square to calculate the inverse'};
   try{
     var result;
     switch(op){
-      case 'add':
-        if(ar!==br||ac!==bc) throw new Error('لازم A و B يكونوا بنفس الأبعاد عشان تجمعهم');
-        result = math.add(A,B); break;
-      case 'sub':
-        if(ar!==br||ac!==bc) throw new Error('لازم A و B يكونوا بنفس الأبعاد عشان تطرحهم');
-        result = math.subtract(A,B); break;
-      case 'mul':
-        if(ac!==br) throw new Error('عدد أعمدة A لازم يساوي عدد صفوف B عشان تضربهم');
-        result = math.multiply(A,B); break;
+      case 'add': if(ar!==br||ac!==bc) throw new Error(dimErr.add); result = math.add(A,B); break;
+      case 'sub': if(ar!==br||ac!==bc) throw new Error(dimErr.sub); result = math.subtract(A,B); break;
+      case 'mul': if(ac!==br) throw new Error(dimErr.mul); result = math.multiply(A,B); break;
       case 'transA': result = math.transpose(A); break;
       case 'transB': result = math.transpose(B); break;
-      case 'detA':
-        if(ar!==ac) throw new Error('لازم تكون A مربعة عشان تحسب المحدد');
-        result = math.det(A); break;
-      case 'detB':
-        if(br!==bc) throw new Error('لازم تكون B مربعة عشان تحسب المحدد');
-        result = math.det(B); break;
-      case 'invA':
-        if(ar!==ac) throw new Error('لازم تكون A مربعة عشان تحسب المعكوس');
-        result = math.inv(A); break;
-      case 'invB':
-        if(br!==bc) throw new Error('لازم تكون B مربعة عشان تحسب المعكوس');
-        result = math.inv(B); break;
+      case 'detA': if(ar!==ac) throw new Error(dimErr.sqA); result = math.det(A); break;
+      case 'detB': if(br!==bc) throw new Error(dimErr.sqB); result = math.det(B); break;
+      case 'invA': if(ar!==ac) throw new Error(dimErr.sqAi); result = math.inv(A); break;
+      case 'invB': if(br!==bc) throw new Error(dimErr.sqBi); result = math.inv(B); break;
     }
     resDiv.innerHTML = mxRenderResult(result);
   }catch(e){
@@ -1227,7 +1848,7 @@ function mxOp(op){
 mxBuildGrids();
 
 /* ════════════════════════════════════════════════════════════
-   8) SCIENTIFIC CALCULATOR (mathjs evaluate)
+   10) SCIENTIFIC CALCULATOR (mathjs evaluate)
    ════════════════════════════════════════════════════════════ */
 var sciExpr = '';
 var SCI_BUTTONS = [
@@ -1241,6 +1862,8 @@ var SCI_BUTTONS = [
 ];
 function sciModeLabel(){}
 function sciBuildGrid(){
+  var grid = document.getElementById('sci-grid');
+  if(!grid) return;
   var html = '';
   SCI_BUTTONS.forEach(function(row){
     row.forEach(function(b){
@@ -1252,7 +1875,7 @@ function sciBuildGrid(){
       html += '<button class="'+cls+'" onclick="sciPress(\''+b.replace("'","\\'")+'\')">'+b+'</button>';
     });
   });
-  document.getElementById('sci-grid').innerHTML = html;
+  grid.innerHTML = html;
 }
 var sciLastAns = 0;
 function sciPress(b){
@@ -1274,7 +1897,7 @@ function sciPress(b){
         } else {
           sciExpr = String(val);
         }
-      }catch(e){ sciExpr = 'خطأ'; }
+      }catch(e){ sciExpr = currentLang==='ar' ? 'خطأ' : 'Error'; }
       break;
     case '÷': sciExpr += '/'; break;
     case '×': sciExpr += '*'; break;
@@ -1294,6 +1917,10 @@ function sciPress(b){
 }
 sciBuildGrid();
 document.getElementById('sci-display').value = '0';
+
+/* ════════════════════════════════════════════════════════════
+   INITIALIZE (apply saved/default language + theme on load)
+   ════════════════════════════════════════════════════════════ */
+applyLang();
+applyTheme();
 </script>
-</body>
-</html>
