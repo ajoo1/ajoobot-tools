@@ -654,6 +654,59 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
 }
 </style>
 
+<style>
+/* ── IC datasheet tool + machine-code additions ── */
+.mc-bin-breakdown .mc-part{display:inline-flex;flex-direction:column;align-items:center;padding:0;margin-inline-end:9px;background:none}
+.mc-bin-breakdown .mc-part>span{padding:3px 5px;border-radius:3px;font-size:12px;font-weight:700}
+.mc-bin-breakdown .mc-part>i{font-style:normal;font-size:9.5px;color:var(--text-dim);margin-top:2px;white-space:nowrap}
+.mc-bit-imm{background:rgba(37,99,235,.16);color:var(--accent-b)}
+.mc-bit-d{background:rgba(220,38,38,.14);color:var(--accent-r)}
+.mc-bit-w{background:rgba(120,120,120,.2);color:var(--text-main)}
+.mc-bit-pfx{background:rgba(217,119,6,.28);color:var(--accent-y)}
+.mc-info{margin-top:12px;font-size:12.5px;color:var(--text-muted);line-height:1.9;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 14px;font-family:var(--font-en)}
+.ic-list{max-height:280px;overflow-y:auto;display:flex;flex-wrap:wrap;gap:6px;padding:2px}
+.ic-catlabel{flex:0 0 100%;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin:8px 2px 0;font-family:var(--font-en)}
+.ic-chip{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:start;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 11px;cursor:pointer;color:var(--text-main);font-family:inherit;transition:.15s;max-width:210px}
+.ic-chip b{font-family:var(--font-en);font-size:13px;color:var(--accent)}
+.ic-chip span{font-size:10.5px;color:var(--text-dim);line-height:1.35}
+.ic-chip:hover,.ic-chip.active{border-color:var(--accent);background:var(--bg-card)}
+.ic-chip.active{box-shadow:0 0 0 2px rgba(8,145,178,.25)}
+.ic-detail{margin-top:14px}
+.ic-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.ic-name{font-family:var(--font-en);font-size:24px;font-weight:800;color:var(--accent)}
+.ic-title{font-size:14px;color:var(--text-muted);margin-top:2px}
+.ic-badges{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.ic-badge{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-muted)}
+.ic-hero{border-color:var(--accent)}
+.ic-hero .rv{font-size:18px;color:var(--accent)}
+.ic-cols{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:22px;margin-top:16px}
+@media(max-width:820px){.ic-cols{grid-template-columns:1fr}}
+.ic-sec{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin:16px 0 8px;font-weight:700;font-family:var(--font-en)}
+.ic-cols .ic-sec:first-child{margin-top:0}
+.ic-svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto}
+.ic-svg-narrow{max-width:320px}
+.ic-svg-name{font-family:var(--font-en);font-size:11px;fill:var(--text-main)}
+.ic-svg-num{font-family:var(--font-en);font-size:10px;fill:var(--text-dim)}
+.ic-legend{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px;font-size:11px;color:var(--text-muted);justify-content:center}
+.ic-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-inline-end:5px;vertical-align:-1px}
+.ic-desc{font-size:13.5px;line-height:1.85;color:var(--text-main)}
+.ic-tt{font-family:var(--font-en);font-size:12.5px;background:var(--bg-secondary);border:1px dashed var(--border-h);border-radius:var(--r-sm);padding:8px 12px;margin:10px 0;color:var(--accent);direction:ltr;text-align:left}
+.ic-notes{padding-inline-start:20px;margin:0;font-size:13px;line-height:1.85;color:var(--text-main)}
+.ic-notes li{margin-bottom:6px}
+.ic-warn{margin-top:12px;font-size:12.5px;line-height:1.7;color:var(--accent-y);background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.35);border-radius:var(--r-sm);padding:9px 13px}
+.ic-ok{color:var(--accent-g);font-size:13px;line-height:1.8}
+.ic-bad{color:var(--accent-r);font-size:13px;line-height:1.8}
+.ic-pintbl td,.ic-pintbl th{padding:6px 10px;text-align:start}
+.ic-pn{font-family:var(--font-en);font-weight:700;color:var(--accent)}
+.ic-pf{font-size:12.5px;color:var(--text-muted)}
+.ic-al{color:var(--text-dim);font-size:11px}
+.ic-tp{font-size:10.5px;padding:2px 8px;border-radius:99px;border:1px solid;white-space:nowrap}
+.ic-budget-list{display:flex;flex-direction:column;gap:6px}
+.ic-brow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 12px;font-size:13px}
+.ic-brow-r{display:flex;gap:14px;align-items:center;font-family:var(--font-en);font-size:12px;color:var(--text-muted)}
+.ic-count-badge{display:inline-block;min-width:16px;text-align:center;font-size:10px;font-weight:800;color:#fff;background:var(--accent);border-radius:99px;padding:0 5px}
+.ic-count-badge:empty{display:none}
+</style>
 <div id="ajoobot-page" dir="ltr" lang="en">
 <div class="topbar">
   <div class="brand">
@@ -680,6 +733,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <button class="nav-btn" data-tool="subnet"><i class="fa-solid fa-network-wired"></i> <span data-i18n="nav_subnet">Subnet Calculator</span></button>
     <button class="nav-btn" data-tool="binsys"><i class="fa-solid fa-microchip"></i> <span data-i18n="nav_binsys">Binary System</span></button>
     <button class="nav-btn" data-tool="mcode"><i class="fa-solid fa-hashtag"></i> <span data-i18n="nav_mcode">Machine Code</span></button>
+    <button class="nav-btn" data-tool="icdata"><i class="fa-solid fa-book-open"></i> <span data-i18n="nav_icdata">IC Datasheets</span></button>
     <button class="nav-btn" data-tool="matrix"><i class="fa-solid fa-table-cells-large"></i> <span data-i18n="nav_matrix">Matrix Calculator</span></button>
     <button class="nav-btn" data-tool="sci"><i class="fa-solid fa-calculator"></i> <span data-i18n="nav_sci">Scientific Calculator</span></button>
   </nav>
@@ -971,6 +1025,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
           <select id="mc-instr" onchange="mcOnInstrChange()">
             <optgroup data-i18n="mc_group_data" label="Data Transfer">
               <option value="MOV">MOV</option>
+              <option value="LEA">LEA</option>
             </optgroup>
             <optgroup data-i18n="mc_group_alu" label="Arithmetic / Logic">
               <option value="ADD">ADD</option>
@@ -986,13 +1041,71 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
               <option value="INC">INC</option>
               <option value="DEC">DEC</option>
             </optgroup>
+            <optgroup data-i18n="mc_group_muldiv" label="Multiply / Divide / NOT / NEG">
+              <option value="MUL">MUL</option>
+              <option value="IMUL">IMUL</option>
+              <option value="DIV">DIV</option>
+              <option value="IDIV">IDIV</option>
+              <option value="NOT">NOT</option>
+              <option value="NEG">NEG</option>
+            </optgroup>
             <optgroup data-i18n="mc_group_stack" label="Stack">
               <option value="PUSH">PUSH</option>
               <option value="POP">POP</option>
             </optgroup>
+            <optgroup data-i18n="mc_group_io" label="Input / Output">
+              <option value="IN">IN</option>
+              <option value="OUT">OUT</option>
+            </optgroup>
             <optgroup data-i18n="mc_group_ctrl" label="Control / Interrupt">
               <option value="JMP">JMP short</option>
               <option value="INT">INT</option>
+            </optgroup>
+            <optgroup data-i18n="mc_group_jcc" label="Conditional jumps / Loop">
+              <option value="JE">JE / JZ</option>
+              <option value="JNE">JNE / JNZ</option>
+              <option value="JA">JA</option>
+              <option value="JAE">JAE / JNC</option>
+              <option value="JB">JB / JC</option>
+              <option value="JBE">JBE</option>
+              <option value="JG">JG</option>
+              <option value="JGE">JGE</option>
+              <option value="JL">JL</option>
+              <option value="JLE">JLE</option>
+              <option value="JS">JS</option>
+              <option value="JNS">JNS</option>
+              <option value="JO">JO</option>
+              <option value="JNO">JNO</option>
+              <option value="JP">JP</option>
+              <option value="JNP">JNP</option>
+              <option value="LOOP">LOOP</option>
+              <option value="LOOPE">LOOPE</option>
+              <option value="LOOPNE">LOOPNE</option>
+              <option value="JCXZ">JCXZ</option>
+            </optgroup>
+            <optgroup data-i18n="mc_group_string" label="String / Misc">
+              <option value="MOVSB">MOVSB</option>
+              <option value="MOVSW">MOVSW</option>
+              <option value="CMPSB">CMPSB</option>
+              <option value="CMPSW">CMPSW</option>
+              <option value="STOSB">STOSB</option>
+              <option value="STOSW">STOSW</option>
+              <option value="LODSB">LODSB</option>
+              <option value="LODSW">LODSW</option>
+              <option value="SCASB">SCASB</option>
+              <option value="SCASW">SCASW</option>
+              <option value="REP">REP</option>
+              <option value="REPNE">REPNE</option>
+              <option value="XLAT">XLAT</option>
+              <option value="CBW">CBW</option>
+              <option value="CWD">CWD</option>
+              <option value="PUSHF">PUSHF</option>
+              <option value="POPF">POPF</option>
+              <option value="LAHF">LAHF</option>
+              <option value="SAHF">SAHF</option>
+              <option value="RET">RET</option>
+              <option value="RETF">RETF</option>
+              <option value="IRET">IRET</option>
             </optgroup>
             <optgroup data-i18n="mc_group_misc" label="No-operand">
               <option value="NOP">NOP</option>
@@ -1002,6 +1115,8 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
               <option value="CMC">CMC</option>
               <option value="CLI">CLI</option>
               <option value="STI">STI</option>
+              <option value="CLD">CLD</option>
+              <option value="STD">STD</option>
             </optgroup>
           </select>
         </div>
@@ -1020,6 +1135,36 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
         <div id="mc-result"></div>
         <div class="hint" data-i18n="mc_hint">This tool covers the most commonly taught 8086 instructions (MOV, ALU ops, INC/DEC, PUSH/POP, INT, JMP short, and flag instructions) with register-direct and immediate addressing — not a full assembler with label resolution or memory operands.</div>
       </div>
+    </section>
+
+        <!-- ═══════════════ 10) IC DATASHEETS ═══════════════ -->
+    <section class="tool-panel" id="tool-icdata">
+      <div class="panel-head">
+        <h2><span class="icon-chip"><i class="fa-solid fa-book-open"></i></span> <span data-i18n="nav_icdata">IC Datasheets</span></h2>
+        <p data-i18n="ic_desc">Pick an IC and get its pinout, supply voltage and current, and how to wire it.</p>
+      </div>
+      <div class="subtabs">
+        <div class="subtab-btn active" data-sub="ic-sub-browse" onclick="switchSubtab('ic','ic-sub-browse')" data-i18n="ic_tab_browse">Datasheets</div>
+        <div class="subtab-btn" data-sub="ic-sub-budget" onclick="switchSubtab('ic','ic-sub-budget')"><span data-i18n="ic_tab_budget">My circuit power budget</span> <span class="ic-count-badge" id="ic-circuit-count"></span></div>
+        <div class="subtab-btn" data-sub="ic-sub-fam" onclick="switchSubtab('ic','ic-sub-fam')" data-i18n="ic_tab_fam">Logic families</div>
+      </div>
+
+      <div class="subpanel active" id="ic-sub-browse">
+        <div class="card">
+          <div class="field-row">
+            <div class="field" style="flex:2;min-width:200px"><label data-i18n="ic_search_ph">Search</label><input type="text" id="ic-search" data-i18n-ph="ic_search_ph" placeholder="Search…" oninput="icOnFilter()"/></div>
+            <div class="field"><label data-i18n="ic_all_cats">Category</label><select id="ic-cat" onchange="icOnFilter()"></select></div>
+            <div class="field"><label data-i18n="ic_year">Year</label><select id="ic-year" onchange="icOnFilter()"></select></div>
+          </div>
+          <div class="hint" style="margin:0 0 6px"><span id="ic-count"></span></div>
+          <div id="ic-list" class="ic-list"></div>
+        </div>
+        <div id="ic-detail"><div class="hint" data-i18n="ic_pick">Select an IC from the list.</div></div>
+        <div class="hint" data-i18n="ic_disclaimer"></div>
+      </div>
+
+      <div class="subpanel" id="ic-sub-budget"><div class="card"><div id="ic-budget"></div></div></div>
+      <div class="subpanel" id="ic-sub-fam"><div class="card"><div id="ic-families"></div></div></div>
     </section>
 
     <!-- ═══════════════ 9) MATRIX CALCULATOR ═══════════════ -->
@@ -1223,6 +1368,84 @@ var I18N = {
     resultval:"Result", flagsreg:"سجل الأعلام",
   }
 };
+Object.assign(I18N.en, {
+  nav_icdata:"IC Datasheets",
+  mc_hint:"Covers the commonly taught 8086 instructions with register, immediate and MEMORY operands: all 8086 addressing modes ([addr], [BX], [SI], [DI], [BP], [BX+SI], [BX+DI], [BP+SI], [BP+DI] with optional 8/16-bit displacement), segment-override prefixes, LEA, MUL/DIV/NOT/NEG, PUSH/POP, IN/OUT, INT, conditional jumps and string instructions. Not a full assembler (no labels or macros). Numbers accept decimal, 0x1F or 1Fh.",
+  mode_reg:"Register", mode_mem:"Memory", mode_sreg:"Segment register", mode_port:"Fixed port (8-bit)", mode_dx:"Port number in DX",
+  mode_regmem:"Register ← Memory  (MOV AX,[…])", mode_memreg:"Memory ← Register  (MOV […],AX)", mode_memimm:"Memory ← Immediate  (MOV WORD PTR […],5)",
+  mode_sregreg:"Segment reg ← Register  (MOV DS,AX)", mode_regsreg:"Register ← Segment reg  (MOV AX,DS)",
+  mem_base:"Memory addressing mode", mem_direct:"Direct address  [addr]", mem_disp:"Displacement / address (dec, 0x.., ..h)",
+  seg_override:"Segment override", seg_default:"Default (DS, or SS for BP)",
+  dest_sreg:"Destination segment register", src_sreg:"Source segment register", port_num:"Port number (0–255)",
+  bad_addr:"Invalid displacement/address. Use decimal, 0x1234 or 1234h.", addr_needed:"Enter the direct address.", addr_range:"Address/displacement out of range (direct: 0–FFFFh, displacement: −32768…65535).",
+  imm_range:"Immediate value does not fit the selected operand size.", port_range:"Port must be between 0 and 255 (0–FFh).",
+  ea_label:"Effective address", phys_label:"Physical address", default_seg:"default segment", override_seg:"segment override prefix used",
+  asm_label:"Assembly", bytes_word:"byte(s)",
+  note_d0:"d = 0: the reg field is the SOURCE, r/m is the destination.", note_d1:"d = 1: the reg field is the DESTINATION, r/m is the memory operand.",
+  note_s1:"s = 1: the 8-bit immediate is sign-extended to 16 bits (shorter encoding, as real assemblers emit).",
+  note_accdirect:"Short accumulator-direct form (3 bytes) — what assemblers emit for MOV AL/AX with a direct address.",
+  note_lea:"LEA loads the effective ADDRESS itself into the register — it does not read memory.",
+  note_dx:"The port number is taken from DX (allows ports above 255).", note_rel:"Displacement is relative to the address of the NEXT instruction (IP after fetch).",
+  note_prefix:"A prefix byte — placed in front of a string instruction (e.g. REP MOVSB = F3 A4).",
+  ic_desc:"Pick an IC and get its pinout, supply voltage and current, and how to wire it — for the ICs used across the four years of study.",
+  ic_tab_browse:"Datasheets", ic_tab_budget:"My circuit power budget", ic_tab_fam:"Logic families",
+  ic_search_ph:"Search: 7400, 8086, counter, op-amp…", ic_all_cats:"All categories", ic_all_years:"All years", ic_year:"Year", ic_none:"No IC matches your search.",
+  ic_pick:"Select an IC from the list to see its datasheet summary.",
+  ic_add_circuit:"Add to my circuit", ic_remove_circuit:"Remove from circuit",
+  ic_supply:"Supply voltage", ic_typ:"Typical", ic_current:"Supply current", ic_current_note:"approximate, typical", ic_package:"Package", ic_pins:"pins", ic_family:"Logic family",
+  ic_pinout:"Pinout (top view)", ic_dip_note:"Top view. The notch/dot marks pin 1; pins count counter-clockwise (down the left side, up the right).", ic_sip_note:"Pin 1 is at the top of the list; check the marking on your module/component.", ic_to_note:"Front view, legs pointing down. Pins are numbered from left to right.",
+  ic_about:"What it does", ic_howto:"How to connect it", ic_variants:"Available variants of this chip", ic_variant:"Variant",
+  ic_pintable:"Pin table", ic_pin_name:"Name", ic_pin_type:"Type", ic_pin_func:"Function", ic_active_low:"active low",
+  ic_budget_empty:"Your circuit is empty. Open an IC in the Datasheets tab and press “Add to my circuit”. The tool then checks whether all your chips can share one supply and adds up the current.",
+  ic_result:"Supply check", ic_common_ok:"All chips can share one supply of", ic_recommended:"recommended:", ic_total_current:"Total current (typ.)", ic_supply_size:"Supply capability (×1.5 margin)", ic_power:"Power at that voltage",
+  ic_common_bad:"No single supply suits all chips.", ic_needs_min:"needs at least", ic_max_only:"tolerates at most", ic_common_fix:"Use separate supplies/regulators (e.g. 7805 for logic) and level shifting between the two domains.",
+  ic_dual_rail:"Dual-supply chips (op-amps) can share", ic_other_rails:"Separate rails / special parts",
+  ic_budget_disclaimer:"Currents are typical/approximate values for planning only (LEDs, motors and loads not included). Always confirm with the manufacturer datasheet.",
+  ic_ls_hc_warn:"LS → HC/CMOS: a 74LS output (VOH ≥ 2.7 V) may not reach an HC input threshold (≥ 3.15 V). Use 74HCT chips or a 1–4.7 kΩ pull-up to +5 V. CMOS → LS is fine.",
+  clear_all:"Clear all",
+  ic_disclaimer:"Educational summary: pinouts are for the standard DIP / through-hole parts. Always verify against the manufacturer datasheet before wiring."
+});
+Object.assign(I18N.ar, {
+  nav_icdata:"داتاشيت الـ IC",
+  mc_hint:"بيغطي أشهر تعليمات 8086 المدروسة بمعاملات Register وImmediate و MEMORY: كل أنماط العنونة في 8086 ([addr] و[BX] و[SI] و[DI] و[BP] و[BX+SI] و[BX+DI] و[BP+SI] و[BP+DI] مع Displacement اختياري 8 أو 16 بت)، وبادئات Segment override، وLEA وMUL/DIV/NOT/NEG وPUSH/POP وIN/OUT وINT والقفزات الشرطية وتعليمات الـString. مش Assembler كامل (من غير Labels أو Macros). الأرقام بتقبل عشري أو 0x1F أو 1Fh.",
+  mode_reg:"Register", mode_mem:"Memory", mode_sreg:"Segment register", mode_port:"Port ثابت (8 بت)", mode_dx:"رقم الـPort في DX",
+  mode_regmem:"Register ← Memory  (MOV AX,[…])", mode_memreg:"Memory ← Register  (MOV […],AX)", mode_memimm:"Memory ← Immediate  (MOV WORD PTR […],5)",
+  mode_sregreg:"Segment ← Register  (MOV DS,AX)", mode_regsreg:"Register ← Segment  (MOV AX,DS)",
+  mem_base:"نمط عنونة الذاكرة", mem_direct:"عنوان مباشر  [addr]", mem_disp:"Displacement / العنوان (عشري أو 0x.. أو ..h)",
+  seg_override:"Segment override", seg_default:"الافتراضي (DS أو SS مع BP)",
+  dest_sreg:"Segment register الوجهة", src_sreg:"Segment register المصدر", port_num:"رقم الـPort (0–255)",
+  bad_addr:"Displacement/العنوان غير صحيح. استخدم عشري أو 0x1234 أو 1234h.", addr_needed:"اكتب العنوان المباشر.", addr_range:"العنوان/الـDisplacement خارج المدى (المباشر 0–FFFFh والـDisplacement من −32768 لـ 65535).",
+  imm_range:"القيمة الفورية أكبر من حجم المعامل المختار.", port_range:"رقم الـPort لازم يكون بين 0 و255 (0–FFh).",
+  ea_label:"العنوان الفعّال (EA)", phys_label:"العنوان الفعلي", default_seg:"الـSegment الافتراضي", override_seg:"اتستخدمت بادئة Segment override",
+  asm_label:"الأسمبلي", bytes_word:"بايت",
+  note_d0:"d = 0: حقل reg هو المصدر (SOURCE) وr/m هو الوجهة.", note_d1:"d = 1: حقل reg هو الوجهة (DESTINATION) وr/m هو معامل الذاكرة.",
+  note_s1:"s = 1: الـImmediate 8 بت بيتمدد بالإشارة لـ16 بت (ترميز أقصر زي ما الـAssemblers بتعمل).",
+  note_accdirect:"الصيغة القصيرة Accumulator-direct (3 بايت) — اللي بيطلعها الـAssembler لـ MOV AL/AX مع عنوان مباشر.",
+  note_lea:"LEA بتحمّل العنوان الفعّال نفسه في الريجستر — مش بتقرا الذاكرة.",
+  note_dx:"رقم الـPort بيتاخد من DX (بيسمح بـPorts أكبر من 255).", note_rel:"الـDisplacement نسبي لعنوان التعليمة الجاية (IP بعد الـFetch).",
+  note_prefix:"بايت بادئة (Prefix) — بيتحط قبل تعليمة String (مثلاً REP MOVSB = F3 A4).",
+  ic_desc:"اختار الـIC وهتلاقي أرجله (Pinout) وجهد وتيار التغذية وطريقة توصيله — لكل الشرائح اللي بتستخدمها في السنين الأربعة.",
+  ic_tab_browse:"الداتاشيت", ic_tab_budget:"استهلاك دايرتي", ic_tab_fam:"عائلات المنطق",
+  ic_search_ph:"ابحث: 7400 أو 8086 أو counter أو op-amp…", ic_all_cats:"كل الأنواع", ic_all_years:"كل السنين", ic_year:"سنة", ic_none:"مفيش IC مطابق للبحث.",
+  ic_pick:"اختار IC من القايمة عشان تشوف ملخص الداتاشيت.",
+  ic_add_circuit:"أضف لدايرتي", ic_remove_circuit:"شيل من الدايرة",
+  ic_supply:"جهد التغذية", ic_typ:"المعتاد", ic_current:"تيار التغذية", ic_current_note:"تقريبي ومعتاد", ic_package:"الغلاف", ic_pins:"رجل", ic_family:"عائلة المنطق",
+  ic_pinout:"شكل الأرجل (Pinout - منظر علوي)", ic_dip_note:"منظر علوي. النتشة/النقطة بتحدد رجل 1، والترقيم بيمشي عكس عقارب الساعة (لتحت على الشمال وبعدين لفوق على اليمين).", ic_sip_note:"رجل 1 في أول القايمة؛ راجع العلامة على القطعة أو الموديول.", ic_to_note:"منظر أمامي والأرجل لتحت. الترقيم من الشمال لليمين.",
+  ic_about:"بيعمل إيه", ic_howto:"إزاي توصله", ic_variants:"النسخ المتاحة من الشريحة دي", ic_variant:"النسخة",
+  ic_pintable:"جدول الأرجل", ic_pin_name:"الاسم", ic_pin_type:"النوع", ic_pin_func:"الوظيفة", ic_active_low:"فعّال عند LOW",
+  ic_budget_empty:"دايرتك فاضية. افتح أي IC في تبويب الداتاشيت واضغط «أضف لدايرتي». الأداة بتتأكد إن كل الشرايح ممكن تتغذى من مصدر واحد وبتجمع التيار.",
+  ic_result:"فحص التغذية", ic_common_ok:"كل الشرايح ممكن تتغذى من مصدر واحد جهده", ic_recommended:"المقترح:", ic_total_current:"إجمالي التيار (معتاد)", ic_supply_size:"قدرة المصدر المطلوبة (بهامش ×1.5)", ic_power:"القدرة عند الجهد ده",
+  ic_common_bad:"مفيش مصدر واحد يناسب كل الشرايح.", ic_needs_min:"محتاجة على الأقل", ic_max_only:"بتتحمل بالكتير", ic_common_fix:"استخدم مصادر/منظمات منفصلة (زي 7805 للمنطق) مع تحويل مستوى بين المجالين.",
+  ic_dual_rail:"الشرايح ثنائية التغذية (المكبرات) ممكن تشترك في", ic_other_rails:"تغذيات منفصلة / قطع خاصة",
+  ic_budget_disclaimer:"التيارات قيم معتادة/تقريبية للتخطيط بس (من غير LEDs أو موتورات أو أحمال). اتأكد دايماً من الداتاشيت الرسمي.",
+  ic_ls_hc_warn:"من LS إلى HC/CMOS: خرج 74LS (VOH ≥ 2.7V) ممكن ما يوصلش لعتبة دخل HC (≥ 3.15V). استخدم شرايح 74HCT أو Pull-up من 1 لـ4.7kΩ على +5V. أما من CMOS إلى LS فمفيش مشكلة.",
+  clear_all:"مسح الكل",
+  ic_disclaimer:"ملخص تعليمي: ترتيب الأرجل للشرايح القياسية DIP / Through-hole. راجع الداتاشيت الرسمي للمصنّع دايماً قبل التوصيل."
+});
+
+Object.assign(I18N.en,{mc_group_muldiv:"Multiply / Divide / NOT / NEG",mc_group_io:"Input / Output",mc_group_jcc:"Conditional jumps / Loop",mc_group_string:"String / Misc"});
+Object.assign(I18N.ar,{mc_group_muldiv:"ضرب / قسمة / NOT / NEG",mc_group_io:"دخل / خرج (IN / OUT)",mc_group_jcc:"قفزات شرطية / Loop",mc_group_string:"تعليمات String / متفرقات"});
+
 var currentLang = localStorage.getItem('ajoobot_lang') || 'en';
 var currentTheme = localStorage.getItem('ajoobot_theme') || 'light';
 
@@ -1240,7 +1463,7 @@ function applyLang(){
   document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
     el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
   });
-  document.getElementById('langToggleLabel').textContent = currentLang==='en' ? 'العربية' : 'English';
+  var _lt = document.getElementById('langToggleLabel'); if(_lt) _lt.textContent = currentLang==='en' ? 'العربية' : 'English';
   localStorage.setItem('ajoobot_lang', currentLang);
   // Rebuild any dynamically-generated UI pieces so their labels refresh in the new language
   if(typeof kmapBuildGrid==='function') kmapBuildGrid();
@@ -1249,6 +1472,7 @@ function applyLang(){
   if(typeof mxBuildGrids==='function') mxBuildGrids();
   if(typeof sciBuildGrid==='function') sciBuildGrid();
   if(typeof mcBuildOperandFields==='function') mcBuildOperandFields();
+  if(typeof icRefresh==='function') icRefresh();
   ['bc-error','kmap-result','tt-fromexpr-result','tt2-result','be-vars-wrap','be-result','rc-result',
    'sn-result','addr-result','ipbin-error','bcalc-result','bcalc-flags','shift-result','shift-flags',
    'mc-result','mx-result'].forEach(function(id){ var el=document.getElementById(id); if(el) el.innerHTML=''; });
@@ -2051,148 +2275,422 @@ function shiftRotateRun(){
 
 /* ════════════════════════════════════════════════════════════
    8) MACHINE CODE (Intel 8086 instruction encoder)
+   — register / immediate / MEMORY operands (all 8086 addressing modes),
+     segment override, LEA, MUL/DIV group, stack, IN/OUT, Jcc/LOOP, string ops
    ════════════════════════════════════════════════════════════ */
 var REG8 = {AL:0,CL:1,DL:2,BL:3,AH:4,CH:5,DH:6,BH:7};
 var REG16 = {AX:0,CX:1,DX:2,BX:3,SP:4,BP:5,SI:6,DI:7};
+var SREG = {ES:0,CS:1,SS:2,DS:3};
 var ALU_GROUP = {ADD:0,OR:1,ADC:2,SBB:3,AND:4,SUB:5,XOR:6,CMP:7};
-var MC_REGREG_OR_IMM = ['MOV','ADD','SUB','ADC','SBB','AND','OR','XOR','CMP'];
-var MC_REGONLY16 = ['INC','DEC','PUSH','POP'];
-var MC_NOOPERAND = {NOP:0x90, HLT:0xF4, CLC:0xF8, STC:0xF9, CMC:0xF5, CLI:0xFA, STI:0xFB};
+var MC_TWO = ['MOV','ADD','SUB','ADC','SBB','AND','OR','XOR','CMP'];
+var MC_UNARY = {INC:[0xFE,0],DEC:[0xFE,1],NOT:[0xF6,2],NEG:[0xF6,3],MUL:[0xF6,4],IMUL:[0xF6,5],DIV:[0xF6,6],IDIV:[0xF6,7]};
+var MC_REL8 = {JMP:0xEB,JO:0x70,JNO:0x71,JB:0x72,JAE:0x73,JE:0x74,JNE:0x75,JBE:0x76,JA:0x77,JS:0x78,JNS:0x79,JP:0x7A,JNP:0x7B,JL:0x7C,JGE:0x7D,JLE:0x7E,JG:0x7F,LOOPNE:0xE0,LOOPE:0xE1,LOOP:0xE2,JCXZ:0xE3};
+var MC_NOOPERAND = {NOP:0x90,HLT:0xF4,CLC:0xF8,STC:0xF9,CMC:0xF5,CLI:0xFA,STI:0xFB,CLD:0xFC,STD:0xFD,
+  MOVSB:0xA4,MOVSW:0xA5,CMPSB:0xA6,CMPSW:0xA7,STOSB:0xAA,STOSW:0xAB,LODSB:0xAC,LODSW:0xAD,SCASB:0xAE,SCASW:0xAF,
+  XLAT:0xD7,CBW:0x98,CWD:0x99,PUSHF:0x9C,POPF:0x9D,LAHF:0x9F,SAHF:0x9E,RET:0xC3,RETF:0xCB,IRET:0xCF,REP:0xF3,REPNE:0xF2};
+var MEM_RM = {'BX+SI':0,'BX+DI':1,'BP+SI':2,'BP+DI':3,'SI':4,'DI':5,'BP':6,'BX':7};
+var MEM_BASES = ['direct','BX+SI','BX+DI','BP+SI','BP+DI','SI','DI','BP','BX'];
+var SEG_PREFIX = {ES:0x26,CS:0x2E,SS:0x36,DS:0x3E};
 
-function mcOnInstrChange(){ mcBuildOperandFields(); }
+function toHexByte(v){ return v.toString(16).toUpperCase().padStart(2,'0'); }
+function hex4(v){ return (v & 0xFFFF).toString(16).toUpperCase().padStart(4,'0'); }
+function bin(v,n){ return (v & ((1<<n)-1)).toString(2).padStart(n,'0'); }
+function modrmReg(regField, rmField){ return 0xC0 | (regField<<3) | rmField; }
+
+function mcKind(instr){
+  if(MC_TWO.indexOf(instr)!==-1) return 'two';
+  if(instr==='LEA') return 'lea';
+  if(MC_UNARY[instr]) return 'unary';
+  if(instr==='PUSH'||instr==='POP') return 'stack';
+  if(instr==='IN'||instr==='OUT') return 'io';
+  if(MC_REL8[instr]!==undefined) return 'rel8';
+  if(instr==='INT') return 'int';
+  return 'none';
+}
+function mcParseNum(s){
+  s = (s||'').trim().replace(/_/g,'');
+  if(!s) return NaN;
+  var neg = false;
+  if(s.charAt(0)==='-'){ neg = true; s = s.slice(1); }
+  var v;
+  if(/^0x[0-9a-f]+$/i.test(s)) v = parseInt(s.slice(2),16);
+  else if(/^[0-9][0-9a-f]*h$/i.test(s)) v = parseInt(s.slice(0,-1),16);
+  else if(/^[01]+b$/i.test(s)) v = parseInt(s.slice(0,-1),2);
+  else if(/^[0-9]+$/.test(s)) v = parseInt(s,10);
+  else return NaN;
+  return neg ? -v : v;
+}
+function mcSelHtml(id, keys, sel, onchange, labelFn){
+  return '<select id="'+id+'"'+(onchange?' onchange="'+onchange+'"':'')+'>'+keys.map(function(k,i){
+    var s = (sel!==undefined && sel!==null) ? (k===sel) : false;
+    return '<option value="'+k+'"'+(s?' selected':'')+'>'+(labelFn?labelFn(k):k)+'</option>';
+  }).join('')+'</select>';
+}
+function mcField(label, inner){ return '<div class="field"><label>'+label+'</label>'+inner+'</div>'; }
+function mcMemFieldsHtml(){
+  var baseEl = document.getElementById('mc-mem-base');
+  var segEl = document.getElementById('mc-seg');
+  var curBase = baseEl ? baseEl.value : 'direct';
+  var curSeg = segEl ? segEl.value : 'default';
+  var dispEl = document.getElementById('mc-mem-disp');
+  var dispVal = dispEl ? dispEl.value : '';
+  var h = mcField(t('mem_base'), mcSelHtml('mc-mem-base', MEM_BASES, curBase, 'mcMemHint()', function(k){ return k==='direct' ? t('mem_direct') : '['+k+']'; }));
+  h += mcField(t('mem_disp'), '<input type="text" id="mc-mem-disp" value="'+dispVal+'" placeholder="0x1234 / 1234h / 5 / -2" oninput="mcMemHint()"/>');
+  h += mcField(t('seg_override'), mcSelHtml('mc-seg', ['default','ES','CS','SS','DS'], curSeg, null, function(k){ return k==='default' ? t('seg_default') : k+':'; }));
+  return h;
+}
+function mcMemHint(){}
 
 function mcBuildOperandFields(){
   var instrEl = document.getElementById('mc-instr');
   if(!instrEl) return;
   var instr = instrEl.value;
+  var kind = mcKind(instr);
   var sizeField = document.getElementById('mc-size-field');
   var wrap = document.getElementById('mc-operand-fields');
   document.getElementById('mc-result').innerHTML = '';
+  var is16 = document.getElementById('mc-size').value === '16';
+  var regTable = is16 ? REG16 : REG8;
+  var regKeys = Object.keys(regTable);
+  var modeEl = document.getElementById('mc-mode');
+  var cur = modeEl ? modeEl.value : null;
+  var html = '';
+  function pickMode(list){ if(list.indexOf(cur)===-1) cur = list[0]; return cur; }
+  function modeSel(list){ return mcField(t('operand_mode'), mcSelHtml('mc-mode', list, pickMode(list), 'mcBuildOperandFields()', function(k){ return t('mode_'+k); })); }
+  function regSel(id, keys, idx){ return '<select id="'+id+'">'+keys.map(function(r,i){ return '<option value="'+r+'"'+(i===idx?' selected':'')+'>'+r+'</option>'; }).join('')+'</select>'; }
 
-  if(MC_REGREG_OR_IMM.indexOf(instr)!==-1){
+  sizeField.style.display = 'none';
+  if(kind==='two'){
+    var modes = ['regreg','regimm','regmem','memreg','memimm'];
+    if(instr==='MOV') modes = modes.concat(['sregreg','regsreg']);
+    var m = pickMode(modes);
+    var isSeg = (m==='sregreg' || m==='regsreg');
+    sizeField.style.display = isSeg ? 'none' : '';
+    html += modeSel(modes);
+    if(m==='regreg') html += mcField(t('dest_reg'), regSel('mc-dest',regKeys,0)) + mcField(t('src_reg'), regSel('mc-src',regKeys,1));
+    else if(m==='regimm') html += mcField(t('dest_reg'), regSel('mc-dest',regKeys,0)) + mcField(t('immediate_val'), '<input type="text" id="mc-imm" placeholder="0x1234 / 55h / 100 / -1"/>');
+    else if(m==='regmem') html += mcField(t('dest_reg'), regSel('mc-dest',regKeys,0)) + mcMemFieldsHtml();
+    else if(m==='memreg') html += mcMemFieldsHtml() + mcField(t('src_reg'), regSel('mc-src',regKeys,0));
+    else if(m==='memimm') html += mcMemFieldsHtml() + mcField(t('immediate_val'), '<input type="text" id="mc-imm" placeholder="0x1234 / 55h / 100 / -1"/>');
+    else if(m==='sregreg') html += mcField(t('dest_sreg'), regSel('mc-dest',['ES','SS','DS'],2)) + mcField(t('src_reg'), regSel('mc-src',Object.keys(REG16),0));
+    else if(m==='regsreg') html += mcField(t('dest_reg'), regSel('mc-dest',Object.keys(REG16),0)) + mcField(t('src_sreg'), regSel('mc-src',['ES','CS','SS','DS'],3));
+  } else if(kind==='lea'){
+    html += mcField(t('dest_reg'), regSel('mc-dest',Object.keys(REG16),0)) + mcMemFieldsHtml();
+  } else if(kind==='unary'){
     sizeField.style.display = '';
-    var is16 = document.getElementById('mc-size').value === '16';
-    var regTable = is16 ? REG16 : REG8;
-    var regKeys = Object.keys(regTable);
-    var currentMode = document.getElementById('mc-mode') ? document.getElementById('mc-mode').value : 'regreg';
-    var modeOpts =
-      '<option value="regreg"'+(currentMode==='regreg'?' selected':'')+'>'+t('mode_regreg')+'</option>'+
-      '<option value="regimm"'+(currentMode==='regimm'?' selected':'')+'>'+t('mode_regimm')+'</option>';
-    var regOpts = regKeys.map(function(r){ return '<option value="'+r+'">'+r+'</option>'; }).join('');
-    var html = '<div class="field"><label>'+t('operand_mode')+'</label><select id="mc-mode" onchange="mcBuildOperandFields()">'+modeOpts+'</select></div>';
-    html += '<div class="field"><label>'+t('dest_reg')+'</label><select id="mc-dest">'+regOpts+'</select></div>';
-    if(currentMode==='regimm'){
-      html += '<div class="field"><label>'+t('immediate_val')+'</label><input type="number" id="mc-imm" placeholder="0"/></div>';
-    } else {
-      var regOpts2 = regKeys.map(function(r,i){ return '<option value="'+r+'"'+(i===1?' selected':'')+'>'+r+'</option>'; }).join('');
-      html += '<div class="field"><label>'+t('src_reg')+'</label><select id="mc-src">'+regOpts2+'</select></div>';
-    }
-    wrap.innerHTML = html;
-  } else if(MC_REGONLY16.indexOf(instr)!==-1){
-    sizeField.style.display = 'none';
-    var regOpts3 = Object.keys(REG16).map(function(r){ return '<option value="'+r+'">'+r+'</option>'; }).join('');
-    wrap.innerHTML = '<div class="field"><label>'+t('register_label')+'</label><select id="mc-reg">'+regOpts3+'</select></div>';
-  } else if(instr==='JMP'){
-    sizeField.style.display = 'none';
-    wrap.innerHTML = '<div class="field"><label>'+t('displacement_label')+'</label><input type="number" id="mc-disp" min="-128" max="127" placeholder="5"/></div>';
-  } else if(instr==='INT'){
-    sizeField.style.display = 'none';
-    wrap.innerHTML = '<div class="field"><label>'+t('interrupt_num')+'</label><input type="number" id="mc-intnum" min="0" max="255" placeholder="33"/></div>';
-  } else {
-    sizeField.style.display = 'none';
-    wrap.innerHTML = '';
+    var um = pickMode(['reg','mem']);
+    html += modeSel(['reg','mem']);
+    if(um==='reg') html += mcField(t('register_label'), regSel('mc-reg',regKeys,0));
+    else html += mcMemFieldsHtml();
+  } else if(kind==='stack'){
+    var sm = pickMode(['reg','sreg','mem']);
+    html += modeSel(['reg','sreg','mem']);
+    if(sm==='reg') html += mcField(t('register_label'), regSel('mc-reg',Object.keys(REG16),0));
+    else if(sm==='sreg') html += mcField(t('register_label'), regSel('mc-reg', instr==='POP' ? ['ES','SS','DS'] : ['ES','CS','SS','DS'], 0));
+    else html += mcMemFieldsHtml();
+  } else if(kind==='io'){
+    sizeField.style.display = '';
+    var im = pickMode(['port','dx']);
+    html += modeSel(['port','dx']);
+    if(im==='port') html += mcField(t('port_num'), '<input type="text" id="mc-port" placeholder="0x60 / 60h / 96"/>');
+  } else if(kind==='rel8'){
+    html += mcField(t('displacement_label'), '<input type="number" id="mc-disp" min="-128" max="127" placeholder="5"/>');
+  } else if(kind==='int'){
+    html += mcField(t('interrupt_num'), '<input type="text" id="mc-intnum" placeholder="21h / 0x21 / 33"/>');
   }
+  wrap.innerHTML = html;
+}
+function mcOnInstrChange(){
+  var md = document.getElementById('mc-mode'); if(md) md.remove();
+  mcBuildOperandFields();
 }
 
-function toHexByte(v){ return v.toString(16).toUpperCase().padStart(2,'0'); }
-function modrmReg(regField, rmField){ return 0xC0 | (regField<<3) | rmField; }
+/* ── memory operand → ModR/M (+disp) ── */
+function mcReadMem(){
+  var base = document.getElementById('mc-mem-base').value;
+  var raw = document.getElementById('mc-mem-disp').value.trim();
+  var disp = raw==='' ? null : mcParseNum(raw);
+  if(raw!=='' && isNaN(disp)) throw new Error(t('bad_addr'));
+  var seg = document.getElementById('mc-seg').value;
+  var m = {base:base, seg:seg, mod:0, rm:0, dbytes:[], disp:disp};
+  if(base==='direct'){
+    if(disp===null) throw new Error(t('addr_needed'));
+    if(disp<0 || disp>0xFFFF) throw new Error(t('addr_range'));
+    m.mod = 0; m.rm = 6; m.dbytes = [disp&255,(disp>>8)&255];
+    m.ea = '['+hex4(disp)+'h]'; m.formula = hex4(disp)+'h';
+  } else {
+    if(disp!==null && (disp<-32768 || disp>0xFFFF)) throw new Error(t('addr_range'));
+    m.rm = MEM_RM[base];
+    if(disp===null || disp===0){
+      if(base==='BP'){ m.mod = 1; m.dbytes = [0]; } else { m.mod = 0; }
+    } else if(disp>=-128 && disp<=127){ m.mod = 1; m.dbytes = [disp&255]; }
+    else { m.mod = 2; m.dbytes = [disp&255,(disp>>8)&255]; }
+    var dtxt = (disp===null || disp===0) ? '' : (disp<0 ? '-'+(-disp) : '+'+disp);
+    m.ea = '['+base+dtxt+']'; m.formula = base + dtxt;
+  }
+  m.defSeg = (base.indexOf('BP')!==-1) ? 'SS' : 'DS';
+  m.asm = (seg!=='default' ? seg+':' : '') + m.ea;
+  return m;
+}
+function mcPushModrm(S, m, regField, regLabel){
+  var modrm = (m.mod<<6)|(regField<<3)|m.rm;
+  S.bytes.push(modrm);
+  S.bd.push({label:'ModR/M', parts:[
+    {b:bin(m.mod,2), c:'mc-bit-mod', l:'mod'},
+    {b:bin(regField,3), c:'mc-bit-reg', l:regLabel},
+    {b:bin(m.rm,3), c:'mc-bit-rm', l:'r/m'}]});
+  m.dbytes.forEach(function(d,i){
+    S.bytes.push(d);
+    S.bd.push({label:(m.dbytes.length===2 ? (i===0?'Disp16 (low)':'Disp16 (high)') : 'Disp8'), parts:[{b:bin(d,8), c:'mc-bit-imm', l:'disp'}]});
+  });
+  var modTxt = m.mod===0 ? (m.base==='direct' ? 'mod=00, r/m=110 → direct address' : 'mod=00 → no displacement') : (m.mod===1 ? 'mod=01 → disp8 (sign-extended)' : 'mod=10 → disp16');
+  S.info.push(t('ea_label')+': '+m.ea+'  ('+modTxt+')');
+  S.info.push(t('phys_label')+': '+(m.seg!=='default'?m.seg:m.defSeg)+' × 16 + '+m.formula+(m.seg==='default' ? '   ['+t('default_seg')+' '+m.defSeg+']' : '   ['+t('override_seg')+']'));
+  if(m.seg!=='default'){
+    // prefix must come first
+    S.prefix = SEG_PREFIX[m.seg];
+  }
+}
+function mcPushImm(S, imm, is16, label){
+  if(is16){
+    var lo = imm & 0xFF, hi = (imm>>8) & 0xFF;
+    S.bytes.push(lo, hi);
+    S.bd.push({label:(label||'Immediate')+' (low)', parts:[{b:bin(lo,8), c:'mc-bit-imm', l:'imm'}]});
+    S.bd.push({label:(label||'Immediate')+' (high)', parts:[{b:bin(hi,8), c:'mc-bit-imm', l:'imm'}]});
+  } else {
+    S.bytes.push(imm & 0xFF);
+    S.bd.push({label:label||'Immediate', parts:[{b:bin(imm,8), c:'mc-bit-imm', l:'imm'}]});
+  }
+}
+function mcPushOp(S, opcode, parts, label){
+  S.bytes.push(opcode);
+  S.bd.push({label:label||'Opcode', parts:parts || [{b:bin(opcode,8), c:'mc-bit-op', l:'opcode'}]});
+}
+function mcCheckImm(imm, is16){
+  if(isNaN(imm)) throw new Error(t('fill_all_fields'));
+  if(is16 ? (imm<-32768 || imm>65535) : (imm<-128 || imm>255)) throw new Error(t('imm_range'));
+}
+function mcPtr(is16){ return is16 ? 'WORD PTR ' : 'BYTE PTR '; }
+function mcFmtImm(imm, is16){ var v = is16 ? (imm & 0xFFFF) : (imm & 0xFF); return v.toString(16).toUpperCase().replace(/^([A-F])/,'0$1')+'h'; }
 
 function mcConvert(){
   var instr = document.getElementById('mc-instr').value;
+  var kind = mcKind(instr);
   var resDiv = document.getElementById('mc-result');
-  var bytes = [];
-  var breakdown = []; // array of {label, bits, cls}
+  var S = {bytes:[], bd:[], info:[], prefix:null};
+  var asm = instr;
   try{
-    if(MC_REGREG_OR_IMM.indexOf(instr)!==-1){
-      var is16 = document.getElementById('mc-size').value === '16';
-      var regTable = is16 ? REG16 : REG8;
-      var w = is16 ? 1 : 0;
-      var mode = document.getElementById('mc-mode').value;
-      var dest = document.getElementById('mc-dest').value;
+    var is16 = document.getElementById('mc-size').value === '16';
+    var w = is16 ? 1 : 0;
+    var regTable = is16 ? REG16 : REG8;
+    var mode = document.getElementById('mc-mode') ? document.getElementById('mc-mode').value : null;
+
+    if(kind==='two'){
+      var grp = ALU_GROUP[instr];
+      var isMov = instr==='MOV';
+      var dest, src, imm, m;
       if(mode==='regreg'){
-        var src = document.getElementById('mc-src').value;
-        var opcode, modrm;
-        if(instr==='MOV'){
-          opcode = is16 ? 0x89 : 0x88;
-          breakdown.push({label:'Opcode', bits:opcode.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+        dest = document.getElementById('mc-dest').value; src = document.getElementById('mc-src').value;
+        var op = isMov ? (is16?0x89:0x88) : ((grp<<3)|w);
+        mcPushOp(S, op, isMov ? [{b:'100010',c:'mc-bit-op',l:'opcode'},{b:'0',c:'mc-bit-d',l:'d'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]
+                              : [{b:'00',c:'mc-bit-op',l:'00'},{b:bin(grp,3),c:'mc-bit-op',l:instr},{b:'0',c:'mc-bit-op',l:'0'},{b:'0',c:'mc-bit-d',l:'d'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]);
+        var mr = modrmReg(regTable[src], regTable[dest]); S.bytes.push(mr);
+        S.bd.push({label:'ModR/M', parts:[{b:'11',c:'mc-bit-mod',l:'mod'},{b:bin(regTable[src],3),c:'mc-bit-reg',l:'reg='+src},{b:bin(regTable[dest],3),c:'mc-bit-rm',l:'r/m='+dest}]});
+        S.info.push(t('note_d0'));
+        asm = instr+' '+dest+', '+src;
+      } else if(mode==='regimm'){
+        dest = document.getElementById('mc-dest').value; imm = mcParseNum(document.getElementById('mc-imm').value); mcCheckImm(imm, is16);
+        asm = instr+' '+dest+', '+mcFmtImm(imm,is16);
+        if(isMov){
+          var o2 = (is16?0xB8:0xB0)+regTable[dest];
+          mcPushOp(S, o2, [{b:'1011',c:'mc-bit-op',l:'opcode'},{b:bin(w,1),c:'mc-bit-w',l:'w'},{b:bin(regTable[dest],3),c:'mc-bit-reg',l:'reg='+dest}]);
+          mcPushImm(S, imm, is16);
         } else {
-          var group = ALU_GROUP[instr];
-          opcode = (group<<3) | w;
-          breakdown.push({label:'Opcode (grp='+group+',d=0,w='+w+')', bits:opcode.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
-        }
-        modrm = modrmReg(regTable[src], regTable[dest]);
-        bytes = [opcode, modrm];
-        breakdown.push({label:'ModR/M (mod=11,reg='+src+','+'r/m='+dest+')', bits:modrm.toString(2).padStart(8,'0'), cls:'mc-bit-mod'});
-      } else {
-        var imm = parseInt(document.getElementById('mc-imm').value,10);
-        if(isNaN(imm)) throw new Error(t('fill_all_fields'));
-        if(instr==='MOV'){
-          var opcode2 = (is16 ? 0xB8 : 0xB0) + regTable[dest];
-          bytes = [opcode2];
-          breakdown.push({label:'Opcode (B'+(is16?'8':'0')+'+reg)', bits:opcode2.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
-        } else {
-          var group2 = ALU_GROUP[instr];
-          var isAcc = is16 ? (dest==='AX') : (dest==='AL');
+          var isAcc = is16 ? dest==='AX' : dest==='AL';
           if(isAcc){
-            var opcode3 = (group2<<3) | 4 | w;
-            bytes = [opcode3];
-            breakdown.push({label:'Opcode (accumulator form)', bits:opcode3.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+            var o3 = (grp<<3)|4|w;
+            mcPushOp(S, o3, [{b:'00',c:'mc-bit-op',l:'00'},{b:bin(grp,3),c:'mc-bit-op',l:instr},{b:'10',c:'mc-bit-op',l:'10'},{b:bin(w,1),c:'mc-bit-w',l:'w'}], 'Opcode (accumulator form)');
+            mcPushImm(S, imm, is16);
           } else {
-            var opcode4 = is16 ? 0x81 : 0x80;
-            var modrm2 = modrmReg(group2, regTable[dest]);
-            bytes = [opcode4, modrm2];
-            breakdown.push({label:'Opcode (r/m,imm group)', bits:opcode4.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
-            breakdown.push({label:'ModR/M (mod=11,reg=grp'+group2+',r/m='+dest+')', bits:modrm2.toString(2).padStart(8,'0'), cls:'mc-bit-mod'});
+            var sImm = is16 ? (imm>0x7FFF ? imm-0x10000 : imm) : 0;
+            var useS = is16 && sImm>=-128 && sImm<=127;
+            var o4 = 0x80 | (useS?2:0) | w;
+            mcPushOp(S, o4, [{b:'100000',c:'mc-bit-op',l:'opcode'},{b:useS?'1':'0',c:'mc-bit-d',l:'s'},{b:bin(w,1),c:'mc-bit-w',l:'w'}], useS ? 'Opcode (imm8 sign-extended)' : 'Opcode (r/m, imm)');
+            S.bytes.push(modrmReg(grp, regTable[dest]));
+            S.bd.push({label:'ModR/M', parts:[{b:'11',c:'mc-bit-mod',l:'mod'},{b:bin(grp,3),c:'mc-bit-reg',l:'/'+grp+' = '+instr},{b:bin(regTable[dest],3),c:'mc-bit-rm',l:'r/m='+dest}]});
+            if(useS){ S.bytes.push(sImm&0xFF); S.bd.push({label:'Immediate (imm8)', parts:[{b:bin(sImm,8),c:'mc-bit-imm',l:'imm8'}]}); S.info.push(t('note_s1')); }
+            else mcPushImm(S, imm, is16);
           }
         }
-        if(is16){ bytes.push(imm & 0xFF, (imm>>8)&0xFF); breakdown.push({label:'Immediate (low)', bits:(imm&0xFF).toString(2).padStart(8,'0'), cls:'mc-bit-rm'}); breakdown.push({label:'Immediate (high)', bits:((imm>>8)&0xFF).toString(2).padStart(8,'0'), cls:'mc-bit-rm'}); }
-        else { bytes.push(imm & 0xFF); breakdown.push({label:'Immediate', bits:(imm&0xFF).toString(2).padStart(8,'0'), cls:'mc-bit-rm'}); }
+      } else if(mode==='regmem'){
+        dest = document.getElementById('mc-dest').value; m = mcReadMem();
+        asm = instr+' '+dest+', '+m.asm;
+        var accDirect = isMov && m.base==='direct' && (is16 ? dest==='AX' : dest==='AL');
+        if(accDirect){
+          var oa = is16 ? 0xA1 : 0xA0;
+          mcPushOp(S, oa, [{b:'1010000',c:'mc-bit-op',l:'opcode'},{b:bin(w,1),c:'mc-bit-w',l:'w'}], 'Opcode (MOV acc, [addr])');
+          S.bytes.push(m.dbytes[0], m.dbytes[1]);
+          S.bd.push({label:'Address (low)', parts:[{b:bin(m.dbytes[0],8),c:'mc-bit-imm',l:'addr'}]});
+          S.bd.push({label:'Address (high)', parts:[{b:bin(m.dbytes[1],8),c:'mc-bit-imm',l:'addr'}]});
+          S.info.push(t('note_accdirect'));
+          S.info.push(t('ea_label')+': '+m.ea);
+          S.info.push(t('phys_label')+': '+(m.seg!=='default'?m.seg:m.defSeg)+' × 16 + '+m.formula);
+          if(m.seg!=='default') S.prefix = SEG_PREFIX[m.seg];
+        } else {
+          var o5 = isMov ? (is16?0x8B:0x8A) : ((grp<<3)|2|w);
+          mcPushOp(S, o5, isMov ? [{b:'100010',c:'mc-bit-op',l:'opcode'},{b:'1',c:'mc-bit-d',l:'d'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]
+                                : [{b:'00',c:'mc-bit-op',l:'00'},{b:bin(grp,3),c:'mc-bit-op',l:instr},{b:'0',c:'mc-bit-op',l:'0'},{b:'1',c:'mc-bit-d',l:'d'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]);
+          mcPushModrm(S, m, regTable[dest], 'reg='+dest);
+          S.info.push(t('note_d1'));
+        }
+      } else if(mode==='memreg'){
+        src = document.getElementById('mc-src').value; m = mcReadMem();
+        asm = instr+' '+m.asm+', '+src;
+        var accDirect2 = isMov && m.base==='direct' && (is16 ? src==='AX' : src==='AL');
+        if(accDirect2){
+          var ob = is16 ? 0xA3 : 0xA2;
+          mcPushOp(S, ob, [{b:'1010001',c:'mc-bit-op',l:'opcode'},{b:bin(w,1),c:'mc-bit-w',l:'w'}], 'Opcode (MOV [addr], acc)');
+          S.bytes.push(m.dbytes[0], m.dbytes[1]);
+          S.bd.push({label:'Address (low)', parts:[{b:bin(m.dbytes[0],8),c:'mc-bit-imm',l:'addr'}]});
+          S.bd.push({label:'Address (high)', parts:[{b:bin(m.dbytes[1],8),c:'mc-bit-imm',l:'addr'}]});
+          S.info.push(t('note_accdirect'));
+          S.info.push(t('ea_label')+': '+m.ea);
+          S.info.push(t('phys_label')+': '+(m.seg!=='default'?m.seg:m.defSeg)+' × 16 + '+m.formula);
+          if(m.seg!=='default') S.prefix = SEG_PREFIX[m.seg];
+        } else {
+          var o6 = isMov ? (is16?0x89:0x88) : ((grp<<3)|w);
+          mcPushOp(S, o6, isMov ? [{b:'100010',c:'mc-bit-op',l:'opcode'},{b:'0',c:'mc-bit-d',l:'d'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]
+                                : [{b:'00',c:'mc-bit-op',l:'00'},{b:bin(grp,3),c:'mc-bit-op',l:instr},{b:'0',c:'mc-bit-op',l:'0'},{b:'0',c:'mc-bit-d',l:'d'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]);
+          mcPushModrm(S, m, regTable[src], 'reg='+src);
+          S.info.push(t('note_d0'));
+        }
+      } else if(mode==='memimm'){
+        m = mcReadMem(); imm = mcParseNum(document.getElementById('mc-imm').value); mcCheckImm(imm, is16);
+        asm = instr+' '+mcPtr(is16)+m.asm+', '+mcFmtImm(imm,is16);
+        if(isMov){
+          mcPushOp(S, is16?0xC7:0xC6, [{b:'1100011',c:'mc-bit-op',l:'opcode'},{b:bin(w,1),c:'mc-bit-w',l:'w'}], 'Opcode (MOV r/m, imm)');
+          mcPushModrm(S, m, 0, '/0');
+          mcPushImm(S, imm, is16);
+        } else {
+          var sI = is16 ? (imm>0x7FFF ? imm-0x10000 : imm) : 0;
+          var uS = is16 && sI>=-128 && sI<=127;
+          mcPushOp(S, 0x80|(uS?2:0)|w, [{b:'100000',c:'mc-bit-op',l:'opcode'},{b:uS?'1':'0',c:'mc-bit-d',l:'s'},{b:bin(w,1),c:'mc-bit-w',l:'w'}], uS ? 'Opcode (imm8 sign-extended)' : 'Opcode (r/m, imm)');
+          mcPushModrm(S, m, grp, '/'+grp+' = '+instr);
+          if(uS){ S.bytes.push(sI&0xFF); S.bd.push({label:'Immediate (imm8)', parts:[{b:bin(sI,8),c:'mc-bit-imm',l:'imm8'}]}); S.info.push(t('note_s1')); }
+          else mcPushImm(S, imm, is16);
+        }
+      } else if(mode==='sregreg'){
+        dest = document.getElementById('mc-dest').value; src = document.getElementById('mc-src').value;
+        mcPushOp(S, 0x8E, null, 'Opcode (MOV Sreg, r/m16)');
+        S.bytes.push(modrmReg(SREG[dest], REG16[src]));
+        S.bd.push({label:'ModR/M', parts:[{b:'11',c:'mc-bit-mod',l:'mod'},{b:bin(SREG[dest],3),c:'mc-bit-reg',l:'sreg='+dest},{b:bin(REG16[src],3),c:'mc-bit-rm',l:'r/m='+src}]});
+        asm = 'MOV '+dest+', '+src;
+      } else if(mode==='regsreg'){
+        dest = document.getElementById('mc-dest').value; src = document.getElementById('mc-src').value;
+        mcPushOp(S, 0x8C, null, 'Opcode (MOV r/m16, Sreg)');
+        S.bytes.push(modrmReg(SREG[src], REG16[dest]));
+        S.bd.push({label:'ModR/M', parts:[{b:'11',c:'mc-bit-mod',l:'mod'},{b:bin(SREG[src],3),c:'mc-bit-reg',l:'sreg='+src},{b:bin(REG16[dest],3),c:'mc-bit-rm',l:'r/m='+dest}]});
+        asm = 'MOV '+dest+', '+src;
       }
-    } else if(MC_REGONLY16.indexOf(instr)!==-1){
-      var reg = document.getElementById('mc-reg').value;
-      var base = {INC:0x40, DEC:0x48, PUSH:0x50, POP:0x58}[instr];
-      var opcode5 = base + REG16[reg];
-      bytes = [opcode5];
-      breakdown.push({label:'Opcode (base+reg)', bits:opcode5.toString(2).padStart(8,'0'), cls:'mc-bit-op'});
-    } else if(instr==='JMP'){
+    } else if(kind==='lea'){
+      var ld = document.getElementById('mc-dest').value; var lm = mcReadMem();
+      mcPushOp(S, 0x8D, null, 'Opcode (LEA)');
+      mcPushModrm(S, lm, REG16[ld], 'reg='+ld);
+      S.info.push(t('note_lea'));
+      asm = 'LEA '+ld+', '+lm.asm;
+    } else if(kind==='unary'){
+      var u = MC_UNARY[instr];
+      if(mode==='reg'){
+        var ur = document.getElementById('mc-reg').value;
+        asm = instr+' '+ur;
+        if((instr==='INC'||instr==='DEC') && is16){
+          var ub = (instr==='INC'?0x40:0x48)+REG16[ur];
+          mcPushOp(S, ub, [{b:instr==='INC'?'01000':'01001',c:'mc-bit-op',l:instr},{b:bin(REG16[ur],3),c:'mc-bit-reg',l:'reg='+ur}], 'Opcode (short form)');
+        } else {
+          mcPushOp(S, u[0]|w, [{b:bin(u[0]>>1,7),c:'mc-bit-op',l:'opcode'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]);
+          S.bytes.push(modrmReg(u[1], regTable[ur]));
+          S.bd.push({label:'ModR/M', parts:[{b:'11',c:'mc-bit-mod',l:'mod'},{b:bin(u[1],3),c:'mc-bit-reg',l:'/'+u[1]+' = '+instr},{b:bin(regTable[ur],3),c:'mc-bit-rm',l:'r/m='+ur}]});
+        }
+      } else {
+        var um = mcReadMem();
+        asm = instr+' '+mcPtr(is16)+um.asm;
+        mcPushOp(S, u[0]|w, [{b:bin(u[0]>>1,7),c:'mc-bit-op',l:'opcode'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]);
+        mcPushModrm(S, um, u[1], '/'+u[1]+' = '+instr);
+      }
+    } else if(kind==='stack'){
+      var isPush = instr==='PUSH';
+      if(mode==='reg'){
+        var sr = document.getElementById('mc-reg').value;
+        var sb = (isPush?0x50:0x58)+REG16[sr];
+        mcPushOp(S, sb, [{b:isPush?'01010':'01011',c:'mc-bit-op',l:instr},{b:bin(REG16[sr],3),c:'mc-bit-reg',l:'reg='+sr}], 'Opcode (base+reg)');
+        asm = instr+' '+sr;
+      } else if(mode==='sreg'){
+        var ss = document.getElementById('mc-reg').value;
+        var sbs = (isPush?0x06:0x07) | (SREG[ss]<<3);
+        mcPushOp(S, sbs, [{b:'000',c:'mc-bit-op',l:''},{b:bin(SREG[ss],2),c:'mc-bit-reg',l:'sreg='+ss},{b:isPush?'110':'111',c:'mc-bit-op',l:instr}], 'Opcode ('+instr+' Sreg)');
+        asm = instr+' '+ss;
+      } else {
+        var sm = mcReadMem();
+        mcPushOp(S, isPush?0xFF:0x8F, null, 'Opcode ('+instr+' r/m16)');
+        mcPushModrm(S, sm, isPush?6:0, '/'+(isPush?6:0)+' = '+instr);
+        asm = instr+' WORD PTR '+sm.asm;
+      }
+    } else if(kind==='io'){
+      var isIn = instr==='IN';
+      var acc = is16 ? 'AX' : 'AL';
+      if(mode==='port'){
+        var pn = mcParseNum(document.getElementById('mc-port').value);
+        if(isNaN(pn) || pn<0 || pn>255) throw new Error(t('port_range'));
+        var ip = (isIn?0xE4:0xE6)|w;
+        mcPushOp(S, ip, [{b:isIn?'1110010':'1110011',c:'mc-bit-op',l:'opcode'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]);
+        S.bytes.push(pn); S.bd.push({label:'Port (8-bit)', parts:[{b:bin(pn,8),c:'mc-bit-imm',l:'port'}]});
+        asm = isIn ? 'IN '+acc+', '+mcFmtImm(pn,false) : 'OUT '+mcFmtImm(pn,false)+', '+acc;
+      } else {
+        var id2 = (isIn?0xEC:0xEE)|w;
+        mcPushOp(S, id2, [{b:isIn?'1110110':'1110111',c:'mc-bit-op',l:'opcode'},{b:bin(w,1),c:'mc-bit-w',l:'w'}]);
+        asm = isIn ? 'IN '+acc+', DX' : 'OUT DX, '+acc;
+        S.info.push(t('note_dx'));
+      }
+    } else if(kind==='rel8'){
       var disp = parseInt(document.getElementById('mc-disp').value,10);
       if(isNaN(disp) || disp<-128 || disp>127) throw new Error(t('fill_all_fields'));
-      var dispByte = disp<0 ? 256+disp : disp;
-      bytes = [0xEB, dispByte];
-      breakdown.push({label:'Opcode (JMP short)', bits:'11101011', cls:'mc-bit-op'});
-      breakdown.push({label:'Displacement (rel8)', bits:dispByte.toString(2).padStart(8,'0'), cls:'mc-bit-rm'});
-    } else if(instr==='INT'){
-      var intnum = parseInt(document.getElementById('mc-intnum').value,10);
-      if(isNaN(intnum) || intnum<0 || intnum>255) throw new Error(t('fill_all_fields'));
-      bytes = [0xCD, intnum];
-      breakdown.push({label:'Opcode (INT)', bits:'11001101', cls:'mc-bit-op'});
-      breakdown.push({label:'Interrupt number', bits:intnum.toString(2).padStart(8,'0'), cls:'mc-bit-rm'});
+      var dbyte = disp<0 ? 256+disp : disp;
+      mcPushOp(S, MC_REL8[instr], null, 'Opcode ('+instr+')');
+      S.bytes.push(dbyte); S.bd.push({label:'Displacement (rel8)', parts:[{b:bin(dbyte,8),c:'mc-bit-imm',l:'rel8'}]});
+      S.info.push(t('note_rel'));
+      asm = instr+' $'+(disp+2>=0?'+':'')+(disp+2);
+    } else if(kind==='int'){
+      var iv = mcParseNum(document.getElementById('mc-intnum').value);
+      if(isNaN(iv) || iv<0 || iv>255) throw new Error(t('fill_all_fields'));
+      if(iv===3){ mcPushOp(S, 0xCC, null, 'Opcode (INT 3 short form)'); }
+      else { mcPushOp(S, 0xCD, null, 'Opcode (INT)'); S.bytes.push(iv); S.bd.push({label:'Interrupt number', parts:[{b:bin(iv,8),c:'mc-bit-imm',l:'type'}]}); }
+      asm = 'INT '+mcFmtImm(iv,false);
     } else {
-      bytes = [MC_NOOPERAND[instr]];
-      breakdown.push({label:'Opcode', bits:bytes[0].toString(2).padStart(8,'0'), cls:'mc-bit-op'});
+      mcPushOp(S, MC_NOOPERAND[instr]);
+      if(instr==='REP'||instr==='REPNE') S.info.push(t('note_prefix'));
     }
 
+    var bytes = S.bytes.slice();
+    if(S.prefix!==null){
+      bytes.unshift(S.prefix);
+      S.bd.unshift({label:'Segment override prefix', parts:[{b:bin(S.prefix,8), c:'mc-bit-pfx', l:'001 sr 110'}]});
+    }
     var bytesHtml = bytes.map(function(b,i){
       return '<div class="mc-byte"><div class="mcv">'+toHexByte(b)+'</div><div class="mcl">'+t('byte_n')+' '+(i+1)+'</div></div>';
     }).join('');
-    var breakdownHtml = breakdown.map(function(bd){
-      return '<div style="margin-top:8px"><div class="hint" style="margin:0 0 3px">'+bd.label+'</div>'+
-        '<div class="mc-bin-breakdown"><span class="'+bd.cls+'">'+bd.bits+'</span></div></div>';
+    var bdHtml = S.bd.map(function(bd){
+      var parts = bd.parts.map(function(p){
+        return '<span class="mc-part"><span class="'+p.c+'">'+p.b+'</span><i>'+p.l+'</i></span>';
+      }).join('');
+      return '<div style="margin-top:10px"><div class="hint" style="margin:0 0 3px">'+bd.label+'</div><div class="mc-bin-breakdown">'+parts+'</div></div>';
     }).join('');
-
+    var infoHtml = S.info.length ? '<div class="mc-info">'+S.info.map(function(s){ return '<div>• '+s+'</div>'; }).join('')+'</div>' : '';
     resDiv.innerHTML =
-      '<div class="result-box"><div class="rlabel">'+t('machine_bytes')+'</div><div class="mc-bytes">'+bytesHtml+'</div></div>'+
-      '<div style="margin-top:14px"><div class="rlabel" style="margin-bottom:6px">'+t('bit_breakdown')+'</div>'+breakdownHtml+'</div>';
+      '<div class="result-box"><div class="rlabel">'+t('asm_label')+'</div><div class="rvalue" style="font-size:17px">'+asm+'</div>'+
+      '<div class="rlabel" style="margin-top:12px">'+t('machine_bytes')+' — '+bytes.length+' '+t('bytes_word')+'</div><div class="mc-bytes">'+bytesHtml+'</div>'+
+      '<div class="hint" style="margin-top:8px;font-family:var(--font-en)">'+bytes.map(toHexByte).join(' ')+'</div></div>'+
+      infoHtml+
+      '<div style="margin-top:14px"><div class="rlabel" style="margin-bottom:6px">'+t('bit_breakdown')+'</div>'+bdHtml+'</div>';
   }catch(e){
     resDiv.innerHTML = '<div class="error-box">'+e.message+'</div>';
   }
@@ -2350,6 +2848,899 @@ function sciPress(b){
 }
 sciBuildGrid();
 document.getElementById('sci-display').value = '0';
+
+/* ════════════════════════════════════════════════════════════
+   10) IC DATASHEETS  (pinouts, supply voltage, wiring notes)
+   ════════════════════════════════════════════════════════════ */
+var IC_CATS = {
+  logic:['Logic gates','بوابات منطقية'],
+  seq:['Flip-flops, counters & registers','فليب فلوب وعدادات ومسجلات'],
+  comb:['Decoders, MUX, adders & ALU','مفكّكات ومالتيبلكسر وجمع وALU'],
+  analog:['Op-amps, comparators, timers & analog','مكبرات وقارنات وتايمر وتناظري'],
+  power:['Regulators, drivers & isolation','منظمات جهد ودرايفرز وعزل'],
+  cpu:['Microprocessors & support chips','معالجات وشرائح مساعدة'],
+  mem:['Memory','ذاكرة'],
+  mcu:['Microcontrollers','ميكروكنترولر'],
+  iface:['Interfacing, converters, sensors & displays','واجهات ومحولات وحساسات وشاشات']
+};
+var IC_COURSES = {
+  dl:['Digital Logic Design','تصميم المنطق الرقمي'], ec:['Electronic Circuits','الدوائر الإلكترونية'],
+  mp:['Microprocessors','المعالجات الدقيقة'], ca:['Computer Architecture','معمارية الحاسب'],
+  it:['Interfacing','الواجهات (Interfacing)'], em:['Embedded Systems','النظم المدمجة'],
+  cm:['Communications','الاتصالات'], pe:['Power Electronics','إلكترونيات القوى'],
+  ms:['Measurements & Instrumentation','القياسات والأجهزة'], ct:['Control Systems','نظم التحكم'],
+  rb:['Robotics / Mechatronics','الروبوتات والميكاترونيكس'], lab:['Electronics Lab','معمل الإلكترونيات']
+};
+var IC_TYPE_INFO = {
+  p:['#ef4444','Power (+V)','تغذية (+V)'], g:['#64748b','Ground / −V','أرضي / −V'],
+  i:['#10b981','Input','دخل'], o:['#f59e0b','Output','خرج'],
+  b:['#a855f7','Bidirectional / I/O','ثنائي الاتجاه / I/O'], a:['#06b6d4','Analog / passive part','تناظري / مكوّن خارجي'],
+  n:['#94a3b8','Not connected','غير موصّل']
+};
+var IC_LOGIC_FAMILIES = [
+  // name, Vcc range, VIH min, VIL max, VOH min, VOL max, IOH, IOL, note[en,ar]
+  ['74 (std TTL)','4.75–5.25 V','2.0 V','0.8 V','2.4 V','0.4 V','−0.4 mA','16 mA',['Old and power-hungry; rarely used now.','قديمة وبتاكل كهرباء كتير؛ نادر استخدامها دلوقتي.']],
+  ['74LS','4.75–5.25 V','2.0 V','0.8 V','2.7 V','0.5 V','−0.4 mA','8 mA',['Most common in university labs. Very strict on supply: never above 5.25 V.','الأشهر في معامل الجامعة. حساسة للجهد: ماتزودش عن 5.25V أبداً.']],
+  ['74HC','2–6 V','3.15 V (@5 V)','1.35 V (@5 V)','4.4 V (@5 V, light load)','0.1 V','−4 mA','4 mA',['CMOS: tiny static current, wide supply. Inputs must never float.','CMOS: استهلاك ثابت شبه صفر وجهد واسع. المداخل ممنوع تبقى عايمة.']],
+  ['74HCT','4.5–5.5 V','2.0 V','0.8 V','4.4 V','0.1 V','−4 mA','4 mA',['CMOS with TTL-compatible input levels — the safe way to connect LS outputs to CMOS.','CMOS بمستويات دخل TTL — الحل الآمن لتوصيل خرج LS بـCMOS.']],
+  ['CD4000B','3–18 V','3.5 V (@5 V)','1.5 V (@5 V)','4.95 V','0.05 V','−0.5 mA (@5 V)','0.5 mA (@5 V)',['Wide supply (3–18 V) but slow and weak outputs; buffer LEDs with a transistor.','جهد واسع (3–18V) بس بطيئة وخرجها ضعيف؛ استخدم ترانزستور مع الـLED.']]
+];
+var IC_FAM_NOTES = {
+  ttl:[
+    ['Decoupling: place a 0.1 µF ceramic capacitor between VCC and GND right next to the chip.','حط مكثف سيراميك 0.1µF بين VCC وGND قريب جداً من الشريحة.'],
+    ['Unused inputs: tie AND/NAND inputs to VCC (through ~1 kΩ) and OR/NOR inputs to GND. On 74HC/HCT never leave any input floating.','المداخل اللي مش مستخدمة: AND/NAND وصّلها على VCC (عبر ~1kΩ) وOR/NOR على GND. في 74HC/HCT ممنوع أي مدخل يبقى عايم.'],
+    ['Supply: 74LS/74 need 4.75–5.25 V (above ~5.5 V can destroy them); 74HC accepts 2–6 V. Use a 7805 for 5 V.','الجهد: 74LS محتاجة 4.75–5.25V (فوق 5.5V ممكن تتحرق)، و74HC من 2 لـ 6V. استخدم 7805 لتطلع 5V.']
+  ],
+  cmos:[
+    ['CMOS is static-sensitive: handle with care and never leave any input floating (tie to VDD or VSS).','الـCMOS حساسة للكهرباء الساكنة: اتعامل معاها بحرص وماتسيبش أي مدخل عايم (وصّله VDD أو VSS).'],
+    ['Supply 3–18 V (5–12 V typical). Add a 0.1 µF capacitor across VDD–VSS.','التغذية 3–18V (المعتاد 5–12V). حط مكثف 0.1µF بين VDD وVSS.'],
+    ['Output drive is weak (~0.5 mA at 5 V): use a transistor/buffer for LEDs, relays or TTL loads.','خرجها ضعيف (~0.5mA عند 5V): استخدم ترانزستور/بافر مع LED أو ريلاي أو أحمال TTL.']
+  ],
+  hc:[
+    ['Never leave inputs floating; tie unused inputs to VCC or GND.','ماتسيبش المداخل عايمة؛ وصّل الفاضي على VCC أو GND.'],
+    ['Add a 0.1 µF ceramic capacitor between VCC and GND close to the chip.','حط مكثف 0.1µF سيراميك بين VCC وGND قريب من الشريحة.']
+  ]
+};
+var IC_DB = [];
+function ic(o){ IC_DB.push(o); }
+function R(p,a,b,s){ var r=[], st=a<=b?1:-1; for(var i=a;i!==b+st;i+=st) r.push(p+i+(s||'')); return r.join(' '); }
+function ICL(x){ if(x===undefined||x===null) return ''; return (typeof x==='string') ? x : x[currentLang==='ar'?1:0]; }
+
+function icParse(o){
+  if(o._parsed) return o._parsed;
+  var toks = o.pins.trim().split(/\s+/);
+  var ovr = {};
+  var ty = o.ty || {};
+  Object.keys(ty).forEach(function(k){ ty[k].split(/\s+/).forEach(function(nm){ if(nm) ovr[nm]=k; }); });
+  var pins = toks.map(function(tk,i){
+    var bar = tk.charAt(0)==='/' && tk.length>1;
+    var name = bar ? tk.slice(1) : tk;
+    var type;
+    if(ovr[name]) type = ovr[name];
+    else if(name==='NC') type='n';
+    else if(/^(VCC[12]?|VDD|V\+|AVCC|\+VS|VBAT|VPP)$/.test(name)) type='p';
+    else if(/^(GND|VSS|AGND|DGND|V-|VEE|-VS)$/.test(name)) type='g';
+    else if(/^\d?(Y\d?|Q[A-H0-9]?|O\d|Σ\d)$/.test(name) || /^OUT[A-Z0-9]?$/.test(name)) type='o';
+    else type='i';
+    return {n:i+1, name:name, bar:bar, type:type};
+  });
+  o._parsed = pins;
+  return pins;
+}
+function icEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function icPinHelp(o, p){
+  var h = o.h && o.h[p.name];
+  if(h) return ICL(h);
+  var mm;
+  if((mm=/^AD(\d+)$/.exec(p.name))) return ICL(['Multiplexed address/data bit '+mm[1],'خط عنوان/بيانات مشترك رقم '+mm[1]]);
+  if((mm=/^D[B]?(\d+)$/.exec(p.name)) && (p.type==='b'||p.type==='o')) return ICL(['Data bit '+mm[1],'خط بيانات رقم '+mm[1]]);
+  if((mm=/^A(\d+)$/.exec(p.name)) && p.type==='o') return ICL(['Address bit '+mm[1],'خط عنوان رقم '+mm[1]]);
+  if((mm=/^P([ABC])(\d)$/.exec(p.name))) return ICL(['Port '+mm[1]+' bit '+mm[2],'Port '+mm[1]+' بت رقم '+mm[2]]);
+  var d = {p:['Power supply','تغذية'], g:['Ground (0 V) / negative supply','أرضي (0V) / تغذية سالبة'], i:['Input','دخل'], o:['Output','خرج'], b:['Bidirectional I/O','دخل/خرج'], a:['Analog / external component','تناظري / مكوّن خارجي'], n:['No internal connection','مفيش توصيل داخلي']};
+  return ICL(d[p.type]);
+}
+function icPkgLabel(o){
+  var m = /^(dip|sip|to92|to220)(\d+)?$/.exec(o.k);
+  var n = icParse(o).length;
+  if(!m) return o.k;
+  if(m[1]==='dip') return 'DIP-'+n;
+  if(m[1]==='sip') return 'SIP-'+n+(o.kn?(' ('+o.kn+')'):'');
+  if(m[1]==='to92') return 'TO-92 ('+n+' pins)';
+  return 'TO-220 ('+n+' pins)';
+}
+
+/* ── SVG pinout drawings ── */
+function icPinText(x,y,p,anchor){
+  return '<text x="'+x+'" y="'+y+'" text-anchor="'+anchor+'" class="ic-svg-name"'+(p.bar?' text-decoration="overline"':'')+'>'+icEsc(p.name)+'</text>';
+}
+function icSvgDip(pins){
+  var n = pins.length, half = n/2, pitch = 22, top = 34, W = 380, bx = 130, bw = 120;
+  var H = top + half*pitch + 16;
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" class="ic-svg" role="img" aria-label="pinout">';
+  s += '<rect x="'+bx+'" y="'+(top-12)+'" width="'+bw+'" height="'+(half*pitch+12)+'" rx="6" fill="var(--bg-secondary)" stroke="var(--accent)" stroke-width="1.5"/>';
+  s += '<path d="M'+(bx+bw/2-12)+' '+(top-12)+' a12 12 0 0 0 24 0" fill="var(--bg-card)" stroke="var(--accent)" stroke-width="1.2"/>';
+  s += '<circle cx="'+(bx+14)+'" cy="'+(top-2)+'" r="3" fill="var(--accent)" opacity=".7"/>';
+  for(var i=0;i<half;i++){
+    var yc = top + i*pitch + 6;
+    var L = pins[i], Rr = pins[n-1-i];
+    s += '<rect x="'+(bx-16)+'" y="'+(yc-4)+'" width="16" height="8" rx="2" fill="'+IC_TYPE_INFO[L.type][0]+'"/>';
+    s += '<text x="'+(bx+8)+'" y="'+(yc+4)+'" class="ic-svg-num">'+L.n+'</text>';
+    s += icPinText(bx-22, yc+4, L, 'end');
+    s += '<rect x="'+(bx+bw)+'" y="'+(yc-4)+'" width="16" height="8" rx="2" fill="'+IC_TYPE_INFO[Rr.type][0]+'"/>';
+    s += '<text x="'+(bx+bw-8)+'" y="'+(yc+4)+'" text-anchor="end" class="ic-svg-num">'+Rr.n+'</text>';
+    s += icPinText(bx+bw+22, yc+4, Rr, 'start');
+  }
+  return s + '</svg>';
+}
+function icSvgSip(pins){
+  var n = pins.length, pitch = 22, top = 24, H = top + n*pitch + 8, W = 300;
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" class="ic-svg ic-svg-narrow" role="img" aria-label="pinout">';
+  s += '<text x="8" y="14" class="ic-svg-num" style="font-size:10px">PIN 1 ▼</text>';
+  s += '<rect x="30" y="'+(top-6)+'" width="34" height="'+(n*pitch+2)+'" rx="5" fill="var(--bg-secondary)" stroke="var(--accent)" stroke-width="1.5"/>';
+  for(var i=0;i<n;i++){
+    var p = pins[i], yc = top + i*pitch + 7;
+    s += '<rect x="64" y="'+(yc-4)+'" width="18" height="8" rx="2" fill="'+IC_TYPE_INFO[p.type][0]+'"/>';
+    s += '<text x="47" y="'+(yc+4)+'" text-anchor="middle" class="ic-svg-num">'+p.n+'</text>';
+    s += icPinText(90, yc+4, p, 'start');
+  }
+  return s + '</svg>';
+}
+function icSvgTo(pins, kind){
+  var n = pins.length, is220 = kind==='to220', gap = is220 ? 64 : 44;
+  var W = n*gap + 40, bodyW = (n-1)*gap + 44, x0 = (W-bodyW)/2;
+  var b = '', y = 10;
+  if(is220){
+    b += '<rect x="'+x0+'" y="'+y+'" width="'+bodyW+'" height="40" rx="3" fill="#94a3b8" opacity=".55" stroke="var(--accent)" stroke-width="1.2"/>';
+    b += '<circle cx="'+(W/2)+'" cy="'+(y+20)+'" r="8" fill="var(--bg-card)" stroke="var(--accent)"/>';
+    y += 40;
+    b += '<rect x="'+x0+'" y="'+y+'" width="'+bodyW+'" height="56" fill="var(--bg-secondary)" stroke="var(--accent)" stroke-width="1.5"/>';
+    b += '<text x="'+(W/2)+'" y="'+(y+33)+'" text-anchor="middle" class="ic-svg-num" style="font-size:11px">FRONT VIEW</text>';
+    y += 56;
+  } else {
+    var r = bodyW/2;
+    b += '<path d="M'+x0+' '+(y+r+44)+' V'+(y+r)+' A'+r+' '+r+' 0 0 1 '+(x0+bodyW)+' '+(y+r)+' V'+(y+r+44)+' Z" fill="var(--bg-secondary)" stroke="var(--accent)" stroke-width="1.5"/>';
+    b += '<text x="'+(W/2)+'" y="'+(y+r+26)+'" text-anchor="middle" class="ic-svg-num" style="font-size:10px">FLAT FACE TOWARD YOU</text>';
+    y += r + 44;
+  }
+  for(var i=0;i<n;i++){
+    var p = pins[i], cx = x0 + 22 + i*gap;
+    b += '<rect x="'+(cx-4)+'" y="'+y+'" width="8" height="34" fill="'+IC_TYPE_INFO[p.type][0]+'"/>';
+    b += '<text x="'+cx+'" y="'+(y+52)+'" text-anchor="middle" class="ic-svg-num" style="font-size:12px">'+p.n+'</text>';
+    b += '<text x="'+cx+'" y="'+(y+68)+'" text-anchor="middle" class="ic-svg-name"'+(p.bar?' text-decoration="overline"':'')+'>'+icEsc(p.name)+'</text>';
+  }
+  var H = y + 78;
+  return '<svg viewBox="0 0 '+W+' '+H+'" class="ic-svg ic-svg-narrow" role="img" aria-label="pinout">' + b + '</svg>';
+}
+function icSvg(o){
+  var pins = icParse(o);
+  var m = /^(dip|sip|to92|to220)/.exec(o.k);
+  if(m[1]==='dip') return icSvgDip(pins);
+  if(m[1]==='sip') return icSvgSip(pins);
+  return icSvgTo(pins, m[1]);
+}
+
+/* ═════════ DATA — 1) logic gates ═════════ */
+var Q4 = '1A 1B 1Y 2A 2B 2Y GND 3Y 3A 3B 4Y 4A 4B VCC';
+ic({id:'7400',n:'74LS00',c:'logic',y:[1],k:'dip14',pins:Q4,fam:'ttl',cur:2,cr:'dl lab',tt:'Y = (A · B)′',
+  t:['Quad 2-input NAND gate','4 بوابات NAND (دخلين لكل واحدة)'],
+  d:['Four independent 2-input NAND gates. NAND is a universal gate: any logic function can be built from NAND gates only.','أربع بوابات NAND مستقلة، كل واحدة بدخلين. الـNAND بوابة شاملة (Universal): أي دالة منطقية ممكن تتبني بيها لوحدها.'],
+  w:[['Gate n uses pins nA, nB (inputs) and nY (output). Example: gate 1 = pins 1, 2 → 3.','كل بوابة ليها nA وnB (دخل) وnY (خرج). مثال: البوابة 1 = الأرجل 1 و2 والخرج رجل 3.'],
+     ['Tie both inputs together to make a NOT gate.','وصّل الدخلين مع بعض تطلع بوابة NOT.']]});
+ic({id:'7402',n:'74LS02',c:'logic',y:[1],k:'dip14',pins:'1Y 1A 1B 2Y 2A 2B GND 3A 3B 3Y 4A 4B 4Y VCC',fam:'ttl',cur:3,cr:'dl lab',tt:'Y = (A + B)′',
+  t:['Quad 2-input NOR gate','4 بوابات NOR (دخلين لكل واحدة)'],
+  d:['Four 2-input NOR gates. Universal gate like NAND.','أربع بوابات NOR بدخلين. برضه بوابة شاملة زي الـNAND.'],
+  w:[['Pinout differs from 7400: the output pin comes FIRST in each gate (pin 1 = 1Y). Don\'t reuse a 7400 wiring diagram.','ترتيب الأرجل مختلف عن 7400: الخرج بيجي الأول في كل بوابة (رجل 1 = 1Y). ماتنسخش توصيلة 7400.']]});
+ic({id:'7404',n:'74LS04',c:'logic',y:[1],k:'dip14',pins:'1A 1Y 2A 2Y 3A 3Y GND 4Y 4A 5Y 5A 6Y 6A VCC',fam:'ttl',cur:3.6,cr:'dl lab',tt:'Y = A′',
+  t:['Hex inverter (NOT gate)','6 بوابات عاكس NOT'],
+  d:['Six independent inverters in one package.','ست عواكس (NOT) مستقلة في شريحة واحدة.'],
+  w:[['Unused inverters: tie their inputs to GND (output will be high) — never leave floating.','العواكس اللي مش مستخدمة: وصّل مدخلها على GND ومتسيبهوش عايم.']]});
+ic({id:'7408',n:'74LS08',c:'logic',y:[1],k:'dip14',pins:Q4,fam:'ttl',cur:5,cr:'dl lab',tt:'Y = A · B',
+  t:['Quad 2-input AND gate','4 بوابات AND (دخلين لكل واحدة)'],
+  d:['Four 2-input AND gates. Same pin layout as 7400/7432/7486.','أربع بوابات AND بدخلين. نفس ترتيب أرجل 7400/7432/7486.']});
+ic({id:'7432',n:'74LS32',c:'logic',y:[1],k:'dip14',pins:Q4,fam:'ttl',cur:4,cr:'dl lab',tt:'Y = A + B',
+  t:['Quad 2-input OR gate','4 بوابات OR (دخلين لكل واحدة)'],
+  d:['Four 2-input OR gates. Same pin layout as 7400/7408/7486.','أربع بوابات OR بدخلين. نفس ترتيب أرجل 7400/7408/7486.']});
+ic({id:'7486',n:'74LS86',c:'logic',y:[1],k:'dip14',pins:Q4,fam:'ttl',cur:6,cr:'dl lab',tt:'Y = A ⊕ B',
+  t:['Quad 2-input XOR gate','4 بوابات XOR (دخلين لكل واحدة)'],
+  d:['Four XOR gates — the building block of adders, parity generators and comparators.','أربع بوابات XOR — أساس دوائر الجمع وتوليد الـParity والمقارنة.']});
+ic({id:'7410',n:'74LS10',c:'logic',y:[1],k:'dip14',pins:'1A 1B 2A 2B 2C 2Y GND 3Y 3A 3B 3C 1Y 1C VCC',fam:'ttl',cur:1.8,cr:'dl lab',tt:'Y = (A · B · C)′',
+  t:['Triple 3-input NAND gate','3 بوابات NAND (3 مداخل لكل واحدة)'],
+  d:['Three 3-input NAND gates. Handy when a K-map result needs 3-input terms.','ثلاث بوابات NAND بـ3 مداخل. مفيدة لما حل الـK-map يحتاج حدود من 3 متغيرات.'],
+  w:[['Gate 1: pins 1, 2, 13 → 12. Gate 2: pins 3, 4, 5 → 6. Gate 3: pins 9, 10, 11 → 8.','بوابة 1: أرجل 1 و2 و13 والخرج 12. بوابة 2: أرجل 3 و4 و5 والخرج 6. بوابة 3: أرجل 9 و10 و11 والخرج 8.']]});
+ic({id:'7420',n:'74LS20',c:'logic',y:[1],k:'dip14',pins:'1A 1B NC 1C 1D 1Y GND 2Y 2A 2B NC 2C 2D VCC',fam:'ttl',cur:1.2,cr:'dl lab',tt:'Y = (A · B · C · D)′',
+  t:['Dual 4-input NAND gate','بوابتين NAND (4 مداخل لكل واحدة)'],
+  d:['Two 4-input NAND gates.','بوابتين NAND بـ4 مداخل.']});
+ic({id:'7414',n:'74LS14',c:'logic',y:[1,2],k:'dip14',pins:'1A 1Y 2A 2Y 3A 3Y GND 4Y 4A 5Y 5A 6Y 6A VCC',fam:'ttl',cur:12,cr:'dl ec lab',tt:'Y = A′ (Schmitt trigger)',
+  t:['Hex Schmitt-trigger inverter','6 عواكس Schmitt Trigger'],
+  d:['Six inverters with hysteresis (typ. VT+ ≈ 1.6 V, VT− ≈ 0.8 V). Cleans slow or noisy signals such as push-button bounce and RC waveforms.','ست عواكس بـ Hysteresis (تقريباً VT+ ≈ 1.6V وVT− ≈ 0.8V). بتنضّف الإشارات البطيئة أو الضوضاء زي ارتداد الزراير وموجات RC.'],
+  w:[['Debounce a switch: push-button → 10 kΩ pull-up + 100 nF to GND → 7414 input.','Debounce لزرار: الزرار → مقاومة 10kΩ Pull-up + مكثف 100nF على GND → مدخل 7414.'],
+     ['RC oscillator: feed output back to input via R, and put C from input to GND (f ≈ 0.8/RC).','مذبذب RC: رجّع الخرج للدخل عبر مقاومة R وحط مكثف C من الدخل للأرضي (f ≈ 0.8/RC).']]});
+ic({id:'CD4011',n:'CD4011B',c:'logic',y:[1,2],k:'dip14',pins:Q4.replace('GND','VSS').replace('VCC','VDD'),fam:'cmos',cur:0.1,curT:['< 1 mA (static ≈ µA)','< 1mA (ثابت ≈ µA)'],cr:'dl ec lab',tt:'Y = (A · B)′',
+  t:['CMOS quad 2-input NAND gate','CMOS: 4 بوابات NAND (دخلين)'],
+  d:['CMOS version of the 7400 with the same pin layout but a wide 3–18 V supply and almost zero static current.','نسخة CMOS من 7400 بنفس ترتيب الأرجل بس بتشتغل على جهد واسع 3–18V واستهلاكها الثابت شبه صفر.']});
+
+/* ═════════ DATA — 2) flip-flops, counters, registers ═════════ */
+ic({id:'7474',n:'74LS74',c:'seq',y:[2],k:'dip14',pins:'/1CLR 1D 1CLK /1PRE 1Q /1Q GND /2Q 2Q /2PRE 2CLK 2D /2CLR VCC',fam:'ttl',cur:4,cr:'dl lab',tt:'Q ← D on ↑ CLK',
+  ty:{o:'1Q 2Q'},h:{'1CLR':'Async clear → Q=0 (active low)','2CLR':'Async clear → Q=0 (active low)','1PRE':'Async preset → Q=1 (active low)','2PRE':'Async preset → Q=1 (active low)','1CLK':'Clock, positive-edge triggered','2CLK':'Clock, positive-edge triggered'},
+  t:['Dual D flip-flop (edge-triggered)','فليب فلوب D مزدوج (Edge-triggered)'],
+  d:['Two positive-edge-triggered D flip-flops with asynchronous preset and clear. Q takes the value of D on the rising clock edge.','اتنين فليب فلوب D بيشتغلوا على الحافة الصاعدة للكلوك، مع Preset وClear غير متزامنين. الخرج Q بياخد قيمة D عند صعود الكلوك.'],
+  w:[['PRE and CLR are active-LOW: tie them to VCC (through 1 kΩ) when not used, otherwise the flip-flop will not toggle.','PRE وCLR فعّالين عند LOW: وصّلهم على VCC (عبر 1kΩ) لو مش هتستخدمهم، وإلا الفليب فلوب مش هيشتغل.'],
+     ['Toggle (T) mode: connect Q̅ back to D.','وضع T (Toggle): وصّل خرج Q̅ على مدخل D.']]});
+ic({id:'7473',n:'74LS73',c:'seq',y:[2],k:'dip14',pins:'1CLK /1CLR 1K VCC 2CLK /2CLR 2J /2Q 2Q 2K GND /1Q 1Q 1J',fam:'ttl',cur:4,cr:'dl lab',tt:'J K : 00 hold · 01 reset · 10 set · 11 toggle',
+  t:['Dual JK flip-flop with clear','فليب فلوب JK مزدوج مع Clear'],
+  d:['Two negative-edge-triggered JK flip-flops with asynchronous clear. VCC and GND are on unusual pins (4 and 11).','اتنين فليب فلوب JK بيشتغلوا على الحافة الهابطة للكلوك مع Clear. لاحظ إن VCC وGND في أرجل غير معتادة (4 و11).'],
+  warn:['Power pins are NOT the corner pins: VCC = pin 4, GND = pin 11.','أرجل التغذية مش في الأطراف: VCC = رجل 4 وGND = رجل 11.']});
+ic({id:'7476',n:'74LS76',c:'seq',y:[2],k:'dip16',pins:'1CLK /1PRE /1CLR 1J VCC 2CLK /2PRE /2CLR 2J /2Q 2Q 2K GND /1Q 1Q 1K',fam:'ttl',cur:6,cr:'dl lab',tt:'J K : 00 hold · 01 reset · 10 set · 11 toggle',
+  t:['Dual JK flip-flop with preset & clear','فليب فلوب JK مزدوج مع Preset وClear'],
+  d:['Two JK flip-flops with both preset and clear; used to build asynchronous (ripple) counters.','اتنين فليب فلوب JK مع Preset وClear؛ بيتستخدموا في بناء العدادات غير المتزامنة (Ripple).'],
+  warn:['VCC = pin 5 and GND = pin 13 (not the usual corners).','VCC = رجل 5 وGND = رجل 13 (مش الأطراف المعتادة).'],
+  w:[['Ripple counter: J=K=1 (to VCC), connect each Q to the next stage\'s CLK.','عداد Ripple: خلي J=K=1 (على VCC) ووصّل كل Q بكلوك المرحلة اللي بعدها.']]});
+ic({id:'7490',n:'74LS90',c:'seq',y:[2],k:'dip14',pins:'CKB R01 R02 NC VCC R91 R92 QC QB GND QD QA NC CKA',fam:'ttl',vars:'LS',cur:9,cr:'dl lab',tt:'÷2 (CKA→QA) and ÷5 (CKB→QB,QC,QD)',
+  h:{CKA:'Clock for ÷2 section (falling edge)',CKB:'Clock for ÷5 section (falling edge)',R01:'Reset-to-0 input (both R0 high → 0000)',R02:'Reset-to-0 input',R91:'Set-to-9 input (both R9 high → 1001)',R92:'Set-to-9 input'},
+  t:['Decade counter (÷2 and ÷5)','عداد عشري (÷2 و÷5)'],
+  d:['A 4-bit counter made of a ÷2 and a ÷5 stage. Connect QA to CKB to get a BCD decade counter (0–9), or use it as a ÷10 with symmetrical square-wave output.','عداد 4 بت متكون من مرحلة ÷2 ومرحلة ÷5. وصّل QA بـ CKB تحصل على عداد BCD من 0 لـ 9، أو تستخدمه ÷10.'],
+  warn:['VCC = pin 5, GND = pin 10.','VCC = رجل 5 وGND = رجل 10.'],
+  w:[['BCD count: connect QA (pin 12) to CKB (pin 1) and feed the clock to CKA (pin 14); outputs QD QC QB QA.','عد BCD: وصّل QA (رجل 12) بـ CKB (رجل 1) وادخّل الكلوك على CKA (رجل 14)؛ الخرج QD QC QB QA.'],
+     ['Tie R0(1),R0(2),R9(1),R9(2) to GND for normal counting.','وصّل R01 وR02 وR91 وR92 على GND للعد الطبيعي.']]});
+ic({id:'7493',n:'74LS93',c:'seq',y:[2],k:'dip14',pins:'CKB R01 R02 NC VCC NC NC QC QB GND QD QA NC CKA',fam:'ttl',vars:'LS',cur:9,cr:'dl lab',tt:'÷2 and ÷8 → 4-bit binary counter (0–15)',
+  t:['4-bit binary ripple counter','عداد ثنائي 4 بت (Ripple)'],
+  d:['A ÷2 and a ÷8 stage. With QA tied to CKB it counts 0–15. Reset both R0 inputs high to clear; a NAND on the outputs can make any modulus (e.g. mod-10, mod-12).','مرحلة ÷2 ومرحلة ÷8. وصّل QA بـ CKB يعد من 0 لـ 15. لو الدخلين R0 بقوا HIGH بيتصفّر، وبكده تقدر تعمل أي Modulus (زي mod-10 وmod-12) بـ NAND على الخرج.'],
+  warn:['VCC = pin 5, GND = pin 10.','VCC = رجل 5 وGND = رجل 10.']});
+ic({id:'74161',n:'74LS161',c:'seq',y:[2,3],k:'dip16',pins:'/CLR CLK A B C D ENP GND /LOAD ENT QD QC QB QA RCO VCC',fam:'ttl',cur:19,cr:'dl ca',tt:'4-bit synchronous binary counter, parallel load',
+  ty:{o:'RCO'},h:{CLR:'Asynchronous clear (active low)',LOAD:'Synchronous parallel load of A–D (active low)',ENP:'Count enable P',ENT:'Count enable T (also enables RCO)',RCO:'Ripple carry out — high at count 15 (cascade)',A:'Parallel data input (LSB)',D:'Parallel data input (MSB)'},
+  t:['4-bit synchronous binary counter','عداد ثنائي متزامن 4 بت'],
+  d:['Synchronous 4-bit counter with parallel load and asynchronous clear. 74LS160 is the decade version, 74LS163 has a synchronous clear.','عداد متزامن 4 بت مع تحميل توازي وClear. النسخة 74LS160 عشرية، و74LS163 الـClear فيها متزامن.'],
+  w:[['Normal counting: CLR = LOAD = ENP = ENT = HIGH.','للعد العادي: خلي CLR وLOAD وENP وENT كلهم HIGH.'],
+     ['Cascade: connect RCO of the first chip to ENT of the next; clocks tied together.','للتوصيل على التوالي: وصّل RCO للأولى بـ ENT للتانية وخلي الكلوك مشترك.']]});
+ic({id:'74193',n:'74LS193',c:'seq',y:[2,3],k:'dip16',pins:'B QB QA DOWN UP QC QD GND D C /LOAD /CO /BO CLR A VCC',fam:'ttl',cur:19,cr:'dl ca',tt:'4-bit synchronous UP/DOWN counter',
+  ty:{o:'CO BO'},h:{UP:'Count-up clock (keep DOWN high)',DOWN:'Count-down clock (keep UP high)',CLR:'Asynchronous clear — ACTIVE HIGH',LOAD:'Asynchronous load (active low)',CO:'Carry out (cascade to next UP)',BO:'Borrow out (cascade to next DOWN)'},
+  t:['4-bit synchronous up/down counter','عداد تصاعدي/تنازلي متزامن 4 بت'],
+  d:['Dual-clock up/down counter with asynchronous parallel load. 74LS192 is the decade version with identical pinout.','عداد تصاعدي/تنازلي بكلوكين ومع تحميل توازي. النسخة العشرية 74LS192 ليها نفس الأرجل.'],
+  w:[['Count up: clock on UP, DOWN = HIGH. Count down: clock on DOWN, UP = HIGH.','عد تصاعدي: الكلوك على UP وDOWN = HIGH. عد تنازلي: الكلوك على DOWN وUP = HIGH.'],
+     ['Note CLR is active-HIGH (opposite of most chips). Tie it to GND for normal counting, and LOAD to VCC.','لاحظ إن CLR فعّال عند HIGH (عكس أغلب الشرائح). وصّله GND للعد العادي وLOAD على VCC.'],
+     ['Cascade: CO → UP and BO → DOWN of the next stage.','للتوصيل على التوالي: CO بـ UP وBO بـ DOWN في المرحلة التالية.']]});
+ic({id:'74164',n:'74LS164',c:'seq',y:[2,3],k:'dip14',pins:'A B QA QB QC QD GND CLK /CLR QE QF QG QH VCC',fam:'ttl',cur:16,cr:'dl it',tt:'8-bit serial-in / parallel-out shift register',
+  t:['8-bit serial-in parallel-out shift register','مسجل إزاحة 8 بت (دخل تسلسلي وخرج توازي)'],
+  d:['Shifts serial data on the rising clock edge. The two serial inputs A and B are ANDed — tie one to VCC and use the other as data.','بيزيح البيانات التسلسلية عند صعود الكلوك. مدخلي A وB بيتعملهم AND — وصّل واحد على VCC واستخدم التاني كبيانات.']});
+ic({id:'74165',n:'74LS165',c:'seq',y:[2,3],k:'dip16',pins:'SH/LD CLK E F G H /QH GND QH SER A B C D CLKINH VCC',fam:'ttl',cur:21,cr:'dl it',tt:'8-bit parallel-in / serial-out shift register',
+  ty:{o:'QH'},h:{'SH/LD':'LOW = load parallel data, HIGH = shift','CLKINH':'Clock inhibit (tie LOW to enable)','SER':'Serial input (for cascading)','QH':'Serial output (MSB first)'},
+  t:['8-bit parallel-in serial-out shift register','مسجل إزاحة 8 بت (دخل توازي وخرج تسلسلي)'],
+  d:['Loads 8 parallel bits then shifts them out serially. Used to read many switches with few pins.','بيحمّل 8 بت توازي وبعدين يطلعهم تسلسلي. بيتستخدم لقراءة زراير كتير بأرجل قليلة.']});
+ic({id:'74194',n:'74LS194',c:'seq',y:[2,3],k:'dip16',pins:'/CLR SR-SER A B C D SL-SER GND S1 S0 CLK QD QC QB QA VCC',fam:'ttl',cur:15,cr:'dl ca',tt:'S1 S0: 00 hold · 01 shift right · 10 shift left · 11 load',
+  t:['4-bit bidirectional universal shift register','مسجل إزاحة عام 4 بت (يمين/شمال/تحميل)'],
+  d:['Four modes selected by S1 S0: hold, shift right, shift left, parallel load. Useful for ring / Johnson counters and serial-parallel conversion.','أربع أوضاع بتتحدد بـ S1 S0: تثبيت، إزاحة يمين، إزاحة شمال، تحميل توازي. بيتستخدم في عدادات Ring وJohnson وتحويل تسلسلي/توازي.']});
+ic({id:'74HC595',n:'74HC595',c:'seq',y:[3,4],k:'dip16',pins:'QB QC QD QE QF QG QH GND QH\' /SRCLR SRCLK RCLK /OE SER QA VCC',fam:'hc',vars:'HC',cur:0.08,curT:['≈ 80 µA static (+ LED current)','≈ 80µA ثابت (+ تيار الـLED)'],cr:'em it',tt:'8-bit shift register + output latch (SPI-like)',
+  ty:{o:"QH'"},h:{SER:'Serial data in (DS)',SRCLK:'Shift-register clock (SH_CP) — rising edge',RCLK:'Storage/latch clock (ST_CP) — rising edge copies to outputs',SRCLR:'Shift-register clear (active low) — tie to VCC',OE:'Output enable (active low) — tie to GND',"QH'":'Serial out — connect to SER of the next 595 to daisy-chain'},
+  t:['8-bit shift register with output latch','مسجل إزاحة 8 بت مع Latch للخرج'],
+  d:['Gives you 8 extra output pins from just 3 microcontroller pins (data, shift clock, latch clock). Chain several to drive dozens of LEDs.','بيدّيك 8 أطراف خرج إضافية من 3 أرجل بس من الميكروكنترولر (Data وShift clock وLatch clock). ممكن توصّل كذا واحدة ورا بعض لتشغيل عشرات الـLEDs.'],
+  w:[['Fixed wiring: SRCLR → VCC, OE → GND. Then Arduino: DS→SER, SH_CP→SRCLK, ST_CP→RCLK.','توصيلة ثابتة: SRCLR على VCC وOE على GND. وبعدين من الميكرو: البيانات على SER والـShift clock على SRCLK والـLatch على RCLK.'],
+     ['Each output can source/sink about 6 mA continuously (70 mA total per chip): use a resistor per LED.','كل خرج بيتحمل ~6mA (70mA للشريحة كلها): حط مقاومة لكل LED.']]});
+
+/* ═════════ DATA — 3) decoders, MUX, adders, ALU ═════════ */
+ic({id:'7442',n:'74LS42',c:'comb',y:[2],k:'dip16',pins:'/O0 /O1 /O2 /O3 /O4 /O5 /O6 GND /O7 /O8 /O9 D C B A VCC',fam:'ttl',cur:7,cr:'dl',tt:'BCD → 1-of-10 (active-low outputs)',
+  t:['BCD to decimal decoder (4→10)','مفكك BCD لعشري (4 → 10)'],
+  d:['Takes a 4-bit BCD code (D C B A) and pulls exactly one of the ten outputs LOW. Inputs 10–15 give all outputs HIGH.','بياخد كود BCD من 4 بت (D C B A) وبيخلي خرج واحد بس من العشرة LOW. القيم 10–15 بتخلي كل الخرج HIGH.']});
+ic({id:'7447',n:'74LS47',c:'comb',y:[1,2],k:'dip16',pins:'B C /LT /BI/RBO /RBI D A GND e d c b a g f VCC',fam:'ttl',vars:'LS',cur:13,cr:'dl lab',tt:'BCD → 7-segment, active-LOW open-collector → COMMON-ANODE display',
+  ty:{o:'a b c d e f g',b:'BI/RBO'},h:{LT:'Lamp test (active low): all segments on',RBI:'Ripple blanking input (active low)','BI/RBO':'Blanking input / ripple blanking output — keep HIGH','D':'BCD input (MSB)','A':'BCD input (LSB)'},
+  t:['BCD to 7-segment decoder/driver (common anode)','مفكك BCD لـ7-Segment (Common Anode)'],
+  d:['Converts a 4-bit BCD number to the 7 segment signals. Outputs are active-LOW open-collector and can sink ~40 mA, so it drives a COMMON-ANODE display directly (through resistors).','بيحوّل رقم BCD (4 بت) لإشارات الـ7 segments. الخرج Active-LOW Open-collector وبيسحب لحد ~40mA، فبيشغّل شاشة Common-Anode مباشرة (بمقاومات).'],
+  w:[['Wire outputs a–g → a 220–330 Ω resistor each → matching display segment. Display common pin → +5 V.','وصّل الخرج a–g → مقاومة 220–330Ω لكل واحد → الـsegment المناسب. رجل الـCommon للشاشة على +5V.'],
+     ['Tie LT, BI/RBO and RBI to +5 V for normal operation.','وصّل LT وBI/RBO وRBI على +5V للتشغيل العادي.'],
+     ['For a COMMON-CATHODE display use 74LS48 (same pinout) or CD4511.','لو الشاشة Common-Cathode استخدم 74LS48 (نفس الأرجل) أو CD4511.']]});
+ic({id:'7448',n:'74LS48',c:'comb',y:[1,2],k:'dip16',pins:'B C /LT /BI/RBO /RBI D A GND e d c b a g f VCC',fam:'ttl',vars:'LS',cur:25,cr:'dl lab',tt:'BCD → 7-segment, active-HIGH → COMMON-CATHODE display',
+  ty:{o:'a b c d e f g',b:'BI/RBO'},
+  t:['BCD to 7-segment decoder/driver (common cathode)','مفكك BCD لـ7-Segment (Common Cathode)'],
+  d:['Same pinout as 7447 but the outputs are active-HIGH with internal pull-ups, so it drives a COMMON-CATHODE display.','نفس أرجل 7447 بس الخرج Active-HIGH وفيه Pull-up داخلي، فبيشغّل شاشة Common-Cathode.'],
+  w:[['Segments → 220–330 Ω resistor each → display; display common pin → GND.','الـsegments → مقاومة 220–330Ω لكل واحد → الشاشة؛ رجل الـCommon على GND.']]});
+ic({id:'74138',n:'74LS138',c:'comb',y:[2,3],k:'dip16',pins:'A B C /G2A /G2B G1 /Y7 GND /Y6 /Y5 /Y4 /Y3 /Y2 /Y1 /Y0 VCC',fam:'ttl',cur:6.3,cr:'dl mp',tt:'3→8 decoder, active-low outputs, enable = G1·G2A′·G2B′',
+  t:['3-to-8 line decoder / demultiplexer','مفكك 3 لـ 8'],
+  d:['Selects one of 8 outputs (active LOW) from a 3-bit code. The classic chip for address decoding in 8086/8085 systems (chip-select generation).','بيختار خرج واحد من 8 (Active LOW) حسب كود من 3 بت. أشهر شريحة لفك العناوين (Address decoding) في أنظمة 8086/8085 لتوليد Chip-select.'],
+  w:[['Enable the chip: G1 = HIGH, G2A = G2B = LOW.','لتشغيل الشريحة: G1 = HIGH وG2A = G2B = LOW.'],
+     ['Address decoding: connect upper address lines to A, B, C (and other lines to enables), then use Y0–Y7 as CS̅ of memory / 8255 / 8253.','فك العناوين: وصّل خطوط العنوان العليا على A وB وC (والباقي على الـEnables) واستخدم Y0–Y7 كـCS للذاكرة أو 8255 أو 8253.']]});
+ic({id:'74139',n:'74LS139',c:'comb',y:[2,3],k:'dip16',pins:'/1G 1A 1B /1Y0 /1Y1 /1Y2 /1Y3 GND /2Y3 /2Y2 /2Y1 /2Y0 2B 2A /2G VCC',fam:'ttl',cur:6.8,cr:'dl mp',tt:'Two 2→4 decoders, active-low outputs',
+  t:['Dual 2-to-4 line decoder','مفكك 2 لـ 4 مزدوج'],
+  d:['Two independent 2-to-4 decoders with active-low enables and outputs.','اتنين مفكك 2 لـ 4 مستقلين، الـEnable والخرج Active-LOW.']});
+ic({id:'74151',n:'74LS151',c:'comb',y:[2],k:'dip16',pins:'D3 D2 D1 D0 Y W /G GND C B A D7 D6 D5 D4 VCC',fam:'ttl',cur:6,cr:'dl',tt:'8→1 multiplexer: Y = D(CBA)',
+  ty:{o:'W'},h:{Y:'Selected data output',W:'Inverted output',G:'Strobe/enable (active low) — tie to GND',A:'Select input (LSB)',C:'Select input (MSB)'},
+  t:['8-to-1 multiplexer','مالتيبلكسر 8 لـ 1'],
+  d:['Selects one of eight data inputs using a 3-bit select code. Can implement any 3-variable (even 4-variable) Boolean function directly.','بيختار واحد من 8 مداخل بيانات بكود اختيار 3 بت. ممكن تنفذ بيه أي دالة منطقية من 3 (أو حتى 4) متغيرات.'],
+  w:[['Implement a function: put variables on C B A and connect each D input to VCC or GND according to the truth table.','لتنفيذ دالة: حط المتغيرات على C B A ووصّل كل D على VCC أو GND حسب جدول الصواب.']]});
+ic({id:'74153',n:'74LS153',c:'comb',y:[2],k:'dip16',pins:'/1G B 1C3 1C2 1C1 1C0 1Y GND 2Y 2C0 2C1 2C2 2C3 A /2G VCC',fam:'ttl',cur:9,cr:'dl',tt:'Two 4→1 multiplexers sharing select A,B',
+  t:['Dual 4-to-1 multiplexer','مالتيبلكسر 4 لـ 1 مزدوج'],
+  d:['Two 4:1 multiplexers that share the select lines A and B, each with its own enable.','اتنين مالتيبلكسر 4:1 بيشتركوا في خطوط الاختيار A وB، وكل واحد ليه Enable خاص.']});
+ic({id:'74157',n:'74LS157',c:'comb',y:[2,3],k:'dip16',pins:'A/B 1A 1B 1Y 2A 2B 2Y GND 3Y 3B 3A 4Y 4B 4A /G VCC',fam:'ttl',cur:9,cr:'dl ca',tt:'Quad 2→1 multiplexer: A/B=0 → A, 1 → B',
+  h:{'A/B':'Select: LOW = A inputs, HIGH = B inputs',G:'Strobe (active low) — tie to GND; HIGH forces outputs LOW'},
+  t:['Quad 2-to-1 multiplexer','4 مالتيبلكسر 2 لـ 1'],
+  d:['Four 2:1 multiplexers with a common select. Great for choosing between two 4-bit buses (e.g. in ALU / datapath labs).','أربع مالتيبلكسر 2:1 بـSelect مشترك. ممتازة للاختيار بين ناقلين 4 بت (في معامل الـALU والـDatapath).']});
+ic({id:'7483',n:'74LS83',c:'comb',y:[2],k:'dip16',pins:'A4 Σ3 A3 B3 VCC Σ2 B2 A2 Σ1 A1 B1 GND C0 C4 Σ4 B4',fam:'ttl',vars:'LS',cur:19,cr:'dl ca',tt:'A + B + C0 = C4 Σ4Σ3Σ2Σ1',
+  ty:{o:'C4'},h:{C0:'Carry in',C4:'Carry out (cascade to next C0)',Σ1:'Sum bit 1 (LSB)',Σ4:'Sum bit 4 (MSB)'},
+  t:['4-bit binary full adder','جامع كامل 4 بت'],
+  d:['Adds two 4-bit numbers plus carry-in and gives a 4-bit sum and carry-out. Two chips cascaded make an 8-bit adder; XOR gates on B turn it into an adder/subtractor.','بيجمع رقمين 4 بت مع Carry-in وبيدّي مجموع 4 بت وCarry-out. اتنين على التوالي = جامع 8 بت، وبوابات XOR على B تخليه جامع/طارح.'],
+  warn:['VCC = pin 5, GND = pin 12. The 74LS283 has a different pinout (check its datasheet).','VCC = رجل 5 وGND = رجل 12. الـ74LS283 ليها ترتيب أرجل مختلف (راجع الـDatasheet).'],
+  w:[['Subtractor: A − B → feed B through XOR gates with control M, and connect M to C0 (M = 1 subtracts).','طارح: A − B → مرّر B على بوابات XOR بتحكم M ووصّل M بـ C0 (لما M = 1 بيطرح).']]});
+ic({id:'7485',n:'74LS85',c:'comb',y:[2],k:'dip16',pins:'B3 IA<B IA=B IA>B OA>B OA=B OA<B GND B0 A0 B1 A1 A2 B2 A3 VCC',fam:'ttl',cur:20,cr:'dl',tt:'4-bit magnitude comparator',
+  ty:{i:'IA<B IA=B IA>B',o:'OA>B OA=B OA<B'},
+  t:['4-bit magnitude comparator','مقارن قيمة 4 بت'],
+  d:['Compares two 4-bit numbers A and B and gives A>B, A=B, A<B. The cascade inputs allow comparing longer words.','بيقارن رقمين 4 بت A وB ويدّي A>B وA=B وA<B. مداخل الـCascade بتسمح بمقارنة كلمات أطول.'],
+  w:[['Single chip: tie IA=B to HIGH and IA>B, IA<B to LOW.','لشريحة واحدة: وصّل IA=B على HIGH وIA>B وIA<B على LOW.']]});
+ic({id:'74148',n:'74LS148',c:'comb',y:[2,3],k:'dip16',pins:'/4 /5 /6 /7 /EI /A2 /A1 GND /A0 /0 /1 /2 /3 /GS /EO VCC',fam:'ttl',cur:12,cr:'dl mp',tt:'8→3 priority encoder (active-low in/out)',
+  ty:{o:'A0 A1 A2 GS EO'},h:{EI:'Enable input (active low)',EO:'Enable output (cascade)',GS:'Group signal: low when any input is active'},
+  t:['8-to-3 priority encoder','مشفّر أولوية 8 لـ 3'],
+  d:['Encodes the highest-priority active input (7 highest) into a 3-bit code. Used to build interrupt controllers.','بيشفّر أعلى دخل فعّال أولوية (رقم 7 الأعلى) لكود 3 بت. بيتستخدم في بناء متحكمات المقاطعات.']});
+ic({id:'74181',n:'74LS181',c:'comb',y:[3],k:'dip24',pins:'B0 A0 S3 S2 S1 S0 Cn M F0 F1 F2 GND F3 A=B /P Cn+4 /G B3 A3 B2 A2 B1 A1 VCC',fam:'ttl',vars:'LS',cur:75,cr:'ca',tt:'4-bit ALU: 16 logic + 16 arithmetic functions',
+  ty:{o:'F0 F1 F2 F3 A=B P G Cn+4'},h:{M:'Mode: HIGH = logic, LOW = arithmetic',S0:'Function select (LSB)',S3:'Function select (MSB)',Cn:'Carry input',P:'Carry propagate (for look-ahead)',G:'Carry generate (for look-ahead)'},
+  t:['4-bit arithmetic logic unit (ALU)','وحدة حساب ومنطق 4 بت (ALU)'],
+  d:['The classic bit-slice ALU: S3–S0 select one of 16 functions, M chooses logic or arithmetic mode. Cascade with 74182 look-ahead for wider words.','الـALU الكلاسيكية: S3–S0 بتختار واحدة من 16 دالة وM بيحدد منطقي أو حسابي. تتوصل مع 74182 لعمل ALU أعرض.'],
+  warn:['24-pin narrow (0.6") DIP; verify pin order against your datasheet version (active-high vs active-low data).','DIP بـ24 رجل (عرض 0.6 بوصة)؛ اتأكد من ترتيب الأرجل في الـDatasheet بتاعك (Active-high أو Active-low).'],
+  w:[['Draws about 75 mA — make sure your 5 V supply can handle it.','بتسحب ~75mA — اتأكد إن مصدر الـ5V يستحمل.']]});
+ic({id:'CD4511',n:'CD4511B',c:'comb',y:[1,2],k:'dip16',pins:'B C /LT /BI LE D A VSS e d c b a g f VDD',fam:'cmos',cur:1,curT:['≈ 1 mA (+ LED current)','≈ 1mA (+ تيار الـLED)'],cr:'dl lab',tt:'BCD → 7-segment, latch, active-HIGH → COMMON-CATHODE',
+  ty:{o:'a b c d e f g'},h:{LE:'Latch enable: HIGH latches the BCD input',LT:'Lamp test (active low)',BI:'Blanking (active low)'},
+  t:['CMOS BCD to 7-segment latch/decoder/driver','CMOS مفكك BCD لـ7-Segment مع Latch'],
+  d:['Drives common-cathode 7-segment displays directly (~25 mA per output at 10 V; ~10 mA is plenty at 5 V). Has an input latch and blanking for BCD > 9.','بيشغّل شاشات Common-Cathode مباشرة. فيه Latch للدخل وبيطفّي الشاشة لو BCD أكبر من 9.'],
+  w:[['Tie LT and BI to VDD and LE to VSS for a plain decoder. Put ~330 Ω in series with every segment.','وصّل LT وBI على VDD وLE على VSS لتشغيل عادي. حط مقاومة ~330Ω مع كل segment.']]});
+ic({id:'CD4017',n:'CD4017B',c:'seq',y:[2,3],k:'dip16',pins:'Q5 Q1 Q0 Q2 Q6 Q7 Q3 VSS Q8 Q4 Q9 CO INH CLK RST VDD',fam:'cmos',cur:1,curT:['< 1 mA (+ LED current)','< 1mA (+ تيار الـLED)'],cr:'dl lab',tt:'Decade counter with 10 decoded outputs (Johnson)',
+  ty:{o:'CO'},h:{CLK:'Clock — advances on rising edge',INH:'Clock inhibit (HIGH = stop) — tie to VSS',RST:'Reset to Q0 (HIGH = reset)',CO:'Carry out — HIGH for Q0–Q4, LOW for Q5–Q9 (÷10)'},
+  t:['CMOS decade counter / divider with 10 decoded outputs','CMOS عداد عشري بـ10 مخارج مفكوكة'],
+  d:['On each clock pulse a single output Q0…Q9 goes HIGH in sequence — perfect for LED chasers and sequencers. Connect Q_n to RST for a shorter count length.','مع كل نبضة كلوك خرج واحد بس من Q0…Q9 يبقى HIGH بالترتيب — مثالي لـLED chaser والسيكوينسرز. وصّل Q_n بـ RST لتقصير العد.'],
+  w:[['Pair with a 555 (astable) as the clock source for a light chaser.','استخدمه مع 555 (Astable) كمصدر كلوك لعمل chaser.'],
+     ['Each output can drive one LED with a 470 Ω series resistor.','كل خرج بيشغّل LED واحد بمقاومة 470Ω على التوالي.']]});
+
+/* ═════════ DATA — 4) analog ═════════ */
+ic({id:'LM741',n:'LM741',c:'analog',y:[1,2],k:'dip8',pins:'OFFN1 IN- IN+ V- OFFN2 OUT V+ NC',v:[5,15,18],vs:'±5 to ±18 V (dual supply)',vsn:['Typical ±15 V','المعتاد ±15V'],rail:'dual',cur:1.7,cr:'ec lab ms',tt:'Vout = A·(V+ − V−); inverting gain = −Rf/Rin',
+  ty:{p:'V-'},h:{OFFN1:'Offset null (10 kΩ pot to V−)',OFFN2:'Offset null (10 kΩ pot to V−)','IN-':'Inverting input','IN+':'Non-inverting input','V-':'Negative supply (−5…−18 V)','V+':'Positive supply (+5…+18 V)'},
+  x:[['Gain-bandwidth','حاصل الكسب × عرض النطاق','≈ 1 MHz'],['Output swing','مدى الخرج','≈ Vs − 2 V']],
+  t:['General-purpose operational amplifier','مكبر عمليات عام الاستخدام'],
+  d:['The textbook op-amp: amplifiers, adders, integrators, filters, comparators. Needs a dual supply (±) and its output can\'t reach the rails.','مكبر العمليات الأشهر في المناهج: مكبرات وجامعات ومكاملات وفلاتر. محتاج تغذية مزدوجة (±) والخرج مش بيوصل لجهد التغذية بالكامل.'],
+  w:[['Connect +Vs (e.g. +12 V) to pin 7 and −Vs (−12 V) to pin 4, with 0.1 µF to ground on each.','وصّل +Vs (مثلاً +12V) على رجل 7 و−Vs (−12V) على رجل 4 مع 0.1µF لكل واحدة على الأرضي.'],
+     ['Not suitable for a single 5 V supply — use LM358 instead.','مش مناسب لتغذية 5V واحدة — استخدم LM358 بدله.']]});
+ic({id:'LM358',n:'LM358',c:'analog',y:[2],k:'dip8',pins:'OUTA INA- INA+ GND INB+ INB- OUTB VCC',v:[3,5,32],vsn:['Single 3–32 V or dual ±1.5…±16 V','مصدر واحد 3–32V أو مزدوج ±1.5…±16V'],cur:0.7,cr:'ec ms lab',tt:'Dual op-amp, single-supply, input includes GND',
+  t:['Dual single-supply op-amp','مكبر عمليات مزدوج (مصدر واحد)'],
+  d:['Two op-amps that work from a single supply (works fine on 5 V) and whose inputs and output can go down to ground. Ideal for sensor amplifiers with microcontrollers.','اتنين مكبر عمليات بيشتغلوا على مصدر واحد (حتى 5V) ومدخلهم وخرجهم يوصلوا للأرضي. مثاليين لتكبير إشارات الحساسات مع الميكروكنترولر.'],
+  warn:['Output can only swing to about VCC − 1.5 V (not rail-to-rail).','الخرج مش بيوصل غير لحوالي VCC − 1.5V (مش Rail-to-rail).']});
+ic({id:'LM324',n:'LM324',c:'analog',y:[2],k:'dip14',pins:'OUT1 IN1- IN1+ VCC IN2+ IN2- OUT2 OUT3 IN3- IN3+ GND IN4+ IN4- OUT4',v:[3,5,32],vsn:['Single 3–32 V or dual ±1.5…±16 V','مصدر واحد 3–32V أو مزدوج ±1.5…±16V'],cur:0.7,cr:'ec ms lab',tt:'Quad op-amp, single supply',
+  t:['Quad single-supply op-amp','4 مكبرات عمليات (مصدر واحد)'],
+  d:['Four LM358-class op-amps in one package.','أربع مكبرات من نوع LM358 في شريحة واحدة.']});
+ic({id:'TL072',n:'TL072',c:'analog',y:[2,3],k:'dip8',pins:'OUTA INA- INA+ V- INB+ INB- OUTB V+',v:[4.5,15,18],vs:'±4.5 to ±18 V',rail:'dual',cur:1.4,cr:'ec cm',tt:'Dual JFET-input low-noise op-amp',
+  ty:{p:'V-'},x:[['Gain-bandwidth','حاصل الكسب × عرض النطاق','≈ 3 MHz'],['Input','الدخل','JFET, very high impedance']],
+  t:['Dual JFET-input op-amp','مكبر عمليات مزدوج بدخل JFET'],
+  d:['Low-noise, high input impedance, faster than LM741. Standard in audio, active filters and communications labs.','ضوضاء قليلة ومعاوقة دخل عالية وأسرع من 741. قياسي في الصوتيات والفلاتر النشطة ومعامل الاتصالات.']});
+ic({id:'AD620',n:'AD620',c:'analog',y:[3,4],k:'dip8',pins:'RG IN- IN+ V- REF OUT V+ RG',v:[2.3,15,18],vs:'±2.3 to ±18 V',rail:'dual',cur:1.3,cr:'ms',tt:'G = 1 + 49.4 kΩ / RG',
+  ty:{p:'V-',a:'RG'},h:{RG:'Gain resistor across the two RG pins',REF:'Output reference — normally GND'},
+  t:['Instrumentation amplifier','مكبر أجهزة (Instrumentation Amp)'],
+  d:['One resistor (RG) sets the gain from 1 to 1000. Excellent for bio-signals (ECG), strain gauges and bridge sensors.','مقاومة واحدة (RG) بتحدد الكسب من 1 لـ 1000. ممتاز للإشارات الحيوية (ECG) وحساسات الـStrain gauge والقناطر.'],
+  w:[['No RG = gain 1. RG = 49.4 kΩ / (G − 1). Example: G = 100 → RG ≈ 499 Ω.','من غير RG الكسب = 1. RG = 49.4kΩ / (G − 1). مثال: G = 100 → RG ≈ 499Ω.']]});
+ic({id:'LM339',n:'LM339',c:'analog',y:[2],k:'dip14',pins:'OUT2 OUT1 VCC IN1- IN1+ IN2- IN2+ IN3- IN3+ IN4- IN4+ GND OUT3 OUT4',v:[2,5,36],cur:0.8,cr:'ec',tt:'Quad comparator, open-collector outputs',
+  h:{OUT1:'Open-collector output — needs a pull-up resistor'},
+  t:['Quad voltage comparator','4 مقارنات جهد'],
+  d:['Four comparators with open-collector outputs that go LOW when IN+ < IN−. Great for threshold detection and level shifting.','أربع مقارنات بخرج Open-collector بيبقى LOW لما IN+ أقل من IN−. ممتازة لكشف العتبات وتغيير مستوى الجهد.'],
+  w:[['Add a 1–10 kΩ pull-up from each used output to the logic supply (5 V for TTL).','حط مقاومة Pull-up من 1 لـ10kΩ من كل خرج مستخدم لجهد المنطق (5V لـTTL).']]});
+ic({id:'LM393',n:'LM393',c:'analog',y:[2],k:'dip8',pins:'OUTA INA- INA+ GND INB+ INB- OUTB VCC',v:[2,5,36],cur:0.4,cr:'ec',tt:'Dual comparator, open-collector outputs',
+  t:['Dual voltage comparator','مقارنين جهد مزدوجين'],
+  d:['Two open-collector comparators (half an LM339). Common on sensor modules.','مقارنين Open-collector (نص LM339). منتشرين في موديولات الحساسات.'],
+  w:[['Needs a pull-up resistor on each output.','محتاج Pull-up على كل خرج.']]});
+ic({id:'LM311',n:'LM311',c:'analog',y:[2],k:'dip8',pins:'GND IN+ IN- V- BAL BAL/STB OUT V+',v:[3.5,5,30],vsn:['Single 5–30 V or dual ±15 V','مصدر واحد أو مزدوج ±15V'],cur:5,cr:'ec',tt:'Single high-speed comparator',
+  ty:{p:'V-'},
+  t:['Single voltage comparator','مقارن جهد مفرد'],
+  d:['Fast comparator with open-collector/emitter output and strobe. For single supply tie V− (pin 4) to ground.','مقارن سريع بخرج Open-collector/emitter وStrobe. في المصدر الواحد وصّل V− (رجل 4) على الأرضي.']});
+ic({id:'NE555',n:'NE555',c:'analog',y:[1,2],k:'dip8',pins:'GND TRIG OUT /RESET CTRL THRES DISCH VCC',v:[4.5,9,16],cur:3,curT:['≈ 3 mA @ 5 V, ≈ 10 mA @ 15 V','≈ 3mA عند 5V و≈ 10mA عند 15V'],cr:'ec lab',tt:'Astable f = 1.44 / ((R1+2R2)C) · Monostable T = 1.1·R·C',
+  ty:{o:'DISCH'},h:{TRIG:'Starts timing when < ⅓ VCC',THRES:'Ends timing when > ⅔ VCC',CTRL:'Control voltage (⅔ VCC) — decouple with 10 nF to GND',DISCH:'Open-collector discharge for the timing capacitor',RESET:'Active low reset — tie to VCC when unused',OUT:'Output, sources/sinks up to 200 mA'},
+  t:['Timer / oscillator','تايمر / مذبذب'],
+  d:['The famous timer: monostable one-shot pulses or astable square-wave oscillator. Output can drive LEDs, relays or small speakers directly (up to 200 mA).','التايمر الشهير: نبضة واحدة (Monostable) أو موجة مربعة مستمرة (Astable). الخرج يشغّل LED وريلاي وسماعة صغيرة مباشرة (لحد 200mA).'],
+  w:[['Astable: R1 between VCC and DISCH, R2 between DISCH and THRES; tie THRES to TRIG; C from THRES to GND.','Astable: R1 بين VCC وDISCH، وR2 بين DISCH وTHRES؛ وصّل THRES مع TRIG؛ والمكثف C من THRES للأرضي.'],
+     ['Monostable: R between VCC and THRES/DISCH, C to GND, trigger pulse on pin 2.','Monostable: مقاومة R بين VCC وDISCH/THRES والمكثف للأرضي ونبضة التريجر على رجل 2.'],
+     ['Put 10 nF from pin 5 to GND and tie RESET (pin 4) to VCC.','حط 10nF من رجل 5 للأرضي ووصّل RESET (رجل 4) على VCC.']]});
+ic({id:'NE556',n:'NE556',c:'analog',y:[2],k:'dip14',pins:'DISCH1 THRES1 CTRL1 /RESET1 OUT1 TRIG1 GND TRIG2 OUT2 /RESET2 CTRL2 THRES2 DISCH2 VCC',v:[4.5,9,16],cur:6,cr:'ec lab',tt:'Two independent 555 timers',ty:{o:'DISCH1 DISCH2'},
+  t:['Dual timer (two 555 in one)','تايمر مزدوج (2 × 555)'],
+  d:['Two 555 timers sharing VCC and GND.','اتنين 555 مستقلين بيشتركوا في VCC وGND.']});
+ic({id:'CD4046',n:'CD4046B',c:'analog',y:[3,4],k:'dip16',pins:'PCP PC1O CMPIN VCOO INH C1A C1B VSS VCOI DEMO R1 R2 PC2O SIGI ZEN VDD',fam:'cmos',cur:1,cr:'cm',tt:'PLL: VCO + two phase comparators',
+  ty:{o:'PCP PC1O VCOO DEMO PC2O',a:'C1A C1B R1 R2 ZEN'},h:{PCP:'Phase pulse output',PC1O:'Phase comparator 1 output (XOR)',CMPIN:'Comparator input (from VCO/divider)',VCOO:'VCO output',INH:'Inhibit (HIGH disables VCO) — tie to VSS',C1A:'Timing capacitor C1',C1B:'Timing capacitor C1',VCOI:'VCO control input',DEMO:'Demodulator output (source follower)',R1:'Sets VCO frequency range',R2:'Sets frequency offset (optional)',PC2O:'Phase comparator 2 output',SIGI:'Signal input (AC-coupled)',ZEN:'Zener 5.4 V for supply regulation'},
+  t:['CMOS phase-locked loop (PLL)','CMOS حلقة قفل الطور (PLL)'],
+  d:['A PLL building block for FM demodulation, frequency multiplication and frequency synthesis. Requires external R1, R2, C1 and a loop filter.','وحدة PLL للـFM demodulation وتضاعف التردد وتخليق الترددات. محتاجة R1 وR2 وC1 وفلتر حلقة خارجي.']});
+ic({id:'XR2206',n:'XR2206',c:'analog',y:[3],k:'dip16',pins:'AMSI STO MO VCC TC1 TC2 TR1 TR2 FSKI BIAS SYNCO GND WAVEA1 WAVEA2 SYMA1 SYMA2',v:[10,12,26],vsn:['Single 10–26 V or dual ±5…±13 V','مصدر واحد 10–26V أو مزدوج ±5…±13V'],cur:12,cr:'cm lab',tt:'f = 1 / (R·C), R = 1 kΩ…2 MΩ',
+  ty:{o:'STO SYNCO MO',a:'TC1 TC2 TR1 TR2 BIAS WAVEA1 WAVEA2 SYMA1 SYMA2'},h:{AMSI:'Amplitude-modulation signal input',STO:'Sine / triangle output',MO:'Multiplier output',TC1:'Timing capacitor',TC2:'Timing capacitor',TR1:'Timing resistor (with FSK pin = high/low)',TR2:'Timing resistor',FSKI:'FSK keying input',SYNCO:'Sync (square) output — open collector'},
+  t:['Function generator IC','مولّد دوال (Function Generator)'],
+  d:['Produces sine, square and triangle waves from 0.01 Hz to 1 MHz with AM/FM/FSK capability. Used in communications labs.','بيولّد Sine وSquare وTriangle من 0.01Hz لـ 1MHz مع إمكانية AM/FM/FSK. بيتستخدم في معامل الاتصالات.'],
+  warn:['Pin-out recalled from the standard DIP-16 datasheet — check the exact part (XR2206CP) before wiring.','ترتيب الأرجل من الـDatasheet القياسي DIP-16 — راجع الشريحة بالظبط (XR2206CP) قبل التوصيل.']});
+ic({id:'LM386',n:'LM386',c:'analog',y:[2,3],k:'dip8',pins:'GAIN IN- IN+ GND OUT VS BYP GAIN',v:[4,6,12],vsn:['LM386N-4: up to 18 V','LM386N-4: لحد 18V'],cur:4,cr:'ec',tt:'Gain 20 (default) up to 200 with 10 µF between pins 1–8',
+  h:{GAIN:'Connect 10 µF (pin1→pin8) for gain = 200',BYP:'Bypass — 10 µF to GND',OUT:'Output → 250 µF → speaker'},
+  t:['Low-voltage audio power amplifier','مكبر قدرة صوتي منخفض الجهد'],
+  d:['Battery-friendly 0.3 W audio amplifier for small speakers.','مكبر صوت 0.3 وات بيتغذى من بطارية، لسماعات صغيرة.'],
+  w:[['Typical: input via 10 kΩ pot, 10 µF on GAIN pins, 250 µF from OUT to 8 Ω speaker, 0.05 µF + 10 Ω snubber from OUT to GND.','التوصيلة المعتادة: الدخل عبر بوتنشيومتر 10kΩ، مكثف 10µF بين رجلي GAIN، ومكثف 250µF من OUT للسماعة 8Ω، و0.05µF + 10Ω من OUT للأرضي.']]});
+ic({id:'TDA2030',n:'TDA2030',c:'analog',y:[3,4],k:'to220',pins:'+IN -IN -VS OUT +VS',v:[6,15,18],vs:'±6 to ±18 V (or 12–36 V single)',rail:'dual',cur:50,curT:['≈ 50 mA quiescent (up to 3.5 A peak)','≈ 50mA ثابت (لحد 3.5A ذروة)'],cr:'ec cm',tt:'14 W audio power amplifier',
+  ty:{p:'-VS +VS'},
+  t:['14 W audio power amplifier','مكبر صوت قدرة 14 وات'],
+  d:['Compact Hi-Fi power amplifier that needs a heat-sink and a dual (or single) supply.','مكبر صوت قدرة صغير ومحتاج مشتت حراري ومصدر مزدوج (أو مفرد).'],
+  warn:['Mount on a heat-sink; the metal tab is connected to −VS.','ركّبه على مشتت حراري؛ الجزء المعدني متوصل بـ −VS.']});
+
+/* ═════════ DATA — 5) regulators, drivers, isolation ═════════ */
+ic({id:'LM7805',n:'LM7805',c:'power',y:[1,2],k:'to220',pins:'IN GND OUT',v:[7,12,25],vs:'Input 7 – 25 V → Output 5 V',rail:'other',cur:5,curT:['Iq ≈ 5 mA · load up to 1 A','Iq ≈ 5mA · حمل لحد 1A'],cr:'ec lab',tt:'Vout = 5 V ±4 %, dropout ≈ 2 V',
+  ty:{p:'IN OUT'},x:[['Output','الخرج','5 V / 1 A max'],['Dropout','Dropout','≈ 2 V']],
+  t:['+5 V linear voltage regulator','منظم جهد خطي +5V'],
+  d:['Turns a higher DC voltage (e.g. 9 V battery, 12 V adapter) into a steady 5 V for logic chips and microcontrollers.','بيحوّل جهد DC أعلى (بطارية 9V أو أدابتور 12V) لـ5V ثابتة لشرائح المنطق والميكروكنترولر.'],
+  w:[['0.33 µF capacitor from IN to GND and 0.1 µF from OUT to GND, both close to the pins.','مكثف 0.33µF من IN للأرضي و0.1µF من OUT للأرضي، قريبين من الأرجل.'],
+     ['Power wasted as heat = (Vin − 5) × I. At 12 V and 500 mA that is 3.5 W — use a heat-sink.','القدرة الضايعة حرارة = (Vin − 5) × I. عند 12V و500mA يبقى 3.5W — استخدم مشتت حراري.']]});
+ic({id:'LM7812',n:'LM7812',c:'power',y:[2],k:'to220',pins:'IN GND OUT',v:[14.5,19,27],vs:'Input 14.5 – 27 V → Output 12 V',rail:'other',cur:5,curT:['Iq ≈ 5 mA · load up to 1 A','Iq ≈ 5mA · حمل لحد 1A'],cr:'ec',tt:'Vout = 12 V',ty:{p:'IN OUT'},
+  t:['+12 V linear voltage regulator','منظم جهد خطي +12V'],
+  d:['+12 V regulator; pair it with LM7912 for a ±12 V op-amp supply.','منظم +12V؛ استخدمه مع LM7912 لتغذية ±12V لمكبرات العمليات.']});
+ic({id:'LM7905',n:'LM7905',c:'power',y:[2],k:'to220',pins:'GND IN OUT',v:[7,12,25],vs:'Input −7 to −25 V → Output −5 V',rail:'other',cur:5,cr:'ec',tt:'Vout = −5 V',ty:{p:'IN OUT'},
+  warn:['Pinout differs from 78xx: pin 1 = GND, pin 2 = IN.','ترتيب الأرجل مختلف عن 78xx: رجل 1 = GND ورجل 2 = IN.'],
+  t:['−5 V negative voltage regulator','منظم جهد سالب −5V'],
+  d:['Negative-rail counterpart of the 7805.','النظير السالب لـ7805.']});
+ic({id:'LM7912',n:'LM7912',c:'power',y:[2],k:'to220',pins:'GND IN OUT',v:[14.5,19,27],vs:'Input −14.5 to −27 V → Output −12 V',rail:'other',cur:5,cr:'ec',tt:'Vout = −12 V',ty:{p:'IN OUT'},
+  warn:['Pinout differs from 78xx: pin 1 = GND, pin 2 = IN.','ترتيب الأرجل مختلف عن 78xx: رجل 1 = GND ورجل 2 = IN.'],
+  t:['−12 V negative voltage regulator','منظم جهد سالب −12V'],
+  d:['Gives the −12 V rail of a ±12 V supply.','بيدّي الجهد −12V في مصدر ±12V.']});
+ic({id:'LM317',n:'LM317',c:'power',y:[2,3],k:'to220',pins:'ADJ OUT IN',v:[4.25,12,40],vs:'Vin up to 40 V → Vout 1.25 – 37 V',rail:'other',cur:5,curT:['Iq ≈ 5 mA · load up to 1.5 A','Iq ≈ 5mA · حمل لحد 1.5A'],cr:'ec pe',tt:'Vout = 1.25 · (1 + R2/R1) (+ IADJ·R2)',
+  ty:{p:'IN OUT',a:'ADJ'},x:[['Dropout','Dropout','Vin − Vout ≥ ≈ 3 V'],['Reference','المرجع','1.25 V between OUT and ADJ']],
+  t:['Adjustable positive regulator','منظم جهد موجب متغيّر'],
+  d:['Set any output voltage from 1.25 V to 37 V with two resistors (or a pot). Used in variable bench supplies and battery chargers.','بتضبط أي جهد خرج من 1.25V لـ37V بمقاومتين (أو بوتنشيومتر). بيتستخدم في باور سبلاي متغير وشواحن البطاريات.'],
+  w:[['R1 = 240 Ω from OUT to ADJ; R2 (pot ≈ 5 kΩ) from ADJ to GND. Example: R2 = 720 Ω → Vout ≈ 5 V.','R1 = 240Ω من OUT لـ ADJ؛ وR2 (بوت ≈ 5kΩ) من ADJ للأرضي. مثال: R2 = 720Ω → Vout ≈ 5V.'],
+     ['Input must be at least ~3 V above the output. Add 0.1 µF on input and 1 µF on output.','الدخل لازم يزيد ~3V على الأقل عن الخرج. حط 0.1µF على الدخل و1µF على الخرج.']]});
+ic({id:'LM337',n:'LM337',c:'power',y:[3],k:'to220',pins:'ADJ IN OUT',v:[4.25,12,40],vs:'Vin −4.25 … −40 V → Vout −1.2 … −37 V',rail:'other',cur:5,cr:'ec pe',tt:'Vout = −1.25 · (1 + R2/R1)',ty:{p:'IN OUT',a:'ADJ'},
+  warn:['Pinout differs from LM317: pin 2 = IN, pin 3 = OUT.','ترتيب الأرجل مختلف عن LM317: رجل 2 = IN ورجل 3 = OUT.'],
+  t:['Adjustable negative regulator','منظم جهد سالب متغيّر'],
+  d:['Negative counterpart of the LM317 for dual-rail variable supplies.','النظير السالب لـ LM317 للمصادر المتغيرة المزدوجة.']});
+ic({id:'ULN2003',n:'ULN2003A',c:'power',y:[3,4],k:'dip16',pins:'IN1 IN2 IN3 IN4 IN5 IN6 IN7 GND COM OUT7 OUT6 OUT5 OUT4 OUT3 OUT2 OUT1',vs:'No logic supply pin — outputs switch loads up to 50 V',rail:'other',cur:1,curT:['Input ≈ 1 mA per active channel','الدخل ≈ 1mA لكل قناة شغّالة'],cr:'em rb it',tt:'7 Darlington sinks: 500 mA / 50 V each',
+  ty:{o:'OUT1 OUT2 OUT3 OUT4 OUT5 OUT6 OUT7',p:'COM'},h:{COM:'Common of the clamp diodes → connect to the load supply (+V) when driving relays/motors'},
+  x:[['Max per channel','أقصى تيار للقناة','500 mA (≈ 600 peak)'],['Input level','مستوى الدخل','5 V TTL / CMOS OK']],
+  t:['7-channel Darlington transistor array','7 ترانزستورات دارلنجتون (Array)'],
+  d:['Lets a 5 V microcontroller pin switch relays, stepper motors, solenoids or lamps. Inputs are logic-level; outputs sink current to ground.','بيخلي رجل ميكروكنترولر 5V تشغّل ريلاي وستيبر موتور وسولونويد ولمبات. الدخل منطقي والخرج بيسحب تيار للأرضي.'],
+  w:[['Load between +V (up to 50 V) and OUTn. Connect COM to that same +V so the clamp diodes protect the chip from inductive kickback.','الحمل بين +V (لحد 50V) وخرج OUTn. وصّل COM بنفس الـ+V عشان دايودات الحماية تحمي الشريحة من الـKickback.'],
+     ['Common ground: GND of ULN2003, microcontroller and load supply must be joined.','الأرضي المشترك: GND الـULN2003 والميكرو ومصدر الحمل لازم يتوصلوا ببعض.'],
+     ['Typical: 28BYJ-48 stepper motor on IN1–IN4 with COM to +5 V.','مثال: ستيبر 28BYJ-48 على IN1–IN4 وCOM على +5V.']]});
+ic({id:'L293D',n:'L293D',c:'power',y:[3,4],k:'dip16',pins:'EN12 1A 1Y GND GND 2Y 2A VCC2 EN34 3A 3Y GND GND 4Y 4A VCC1',v:[4.5,5,7],vsn:['VCC1 = logic supply','VCC1 = تغذية المنطق'],vx:[['VCC2 (motor)','VCC2 (الموتور)','4.5 – 36 V']],cur:30,curT:['Logic ≈ 22–60 mA; motor current separate (0.6 A/ch, 1.2 A peak)','المنطق ≈ 22–60mA؛ تيار الموتور منفصل (0.6A/قناة و1.2A ذروة)'],cr:'em rb it',tt:'Dual H-bridge with clamp diodes',
+  ty:{p:'VCC2',o:'1Y 2Y 3Y 4Y'},h:{EN12:'Enable channels 1–2 (PWM here for speed)',EN34:'Enable channels 3–4',VCC1:'Logic supply 5 V',VCC2:'Motor supply 4.5–36 V','1A':'Logic input → drives 1Y','2A':'Logic input → drives 2Y'},
+  t:['Dual H-bridge motor driver','درايفر موتور H-Bridge مزدوج'],
+  d:['Drives two small DC motors in both directions (or one stepper). Built-in flyback diodes.','بيشغّل موتورين DC صغيرين في الاتجاهين (أو ستيبر واحد). فيه دايودات حماية داخلية.'],
+  w:[['Motor 1 between 1Y and 2Y. Direction: 1A/2A = 10 forward, 01 reverse, 00 or 11 stop. PWM on EN12 controls speed.','الموتور الأول بين 1Y و2Y. الاتجاه: 1A/2A = 10 أمام، 01 خلف، 00 أو 11 وقوف. PWM على EN12 للتحكم في السرعة.'],
+     ['Join the four GND pins to ground (they also act as heat sink).','وصّل أرجل GND الأربعة بالأرضي (بتشتغل كمشتت حراري كمان).'],
+     ['Ground of motor supply and logic must be common.','أرضي مصدر الموتور والمنطق لازم يكون مشترك.']]});
+ic({id:'L298N',n:'L298N',c:'power',y:[4],k:'sip15',kn:'Multiwatt',pins:'SENSA OUT1 OUT2 VS IN1 ENA IN2 GND VSS IN3 ENB IN4 OUT3 OUT4 SENSB',v:[4.5,5,7],vsn:['VSS = logic supply','VSS = تغذية المنطق'],vx:[['VS (motor)','VS (الموتور)','up to 46 V (≥ 5 V)']],cur:36,curT:['Logic ≈ 36 mA; motor up to 2 A per channel','المنطق ≈ 36mA؛ الموتور لحد 2A لكل قناة'],cr:'em rb pe',tt:'Dual full H-bridge, 2 A per channel',
+  ty:{p:'VS VSS',o:'OUT1 OUT2 OUT3 OUT4',a:'SENSA SENSB'},h:{SENSA:'Current sense A — usually to GND via a sense resistor (or directly)',SENSB:'Current sense B',ENA:'Enable / PWM for bridge A',ENB:'Enable / PWM for bridge B',VS:'Motor supply',VSS:'Logic supply 5 V'},
+  t:['Dual full-bridge motor driver (2 A)','درايفر موتور H-Bridge مزدوج (2A)'],
+  d:['Higher-power motor driver used in robot cars and CNC/3D-printer labs (usually as the red L298N module).','درايفر موتور أعلى قدرة بيتستخدم في عربيات الروبوت والـCNC (غالباً موديول L298N الأحمر).'],
+  w:[['About 2 V is lost inside the bridge: motors get roughly VS − 2 V.','بيضيع حوالي 2V جوه الجسر: الموتور بياخد تقريباً VS − 2V.'],
+     ['Needs external fast flyback diodes (e.g. 1N4007 is too slow; use UF4007/Schottky) on each output — most modules already include them.','محتاج دايودات حماية سريعة برة على كل خرج — أغلب الموديولات فيها دايودات جاهزة.']]});
+ic({id:'TL494',n:'TL494',c:'power',y:[4],k:'dip16',pins:'IN1+ IN1- FB DTC CT RT GND C1 E1 E2 C2 VCC OC REF IN2- IN2+',v:[7,12,40],cur:6,cr:'pe',tt:'f = 1.1 / (RT · CT)',
+  ty:{o:'C1 E1 E2 C2 REF',a:'CT RT'},h:{FB:'Feedback / compensation node',DTC:'Dead-time control (0–3 V)',CT:'Timing capacitor',RT:'Timing resistor',OC:'Output control: GND = parallel, REF = push-pull',REF:'5 V reference output (10 mA)'},
+  t:['PWM control IC','آي سي تحكم PWM'],
+  d:['Complete PWM controller for switch-mode power supplies, inverters and motor speed controllers. Two error amplifiers, dead-time control and 5 V reference.','متحكم PWM كامل لمصادر الـSMPS والإنفرترز والتحكم في سرعة الموتورات. فيه اتنين Error amplifier وDead-time ومرجع 5V.']});
+ic({id:'SG3525',n:'SG3525A',c:'power',y:[4],k:'dip16',pins:'INV NI SYNC OSC CT RT DISCH SS COMP SD OUTA GND VC OUTB VCC VREF',v:[8,12,35],cur:14,cr:'pe',tt:'PWM, f ≈ 1 / (CT · (0.7·RT + 3·RD))',
+  ty:{o:'OSC OUTA OUTB VREF',a:'CT RT DISCH SS COMP',p:'VC'},h:{INV:'Error amp inverting input',NI:'Error amp non-inverting input',SD:'Shutdown input',SS:'Soft-start capacitor',VC:'Output-stage supply',VREF:'5.1 V reference'},
+  t:['PWM controller (push-pull outputs)','متحكم PWM (خرجين Push-pull)'],
+  d:['Two complementary totem-pole outputs for half-bridge / push-pull converters and inverters.','خرجين متكاملين Totem-pole لمحولات Half-bridge وPush-pull والإنفرترز.']});
+ic({id:'IR2110',n:'IR2110',c:'power',y:[4],k:'dip14',pins:'LO COM VCC NC VS VB HO NC VDD HIN SD LIN VSS NC',v:[10,15,20],vsn:['VCC = gate-drive supply','VCC = تغذية الـGate'],vx:[['VDD (logic)','VDD (المنطق)','3.3 – 20 V']],cur:1,cr:'pe',tt:'High-side + low-side MOSFET/IGBT driver',
+  ty:{o:'LO HO',p:'VS VB',g:'COM'},h:{HIN:'High-side input',LIN:'Low-side input',SD:'Shutdown (HIGH = outputs off)',VB:'High-side floating supply (bootstrap capacitor to VS)',VS:'High-side floating return (mid-point of half-bridge)',COM:'Low-side return'},
+  t:['High/low side MOSFET driver','درايفر MOSFET (High/Low side)'],
+  d:['Drives an N-MOSFET half-bridge using a bootstrap capacitor and diode. Used in inverters and motor drives.','بيشغّل نصف قنطرة N-MOSFET باستخدام مكثف ودايود Bootstrap. بيتستخدم في الإنفرترز ودرايفرات الموتورات.'],
+  w:[['Bootstrap: fast diode from VCC to VB, 0.1–1 µF capacitor between VB and VS. Add a small gate resistor to each MOSFET.','Bootstrap: دايود سريع من VCC لـ VB ومكثف 0.1–1µF بين VB وVS. وحط مقاومة Gate صغيرة لكل MOSFET.']]});
+ic({id:'4N25',n:'4N25',c:'power',y:[3,4],k:'dip6',pins:'ANODE CATHODE NC EMIT COLL BASE',vs:'No supply pin — LED: 1.2 V @ 10 mA',rail:'other',cur:0,curT:['LED current ≈ 10 mA','تيار الـLED ≈ 10mA'],cr:'em pe',tt:'Optocoupler: CTR ≥ 20 % @ IF = 10 mA',
+  ty:{o:'EMIT COLL',g:'CATHODE'},h:{ANODE:'LED anode — via series resistor R = (Vin − 1.2) / 10 mA',CATHODE:'LED cathode',BASE:'Transistor base (usually unconnected)',COLL:'Phototransistor collector',EMIT:'Phototransistor emitter'},
+  x:[['Isolation','العزل','≈ 5 kV'],['VCEO max','VCEO الأقصى','30 V']],
+  t:['Phototransistor optocoupler (6-pin)','أوبتوكوبلر بفوتوترانزستور (6 أرجل)'],
+  d:['Passes a logic signal across an electrical isolation barrier. Protects a microcontroller from mains, motors and noisy circuits.','بينقل الإشارة مع عزل كهربي. بيحمي الميكروكنترولر من الشبكة والموتورات والضوضاء.'],
+  w:[['Input side: 5 V → 330 Ω → ANODE, CATHODE → the driving pin/GND.','ناحية الدخل: 5V ← 330Ω ← ANODE، وCATHODE على الرجل/الأرضي.'],
+     ['Output side: COLL → pull-up (4.7 kΩ) to the receiver\'s supply, EMIT → its GND. Output is inverted.','ناحية الخرج: COLL ← Pull-up (4.7kΩ) على تغذية المستقبل، وEMIT على الأرضي بتاعه. الخرج بيبقى معكوس.']]});
+ic({id:'PC817',n:'PC817',c:'power',y:[3,4],k:'dip4',pins:'ANODE CATHODE EMIT COLL',vs:'No supply pin — LED: 1.2 V @ 5–20 mA',rail:'other',cur:0,curT:['LED current 5–20 mA','تيار الـLED 5–20mA'],cr:'em pe',tt:'Optocoupler: CTR 50–600 %',
+  ty:{o:'EMIT COLL',g:'CATHODE'},h:{ANODE:'LED anode (series resistor required)',CATHODE:'LED cathode',EMIT:'Phototransistor emitter',COLL:'Phototransistor collector'},
+  x:[['Isolation','العزل','5 kV rms'],['VCEO max','VCEO الأقصى','35 V']],
+  t:['Phototransistor optocoupler (4-pin)','أوبتوكوبلر (4 أرجل)'],
+  d:['Compact isolator common on relay/driver modules.','عازل صغير منتشر في موديولات الريلاي والدرايفرات.'],
+  w:[['LED side: 5 V → 220–330 Ω → ANODE; CATHODE → GND (or the driving pin).','ناحية LED: 5V ← 220–330Ω ← ANODE، وCATHODE للأرضي.']]});
+
+/* ═════════ DATA — 6) microprocessors & support chips ═════════ */
+ic({id:'8086',n:'Intel 8086',c:'cpu',y:[3],k:'dip40',pins:'GND '+R('AD',14,8)+' '+R('AD',7,0).split(' ').join(' ')+' NMI INTR CLK GND RESET READY /TEST /INTA ALE /DEN DT/R M/IO /WR HLDA HOLD /RD MN/MX /BHE A19 A18 A17 A16 AD15 VCC',
+  v:[4.5,5,5.5],cur:340,curT:['≈ 340 mA max (8086), 5 V ±10 %','≈ 340mA أقصى (8086) وجهد 5V ±10%'],cr:'mp ca',tt:'16-bit CPU · 20-bit address · 1 MB · pins shown for MINIMUM mode (MN/MX = 1)',
+  ty:{b:R('AD',0,15),o:'A16 A17 A18 A19 INTA ALE DEN DT/R M/IO WR HLDA RD BHE'},
+  h:{GND:'Ground — BOTH pins 1 and 20 must be connected',AD0:'Multiplexed address/data bit 0 (LSB)',AD15:'Multiplexed address/data bit 15',A16:'Address A16 (status S3 in T2–T4)',A19:'Address A19 (status S6)',BHE:'Bus-high-enable: with A0 selects byte/word (S7)',NMI:'Non-maskable interrupt (rising edge)',INTR:'Maskable interrupt request',CLK:'Clock: 33 % duty from 8284A (5 MHz for 8086)',RESET:'Reset (≥ 4 clocks HIGH)',READY:'Wait-state input from memory/I/O',TEST:'Wait for coprocessor (WAIT instruction)',INTA:'Interrupt acknowledge (max mode: QS1)',ALE:'Address latch enable — use to latch AD0–AD15 into 8282/74373 (max mode: QS0)',DEN:'Data enable — enables the data transceiver (max mode: S0)','DT/R':'Data transmit/receive — direction of transceiver (max mode: S1)','M/IO':'HIGH = memory cycle, LOW = I/O cycle (max mode: S2)',WR:'Write strobe (max mode: LOCK)',HLDA:'Hold acknowledge (max mode: RQ/GT1)',HOLD:'DMA hold request (max mode: RQ/GT0)',RD:'Read strobe','MN/MX':'HIGH = minimum mode, LOW = maximum mode (needs 8288)'},
+  t:['16-bit microprocessor','معالج 16 بت'],
+  d:['The processor studied in the microprocessors course: 16-bit data, 20-bit address bus (1 MB), multiplexed address/data pins. It needs an 8284A clock generator, address latches (74LS373/8282) and optional data transceivers (74LS245/8286).','المعالج المدروس في مادة المعالجات: بيانات 16 بت وعنوان 20 بت (1 ميجا) والأرجل مشتركة عنوان/بيانات. محتاج مولّد كلوك 8284A ولاتشات للعنوان (74LS373/8282) وTransceivers اختيارية (74LS245/8286).'],
+  warn:['Pin functions in brackets in each hint apply in MAXIMUM mode (MN/MX = 0). Connect both GND pins (1 and 20).','الوظائف اللي بين الأقواس تخص Maximum mode (MN/MX = 0). وصّل رجلين الـGND (1 و20).'],
+  w:[['Minimum-mode minimal system: 8086 + 8284A (crystal 15 MHz → 5 MHz CLK) + 3×74LS373 (latch A0–A19 with ALE) + 2×74LS245 (data bus, DEN & DT/R) + memory + decoder.','نظام Minimum mode: 8086 + 8284A (كريستال 15MHz ← كلوك 5MHz) + 3 × 74LS373 (لاتش للعناوين A0–A19 بـ ALE) + 2 × 74LS245 (ناقل البيانات بـ DEN وDT/R) + ذاكرة + Decoder.'],
+     ['Tie MN/MX to VCC (minimum mode). Pull unused inputs HOLD, NMI to GND; READY comes from the 8284A; INTR from the 8259A.','وصّل MN/MX على VCC (Minimum). وصّل HOLD وNMI الغير مستخدمين على GND؛ READY من 8284A وINTR من 8259A.'],
+     ['Memory/I/O select: M/IO with the address decoder (74LS138) produces chip selects.','اختيار الذاكرة/الـI/O: M/IO مع مفكك العناوين (74LS138) بيولّد Chip-selects.']]});
+ic({id:'8085',n:'Intel 8085',c:'cpu',y:[3],k:'dip40',pins:'X1 X2 RESETOUT SOD SID TRAP RST7.5 RST6.5 RST5.5 INTR /INTA '+R('AD',0,7)+' GND '+R('A',8,15)+' S0 ALE /WR /RD S1 IO/M READY /RESETIN CLKOUT HLDA HOLD VCC',
+  v:[4.75,5,5.25],cur:170,curT:['≈ 170 mA max','≈ 170mA أقصى'],cr:'mp',tt:'8-bit CPU · 16-bit address · 64 KB · single +5 V',
+  ty:{b:R('AD',0,7),o:'RESETOUT SOD INTA A8 A9 A10 A11 A12 A13 A14 A15 S0 ALE WR RD S1 IO/M CLKOUT HLDA',a:'X1 X2'},
+  h:{X1:'Crystal / clock input (internal ÷2: 6 MHz crystal → 3 MHz)',X2:'Crystal',SOD:'Serial output data',SID:'Serial input data',TRAP:'Non-maskable, highest-priority interrupt',ALE:'Address latch enable (latch AD0–AD7)','IO/M':'HIGH = I/O cycle, LOW = memory cycle',READY:'Wait-state request',RESETIN:'Reset input (active low)'},
+  t:['8-bit microprocessor','معالج 8 بت'],
+  d:['Classic 8-bit CPU with five hardware interrupts and serial I/O pins. Address lines A0–A7 are multiplexed with data (latch them with 74LS373 using ALE).','معالج 8 بت كلاسيكي بخمس مقاطعات هاردوير وأرجل Serial. خطوط A0–A7 مشتركة مع البيانات (اعمل لها لاتش بـ 74LS373 باستخدام ALE).']});
+ic({id:'8255A',n:'Intel 8255A',c:'cpu',y:[3],k:'dip40',pins:'PA3 PA2 PA1 PA0 /RD /CS GND A1 A0 PC7 PC6 PC5 PC4 PC0 PC1 PC2 PC3 PB0 PB1 PB2 PB3 PB4 PB5 PB6 PB7 VCC '+R('D',7,0).split(' ').join(' ')+' RESET /WR PA7 PA6 PA5 PA4',
+  v:[4.5,5,5.5],cur:120,curT:['≈ 120 mA max','≈ 120mA أقصى'],cr:'mp it',tt:'Programmable Peripheral Interface: 24 I/O lines (ports A, B, C)',
+  ty:{b:R('D',0,7)+' '+R('PA',0,7)+' '+R('PB',0,7)+' '+R('PC',0,7)},
+  h:{CS:'Chip select (from address decoder)',RD:'Read strobe',WR:'Write strobe',A0:'Register select LSB: 00=PA, 01=PB, 10=PC, 11=Control',A1:'Register select MSB',RESET:'Reset — all ports become inputs (connect to system RESET)',D0:'CPU data bus (LSB)',D7:'CPU data bus (MSB)',PA0:'Port A bit 0',PB0:'Port B bit 0',PC0:'Port C bit 0'},
+  t:['Programmable peripheral interface (PPI)','واجهة طرفيات قابلة للبرمجة (PPI)'],
+  d:['Adds 24 programmable parallel I/O pins to the processor. Written through a control word (I/O mode: mode 0 simple I/O, mode 1 strobed, mode 2 bidirectional, or BSR bit-set/reset for port C).','بيضيف 24 خط I/O توازي قابلين للبرمجة. البرمجة بكلمة تحكم (Mode 0 دخل/خرج بسيط، Mode 1 بـ Strobe، Mode 2 ثنائي الاتجاه، أو BSR لضبط/مسح بتّات Port C).'],
+  w:[['Connect D0–D7 to the CPU data bus, RD/WR to the CPU strobes, RESET to system reset, A0/A1 to CPU A0/A1 (8086: A1/A2 with even-address bus), CS to a 74LS138 output.','وصّل D0–D7 بناقل البيانات وRD/WR بإشارات المعالج وRESET بالـReset وA0/A1 بـ A0/A1 (في 8086: A1/A2 مع العناوين الزوجية) وCS من خرج 74LS138.'],
+     ['Control-word address = A1 A0 = 11. Example: mode 0, all ports output → 80h.','عنوان كلمة التحكم = A1 A0 = 11. مثال: Mode 0 وكل الـPorts خرج → 80h.'],
+     ['Ports can source ~2.5 mA only: drive LEDs/relays through buffers (7407, ULN2003).','كل خرج بيدّي ~2.5mA بس: استخدم Buffers (7407 أو ULN2003) للـLEDs والريلاي.']]});
+ic({id:'8254',n:'Intel 8253/8254',c:'cpu',y:[3],k:'dip24',pins:R('D',7,0)+' CLK0 OUT0 GATE0 GND OUT1 GATE1 CLK1 GATE2 OUT2 CLK2 A0 A1 /CS /RD /WR VCC',alias:'8253 timer',
+  v:[4.5,5,5.5],cur:140,curT:['≈ 140 mA max','≈ 140mA أقصى'],cr:'mp it',tt:'3 independent 16-bit down counters / timers',
+  ty:{b:R('D',0,7),o:'OUT0 OUT1 OUT2'},h:{A0:'Register select LSB: 00=Counter0, 01=Counter1, 10=Counter2, 11=Control',GATE0:'Gate: enables/starts counter 0',CLK0:'Counter 0 clock input (0–10 MHz)',OUT0:'Counter 0 output'},
+  t:['Programmable interval timer','تايمر قابل للبرمجة (3 عدادات)'],
+  d:['Three 16-bit counters with 6 modes (interrupt on terminal count, one-shot, rate generator, square wave, software/hardware strobe). Used for delays, baud-rate and square-wave generation.','ثلاث عدادات 16 بت بـ6 أوضاع (مقاطعة عند الصفر، One-shot، مولّد معدل، موجة مربعة، Strobe). بيتستخدم في التأخير وتوليد Baud-rate والموجات المربعة.'],
+  w:[['Set a control word first (counter select, RW mode, mode, BCD/binary), then load the count. Mode 3 with N gives a square wave of f_CLK / N.','ابعت كلمة التحكم الأول (أي عداد ووضع القراءة/الكتابة والـMode وBCD/Binary) وبعدين حمّل القيمة. Mode 3 مع N بيدّي موجة مربعة بتردد f_CLK / N.']]});
+ic({id:'8259A',n:'Intel 8259A',c:'cpu',y:[3],k:'dip28',pins:'/CS /WR /RD '+R('D',7,0)+' CAS0 CAS1 GND CAS2 SP/EN INT '+R('IR',7,0)+' /INTA A0 VCC',
+  v:[4.5,5,5.5],cur:85,curT:['≈ 85 mA max','≈ 85mA أقصى'],cr:'mp it',tt:'8-level priority interrupt controller (cascadable to 64)',
+  ty:{b:R('D',0,7)+' CAS0 CAS1 CAS2 SP/EN',o:'INT'},h:{IR0:'Interrupt request 0 (highest priority by default)',IR7:'Interrupt request 7',INT:'Interrupt output → CPU INTR',INTA:'Interrupt acknowledge ← CPU',CAS0:'Cascade lines (master out / slave in)','SP/EN':'HIGH = master, LOW = slave (non-buffered mode)'},
+  t:['Programmable interrupt controller (PIC)','متحكم مقاطعات قابل للبرمجة (PIC)'],
+  d:['Manages up to 8 interrupt sources and sends the CPU a vector number during INTA. Initialised with ICW1–ICW4 and controlled with OCW1–OCW3.','بيدير لحد 8 مصادر مقاطعة وبيبعت للمعالج رقم الـVector أثناء INTA. بيتهيّأ بـ ICW1–ICW4 ويتحكم فيه بـ OCW1–OCW3.']});
+ic({id:'8284A',n:'Intel 8284A',c:'cpu',y:[3],k:'dip18',pins:'CSYNC PCLK /AEN1 RDY1 READY RDY2 /AEN2 CLK GND RESET /RES /ASYNC EFI F/C OSC X2 X1 VCC',
+  v:[4.5,5,5.5],cur:140,cr:'mp',tt:'Crystal 15 MHz → CLK 5 MHz (÷3), PCLK 2.5 MHz',
+  ty:{o:'PCLK READY CLK RESET OSC',a:'X1 X2'},h:{X1:'Crystal pin (15 MHz for a 5 MHz 8086)',X2:'Crystal pin',CLK:'Clock output to the 8086 CLK pin (33 % duty)',RES:'Power-on reset input (RC + Schmitt) — active low',RESET:'Synchronized reset → CPU RESET',READY:'Synchronized READY → CPU READY',RDY1:'Ready from device 1',RDY2:'Ready from device 2','F/C':'LOW = crystal, HIGH = external clock (EFI)',EFI:'External frequency input',ASYNC:'Ready synchronisation select',PCLK:'Peripheral clock (÷2 of CLK)',CSYNC:'Clock synchronisation (tie to GND when using crystal)'},
+  t:['Clock generator & driver for 8086/8088','مولّد كلوك لـ8086/8088'],
+  d:['Provides the 8086 with CLK (33 % duty), synchronised RESET and READY signals, and a peripheral clock.','بيدّي الـ8086 الكلوك (33% Duty) وإشارات RESET وREADY متزامنة وكلوك للطرفيات.'],
+  w:[['Crystal between X1 and X2 (15 MHz), F/C̅ and CSYNC to GND, RES̅ from an RC (10 kΩ / 1 µF) power-on circuit.','كريستال بين X1 وX2 (15MHz)، و F/C وCSYNC على GND، وRES من دائرة RC (10kΩ/1µF) للـPower-on reset.']]});
+ic({id:'8282',n:'Intel 8282/8283',c:'cpu',y:[3],k:'dip20',pins:R('DI',0,7)+' STB GND /OE '+R('DO',7,0)+' VCC',
+  v:[4.5,5,5.5],cur:160,cr:'mp',tt:'8-bit latch (8283 inverts)',ty:{o:R('DO',0,7)},h:{STB:'Strobe: connect to ALE (latches while LOW after ALE falls)',OE:'Output enable (active low) — tie to GND'},
+  t:['Octal address latch','لاتش عناوين 8 بت'],
+  d:['Latches the multiplexed address (AD0–AD15 + A16–A19) using ALE. Three chips are needed for an 8086. The 74LS373 is a common substitute.','بيعمل لاتش للعنوان المشترك (AD0–AD15 وA16–A19) باستخدام ALE. محتاج 3 شرايح مع 8086. الـ74LS373 بديل شائع.']});
+ic({id:'8286',n:'Intel 8286/8287',c:'cpu',y:[3],k:'dip20',pins:R('A',0,7)+' /OE GND T '+R('B',7,0)+' VCC',
+  v:[4.5,5,5.5],cur:130,cr:'mp',tt:'8-bit bidirectional bus transceiver (8287 inverts)',ty:{b:R('A',0,7)+' '+R('B',0,7)},h:{T:'Transmit: HIGH = A→B, LOW = B→A (connect to DT/R)',OE:'Output enable (connect to DEN)'},
+  t:['Octal bus transceiver','Transceiver ناقل بيانات 8 بت'],
+  d:['Buffers the data bus. Connect T to DT/R and OE to DEN of the 8086. The 74LS245 is the common equivalent.','بيدعّم ناقل البيانات. وصّل T بـ DT/R وOE بـ DEN من الـ8086. الـ74LS245 بديل معروف.']});
+ic({id:'74245',n:'74LS245',c:'cpu',y:[3],k:'dip20',pins:'DIR '+R('A',1,8)+' GND '+R('B',8,1)+' /OE VCC',fam:'ttl',cur:48,cr:'mp ca',tt:'Octal bidirectional bus transceiver, 3-state',
+  ty:{b:R('A',1,8)+' '+R('B',1,8)},h:{DIR:'HIGH = A→B, LOW = B→A (connect to DT/R)',OE:'Output enable (active low): HIGH = both sides high-Z (connect to DEN)'},
+  t:['Octal bus transceiver (3-state)','Transceiver ناقل بيانات 8 بت (3-state)'],
+  d:['Standard data-bus buffer between the CPU and memory/peripherals.','Buffer قياسي لناقل البيانات بين المعالج والذاكرة والطرفيات.']});
+ic({id:'74244',n:'74LS244',c:'cpu',y:[3],k:'dip20',pins:'/1G 1A1 2Y4 1A2 2Y3 1A3 2Y2 1A4 2Y1 GND 2A1 1Y4 2A2 1Y3 2A3 1Y2 2A4 1Y1 /2G VCC',fam:'ttl',cur:27,cr:'mp ca',tt:'Octal buffer / line driver, 3-state (unidirectional)',
+  t:['Octal buffer/line driver (3-state)','Buffer ناقل 8 بت اتجاه واحد (3-state)'],
+  d:['Two 4-bit 3-state buffers with independent enables — used for address/control buffering and input ports.','اتنين Buffer 4 بت بـ3-state وEnable منفصل لكل واحد — بيتستخدم لعنونة/تحكم وبوابات الدخل.']});
+ic({id:'74373',n:'74LS373',c:'cpu',y:[3],k:'dip20',pins:'/OC 1Q 1D 2D 2Q 3Q 3D 4D 4Q GND LE 5Q 5D 6D 6Q 7Q 7D 8D 8Q VCC',fam:'ttl',cur:24,cr:'mp ca',tt:'Octal transparent D-latch, 3-state',
+  h:{OC:'Output control (active low) — tie to GND',LE:'Latch enable: HIGH = transparent, falling edge = latch (connect to ALE)'},
+  t:['Octal transparent latch (3-state)','لاتش شفاف 8 بت (3-state)'],
+  d:['The usual address latch for 8085/8086 systems: LE = ALE, OC = GND. 74LS374 is the edge-triggered version (same pins, CLK on pin 11).','لاتش العناوين المعتاد في أنظمة 8085/8086: LE = ALE وOC = GND. النسخة 74LS374 Edge-triggered بنفس الأرجل (الكلوك على رجل 11).']});
+
+/* ═════════ DATA — 7) memory ═════════ */
+ic({id:'6116',n:'HM6116 (2K×8 SRAM)',c:'mem',y:[3],k:'dip24',pins:'A7 A6 A5 A4 A3 A2 A1 A0 D0 D1 D2 GND D3 D4 D5 D6 D7 /CS A10 /OE /WE A9 A8 VCC',v:[4.5,5,5.5],cur:35,curT:['≈ 35 mA active, µA standby','≈ 35mA شغّال وµA في الـStandby'],cr:'mp ca',tt:'2 K × 8 static RAM (16 Kbit)',
+  ty:{b:R('D',0,7)},h:{CS:'Chip select (active low)',OE:'Output enable (active low) — read',WE:'Write enable (active low)'},
+  t:['2K × 8 static RAM','ذاكرة SRAM سعة 2K × 8'],
+  d:['Small static RAM used in memory-interfacing labs. Address lines A0–A10, data D0–D7. Read: CS = OE = 0, WE = 1. Write: CS = WE = 0, OE = 1.','ذاكرة RAM ثابتة صغيرة بتتستخدم في معامل الـMemory interfacing. عناوين A0–A10 وبيانات D0–D7. قراءة: CS = OE = 0 وWE = 1. كتابة: CS = WE = 0 وOE = 1.']});
+ic({id:'6264',n:'6264 (8K×8 SRAM)',c:'mem',y:[3],k:'dip28',pins:'NC A12 A7 A6 A5 A4 A3 A2 A1 A0 D0 D1 D2 GND D3 D4 D5 D6 D7 /CS1 A10 /OE A11 A9 A8 CS2 /WE VCC',v:[4.5,5,5.5],cur:40,cr:'mp ca',tt:'8 K × 8 static RAM (64 Kbit)',ty:{b:R('D',0,7)},h:{CS1:'Chip select 1 (active low)',CS2:'Chip select 2 (active HIGH) — tie to VCC if unused'},
+  t:['8K × 8 static RAM','ذاكرة SRAM سعة 8K × 8'],
+  d:['8 KB SRAM with two chip selects (CS1̅ low and CS2 high) — convenient for address decoding.','ذاكرة 8KB بـ Chip-select اتنين (CS1 LOW وCS2 HIGH) — مريحة في فك العناوين.']});
+ic({id:'62256',n:'62256 (32K×8 SRAM)',c:'mem',y:[3],k:'dip28',pins:'A14 A12 A7 A6 A5 A4 A3 A2 A1 A0 D0 D1 D2 GND D3 D4 D5 D6 D7 /CS A10 /OE A11 A9 A8 A13 /WE VCC',v:[4.5,5,5.5],cur:40,cr:'mp ca',tt:'32 K × 8 static RAM (256 Kbit)',ty:{b:R('D',0,7)},
+  t:['32K × 8 static RAM','ذاكرة SRAM سعة 32K × 8'],
+  d:['Common RAM for 8086 / 8051 memory-expansion projects.','RAM شائعة في مشاريع توسعة ذاكرة 8086 و8051.']});
+ic({id:'27C256',n:'27C256 (32K×8 EPROM)',c:'mem',y:[3],k:'dip28',pins:'VPP A12 A7 A6 A5 A4 A3 A2 A1 A0 D0 D1 D2 GND D3 D4 D5 D6 D7 /CE A10 /OE A11 A9 A8 A13 A14 VCC',v:[4.75,5,5.25],cur:20,cr:'mp ca',tt:'32 K × 8 UV-erasable EPROM (256 Kbit)',ty:{b:'',o:R('D',0,7),p:'VPP'},h:{VPP:'Programming voltage (12.5 V while programming, tie to VCC when reading)',CE:'Chip enable (active low)',OE:'Output enable (active low)'},
+  t:['32K × 8 EPROM','ذاكرة EPROM سعة 32K × 8'],
+  d:['Non-volatile program memory holding the BIOS/monitor code (e.g. the reset vector at FFFF0h in an 8086 system). 28C256 EEPROM has the same pins except pin 1 = A14 and pin 27 = WE̅.','ذاكرة غير متطايرة بتخزّن البرنامج (زي الـReset vector عند FFFF0h في نظام 8086). الـ28C256 EEPROM نفس الأرجل ما عدا رجل 1 = A14 ورجل 27 = WE.']});
+ic({id:'24C02',n:'AT24C02 (I²C EEPROM)',c:'mem',y:[4],k:'dip8',pins:'A0 A1 A2 GND SDA SCL WP VCC',v:[1.8,5,5.5],cur:1,cr:'em',tt:'2 Kbit (256 × 8) serial EEPROM, I²C address 1010 A2A1A0',
+  ty:{b:'SDA'},h:{SDA:'I²C data (open-drain, needs 4.7 kΩ pull-up)',SCL:'I²C clock (needs 4.7 kΩ pull-up)',WP:'Write protect: HIGH = protected, GND = writable',A0:'Address select bit'},
+  t:['I²C serial EEPROM','ذاكرة EEPROM تسلسلية I²C'],
+  d:['Stores small settings that survive power-off. AT24C32/64/256 have the same pinout.','بتخزّن إعدادات صغيرة تفضل بعد قطع الكهرباء. الـAT24C32/64/256 ليها نفس الأرجل.'],
+  w:[['Tie A0–A2 and WP to GND; SDA/SCL to the MCU with 4.7 kΩ pull-ups to VCC.','وصّل A0–A2 وWP على GND؛ وSDA/SCL على الميكرو مع Pull-up 4.7kΩ على VCC.']]});
+
+/* ═════════ DATA — 8) microcontrollers ═════════ */
+ic({id:'8051',n:'AT89C51 / 8051',c:'mcu',y:[3,4],k:'dip40',pins:R('P1.',0,7)+' RST P3.0/RXD P3.1/TXD P3.2/INT0 P3.3/INT1 P3.4/T0 P3.5/T1 P3.6/WR P3.7/RD XTAL2 XTAL1 GND '+R('P2.',0,7)+' /PSEN ALE /EA '+R('P0.',7,0).split(' ').join(' ')+' VCC',alias:'AT89S52 89C52',
+  v:[4,5,5.5],cur:15,curT:['≈ 15–20 mA @ 12 MHz','≈ 15–20mA عند 12MHz'],cr:'mp em',tt:'8-bit MCU · 4 KB flash · 128 B RAM · 2 timers · UART · 32 I/O',
+  ty:{b:R('P0.',0,7)+' '+R('P1.',0,7)+' '+R('P2.',0,7)+' P3.0/RXD P3.1/TXD P3.2/INT0 P3.3/INT1 P3.4/T0 P3.5/T1 P3.6/WR P3.7/RD',o:'XTAL2 PSEN ALE',a:'XTAL1 XTAL2'},
+  h:{RST:'Reset — HIGH for ≥ 2 machine cycles (10 µF to VCC + 8.2 kΩ to GND)',XTAL1:'Crystal (11.0592 MHz for baud rates) + 33 pF to GND',XTAL2:'Crystal + 33 pF to GND',PSEN:'Program store enable (external code memory)',ALE:'Address latch enable (P0 low address)',EA:'Tie HIGH to run internal flash, LOW for external code','P0.0':'Port 0 — open-drain, needs 10 kΩ pull-ups when used as GPIO / AD0','P1.0':'Port 1 — internal pull-ups','P2.0':'Port 2 — A8 when using external memory','P3.0/RXD':'UART receive','P3.1/TXD':'UART transmit','P3.2/INT0':'External interrupt 0','P3.3/INT1':'External interrupt 1'},
+  t:['8051-family 8-bit microcontroller','ميكروكنترولر 8 بت عائلة 8051'],
+  d:['The classic MCU of embedded-systems courses. Pin-compatible chips: AT89S51/52, AT89C52, P89V51.','الميكروكنترولر الكلاسيكي في مناهج النظم المدمجة. شرايح متوافقة في الأرجل: AT89S51/52 وAT89C52 وP89V51.'],
+  w:[['Minimum system: +5 V on pin 40, GND on 20, EA (pin 31) to +5 V, crystal 11.0592 MHz with two 33 pF caps on XTAL1/XTAL2, and a power-on reset (10 µF + 8.2 kΩ) on RST.','أقل نظام: +5V على رجل 40 وGND على 20 وEA (رجل 31) على +5V وكريستال 11.0592MHz مع مكثفين 33pF على XTAL1/XTAL2 ودائرة Reset (10µF + 8.2kΩ) على RST.'],
+     ['Port 0 has no internal pull-ups: add 10 kΩ resistor-pack to +5 V when used as output.','Port 0 من غير Pull-up داخلي: حط Resistor-pack 10kΩ على +5V لما تستخدمه كخرج.'],
+     ['Each pin drives ≈ 1.6–10 mA: use transistors/ULN2003 for relays and motors.','كل رجل بتدّي ~1.6–10mA: استخدم ترانزستور أو ULN2003 للريلاي والموتور.']]});
+ic({id:'PIC16F877A',n:'PIC16F877A',c:'mcu',y:[4],k:'dip40',pins:'/MCLR RA0/AN0 RA1/AN1 RA2/AN2 RA3/AN3 RA4/T0CKI RA5/AN4 RE0/AN5 RE1/AN6 RE2/AN7 VDD VSS OSC1 OSC2 RC0 RC1/CCP2 RC2/CCP1 RC3/SCL RD0 RD1 RD2 RD3 RC4/SDA RC5/SDO RC6/TX RC7/RX RD4 RD5 RD6 RD7 VSS VDD RB0/INT RB1 RB2 RB3/PGM RB4 RB5 RB6/PGC RB7/PGD',
+  v:[4,5,5.5],cur:2,curT:['≈ 2 mA @ 4 MHz, 5 V','≈ 2mA عند 4MHz و5V'],cr:'em',tt:'8-bit PIC · 14 KB flash · 8× 10-bit ADC · 2 CCP · UART · I²C/SPI',
+  ty:{b:'RA0/AN0 RA1/AN1 RA2/AN2 RA3/AN3 RA4/T0CKI RA5/AN4 RE0/AN5 RE1/AN6 RE2/AN7 RC0 RC1/CCP2 RC2/CCP1 RC3/SCL RD0 RD1 RD2 RD3 RC4/SDA RC5/SDO RC6/TX RC7/RX RD4 RD5 RD6 RD7 RB0/INT RB1 RB2 RB3/PGM RB4 RB5 RB6/PGC RB7/PGD',o:'OSC2'},
+  h:{MCLR:'Master clear / Vpp — 10 kΩ pull-up to VDD',OSC1:'Crystal/clock input (4 or 20 MHz + 2 × 22 pF)',OSC2:'Crystal output',VDD:'Supply — connect BOTH VDD pins (11, 32)',VSS:'Ground — connect BOTH VSS pins (12, 31)','RA4/T0CKI':'Open-drain output — needs a pull-up','RB6/PGC':'In-circuit programming clock','RB7/PGD':'In-circuit programming data'},
+  t:['PIC 8-bit microcontroller (40-pin)','ميكروكنترولر PIC 8 بت (40 رجل)'],
+  d:['Widely used in Egyptian embedded/robotics courses. Programmed with MPLAB XC8 / MikroC and PICkit / ICSP.','واسع الانتشار في مواد النظم المدمجة والروبوتات. بيتبرمج بـ MPLAB XC8 / MikroC وPICkit / ICSP.'],
+  w:[['Connect all four power pins: VDD (11, 32) to +5 V and VSS (12, 31) to GND; 0.1 µF next to each pair.','وصّل الأربع أرجل تغذية: VDD (11 و32) على +5V وVSS (12 و31) على GND؛ ومكثف 0.1µF جنب كل زوج.'],
+     ['MCLR (pin 1): 10 kΩ to +5 V (and a reset push-button to GND); leave RB6/RB7/RB3 free for programming.','MCLR (رجل 1): مقاومة 10kΩ على +5V (وزرار Reset على GND)؛ وسيب RB6/RB7/RB3 فاضيين للبرمجة.']]});
+ic({id:'PIC16F84A',n:'PIC16F84A',c:'mcu',y:[3,4],k:'dip18',pins:'RA2 RA3 RA4/T0CKI /MCLR VSS RB0/INT RB1 RB2 RB3 RB4 RB5 RB6 RB7 VDD OSC2 OSC1 RA0 RA1',
+  v:[2,5,5.5],cur:1,curT:['≈ 1 mA @ 4 MHz, 5 V','≈ 1mA عند 4MHz و5V'],cr:'em',tt:'8-bit PIC · 1 KB flash · 13 I/O',
+  ty:{b:'RA0 RA1 RA2 RA3 RA4/T0CKI RB0/INT RB1 RB2 RB3 RB4 RB5 RB6 RB7',o:'OSC2'},
+  t:['PIC 8-bit microcontroller (18-pin)','ميكروكنترولر PIC 8 بت (18 رجل)'],
+  d:['Small starter MCU, RB0–RB7 with weak pull-ups, one 8-bit timer.','ميكروكنترولر صغير للبداية، RB0–RB7 فيهم Pull-up ضعيف وتايمر واحد 8 بت.']});
+ic({id:'ATmega328P',n:'ATmega328P',c:'mcu',y:[4],k:'dip28',pins:'/PC6/RESET PD0/RXD PD1/TXD PD2/INT0 PD3/INT1 PD4 VCC GND PB6/XTAL1 PB7/XTAL2 PD5 PD6 PD7 PB0 PB1 PB2/SS PB3/MOSI PB4/MISO PB5/SCK AVCC AREF GND PC0/ADC0 PC1/ADC1 PC2/ADC2 PC3/ADC3 PC4/SDA PC5/SCL'.replace('/PC6/RESET','PC6/RESET'),alias:'arduino uno nano',
+  v:[1.8,5,5.5],cur:12,curT:['≈ 10–15 mA @ 16 MHz, 5 V','≈ 10–15mA عند 16MHz و5V'],cr:'em',tt:'AVR 8-bit · 32 KB flash · 2 KB RAM · 6× 10-bit ADC · UART/SPI/I²C',
+  ty:{b:'PC6/RESET PD0/RXD PD1/TXD PD2/INT0 PD3/INT1 PD4 PB6/XTAL1 PB7/XTAL2 PD5 PD6 PD7 PB0 PB1 PB2/SS PB3/MOSI PB4/MISO PB5/SCK PC0/ADC0 PC1/ADC1 PC2/ADC2 PC3/ADC3 PC4/SDA PC5/SCL',a:'AREF'},
+  h:{'PC6/RESET':'Reset (active low) — 10 kΩ pull-up to VCC','PB6/XTAL1':'16 MHz crystal + 22 pF to GND','PB7/XTAL2':'16 MHz crystal + 22 pF to GND',AVCC:'ADC supply — connect to VCC (through 10 µH + 0.1 µF if you need clean ADC)',AREF:'ADC reference — 0.1 µF to GND','PD0/RXD':'Arduino D0 (UART RX)','PD1/TXD':'Arduino D1 (UART TX)','PD2/INT0':'Arduino D2','PD3/INT1':'Arduino D3 (PWM)','PB5/SCK':'Arduino D13 (SPI clock, on-board LED)','PC4/SDA':'Arduino A4 (I²C data)','PC5/SCL':'Arduino A5 (I²C clock)'},
+  t:['AVR 8-bit microcontroller (Arduino Uno chip)','ميكروكنترولر AVR 8 بت (شريحة Arduino Uno)'],
+  d:['The heart of Arduino Uno/Nano. Arduino pin map: D0–D7 = PD0–PD7, D8–D13 = PB0–PB5, A0–A5 = PC0–PC5.','قلب Arduino Uno/Nano. خريطة الأرجل: D0–D7 = PD0–PD7 وD8–D13 = PB0–PB5 وA0–A5 = PC0–PC5.'],
+  w:[['Stand-alone: VCC (7) and AVCC (20) to +5 V, both GND (8, 22) to ground, 0.1 µF on each supply, 16 MHz crystal + 2 × 22 pF, 10 kΩ from RESET to VCC.','Stand-alone: VCC (7) وAVCC (20) على +5V وGND (8 و22) على الأرضي ومكثف 0.1µF لكل تغذية وكريستال 16MHz + 2×22pF ومقاومة 10kΩ من RESET لـ VCC.'],
+     ['Max 40 mA per I/O pin (recommended ≤ 20 mA) and 200 mA total — use resistors for LEDs.','أقصى تيار 40mA لكل رجل (يفضّل ≤ 20mA) و200mA للشريحة — حط مقاومات مع الـLEDs.']]});
+ic({id:'ATmega16',n:'ATmega16',c:'mcu',y:[4],k:'dip40',pins:'PB0/T0 PB1/T1 PB2/INT2 PB3/OC0 PB4/SS PB5/MOSI PB6/MISO PB7/SCK RESET VCC GND XTAL2 XTAL1 PD0/RXD PD1/TXD PD2/INT0 PD3/INT1 PD4/OC1B PD5/OC1A PD6/ICP1 PD7/OC2 PC0/SCL PC1/SDA PC2/TCK PC3/TMS PC4/TDO PC5/TDI PC6/TOSC1 PC7/TOSC2 AVCC GND AREF PA7/ADC7 PA6/ADC6 PA5/ADC5 PA4/ADC4 PA3/ADC3 PA2/ADC2 PA1/ADC1 PA0/ADC0',alias:'ATmega32 avr',
+  v:[4.5,5,5.5],cur:15,curT:['≈ 15 mA @ 16 MHz','≈ 15mA عند 16MHz'],cr:'em',tt:'AVR 8-bit · 16 KB flash · 8× 10-bit ADC · 4 PWM · UART/SPI/TWI',
+  ty:{b:'PB0/T0 PB1/T1 PB2/INT2 PB3/OC0 PB4/SS PB5/MOSI PB6/MISO PB7/SCK PD0/RXD PD1/TXD PD2/INT0 PD3/INT1 PD4/OC1B PD5/OC1A PD6/ICP1 PD7/OC2 PC0/SCL PC1/SDA PC2/TCK PC3/TMS PC4/TDO PC5/TDI PC6/TOSC1 PC7/TOSC2 PA0/ADC0 PA1/ADC1 PA2/ADC2 PA3/ADC3 PA4/ADC4 PA5/ADC5 PA6/ADC6 PA7/ADC7',a:'AREF'},
+  h:{RESET:'Reset (active low) — 10 kΩ pull-up to VCC',AVCC:'ADC supply — connect to VCC',AREF:'ADC reference (0.1 µF to GND)','PC2/TCK':'JTAG — disable JTAGEN fuse to use PC2–PC5 as GPIO','PB5/MOSI':'ISP programming MOSI','PB6/MISO':'ISP programming MISO','PB7/SCK':'ISP programming clock'},
+  t:['AVR 8-bit microcontroller (40-pin)','ميكروكنترولر AVR 8 بت (40 رجل)'],
+  d:['Popular in university labs (Proteus/AVR Studio/CodeVision). ATmega32 has the same pinout with double the memory.','منتشر في معامل الجامعات (Proteus/AVR Studio/CodeVision). الـATmega32 بنفس الأرجل وضعف الذاكرة.'],
+  w:[['Power: VCC (10) & AVCC (30) → +5 V; GND (11, 31) → ground. Programming through ISP: MOSI PB5, MISO PB6, SCK PB7, RESET.','التغذية: VCC (10) وAVCC (30) على +5V وGND (11 و31) على الأرضي. البرمجة بـISP: MOSI = PB5 وMISO = PB6 وSCK = PB7 وRESET.']]});
+
+/* ═════════ DATA — 9) interfacing, converters, sensors, displays ═════════ */
+ic({id:'ADC0804',n:'ADC0804',c:'iface',y:[3,4],k:'dip20',pins:'/CS /RD /WR CLKIN /INTR VIN+ VIN- AGND VREF/2 DGND DB7 DB6 DB5 DB4 DB3 DB2 DB1 DB0 CLKR VCC',
+  v:[4.5,5,6.3],cur:1.1,cr:'it em',tt:'8-bit successive-approximation ADC · ≈ 100 µs conversion · Vref = 5 V default (step = 19.53 mV)',
+  ty:{o:R('DB',7,0)+' INTR',a:'VIN+ VIN- AGND VREF/2 CLKR CLKIN',g:'AGND DGND'},h:{CS:'Chip select (active low)',RD:'Read: LOW enables the digital outputs',WR:'Write/start: a LOW→HIGH pulse starts conversion',INTR:'End of conversion (goes LOW when data is ready)',CLKIN:'Clock input (or RC oscillator: R to CLKR, C to GND)',CLKR:'Clock R: 10 kΩ from CLKIN to CLKR + 150 pF from CLKIN to GND ⇒ ≈ 606 kHz','VREF/2':'Leave open for Vref = VCC (span 0–5 V); apply Vref/2 to change step size','VIN+':'Analog input (+)',DB7:'Data output MSB',DB0:'Data output LSB'},
+  t:['8-bit A/D converter','محول تناظري لرقمي 8 بت'],
+  d:['Reads an analog voltage (0–5 V) and gives an 8-bit number. Digital output = Vin / step; with Vref/2 open: step = 5 V/256 = 19.53 mV.','بيقرأ جهد تناظري (0–5V) ويطلع رقم 8 بت. الخرج الرقمي = Vin / الخطوة؛ ولو VREF/2 مفتوحة: الخطوة = 5V/256 = 19.53mV.'],
+  w:[['Start: pulse WR̅ low→high with CS̅ = 0. Wait for INTR̅ to fall, then RD̅ = 0 and read DB0–DB7.','ابدأ: نبضة على WR من LOW لـ HIGH وCS = 0. استنى INTR تنزل LOW، وبعدين RD = 0 واقرأ DB0–DB7.'],
+     ['Connect AGND and DGND together to ground; VIN(−) to ground for single-ended input.','وصّل AGND وDGND على الأرضي؛ وVIN(−) على الأرضي للقياس الأحادي.']]});
+ic({id:'ADC0808',n:'ADC0808 / ADC0809',c:'iface',y:[3,4],k:'dip28',pins:'IN3 IN4 IN5 IN6 IN7 START EOC D3 OE CLK VCC VREF+ GND D1 D2 VREF- D0 D4 D5 D6 D7 ALE ADDC ADDB ADDA IN0 IN1 IN2',alias:'ADC0809',
+  v:[4.5,5,6],cur:1,cr:'it em',tt:'8-bit ADC, 8 multiplexed analog channels · conversion ≈ 100 µs (clock 640 kHz)',
+  ty:{o:R('D',0,7)+' EOC',a:'VREF+ VREF-'},h:{START:'Start conversion (rising edge)',EOC:'End of conversion (goes HIGH when done)',OE:'Output enable — HIGH puts data on D0–D7',ALE:'Address latch enable — latches ADDA–ADDC',ADDA:'Channel select LSB',ADDC:'Channel select MSB',CLK:'Clock 10 kHz – 1.2 MHz',D7:'Data MSB',D0:'Data LSB','VREF+':'Reference + (normally VCC)','VREF-':'Reference − (normally GND)'},
+  t:['8-bit ADC with 8-channel multiplexer','محول A/D 8 بت بـ8 قنوات'],
+  d:['Choose channel IN0–IN7 with ADDC-ADDB-ADDA, pulse ALE and START, wait for EOC, then set OE to read the data. Used with 8086/8051 in interfacing labs.','اختار القناة IN0–IN7 بـ ADDC-ADDB-ADDA وابعت نبضة ALE وSTART واستنى EOC وبعدين OE عشان تقرا البيانات. بيتستخدم مع 8086/8051 في معامل الـInterfacing.'],
+  w:[['VREF+ → VCC (5 V), VREF− → GND, VCC 5 V. Feed CLK from a 555 or MCU (≈ 500 kHz).','VREF+ على VCC (5V) وVREF− على GND. الكلوك من 555 أو الميكرو (≈ 500kHz).'],
+     ['Sequence: set channel → ALE = 1 → START = 1→0 → wait EOC = 1 → OE = 1 → read → OE = 0.','التسلسل: اختار القناة ← ALE = 1 ← START = 1 لـ 0 ← استنى EOC = 1 ← OE = 1 ← اقرا ← OE = 0.']]});
+ic({id:'DAC0808',n:'DAC0808',c:'iface',y:[3],k:'dip16',pins:'NC GND VEE IOUT A1 A2 A3 A4 A5 A6 A7 A8 VCC VREF+ VREF- COMP',
+  v:[4.5,5,5.5],vx:[['VEE (negative)','VEE (السالب)','−4.5 to −18 V (−5 V / −12 V typical)']],cur:2.3,cr:'it cm',tt:'8-bit current-output DAC: Iout = Iref · (D/256), full scale ≈ 2 mA · settling 150 ns',
+  ty:{p:'VEE',o:'IOUT',a:'VREF+ VREF- COMP',i:R('A',1,8)},h:{A1:'Data bit 1 — MSB',A8:'Data bit 8 — LSB',IOUT:'Current output (convert to voltage with an op-amp)','VREF+':'Reference current input: Iref = 2 mA (e.g. 10 V via 5 kΩ)','VREF-':'Tie through a 5 kΩ resistor to GND',COMP:'Compensation: 0.1 µF to VEE'},
+  t:['8-bit D/A converter','محول رقمي لتناظري 8 بت'],
+  d:['Converts an 8-bit digital word into a proportional current. Add an op-amp (e.g. LM741 / LM358) as current-to-voltage converter to get 0 to ≈ +10 V.','بيحوّل كلمة 8 بت لتيار متناسب. ضيف مكبر عمليات (LM741 / LM358) كمحول تيار لجهد عشان تحصل على 0 لـ ≈ 10V.'],
+  warn:['Needs a NEGATIVE supply on VEE (pin 3) in addition to +5 V.','محتاج تغذية سالبة على VEE (رجل 3) بالإضافة لـ +5V.'],
+  w:[['Typical: VREF+ (14) to +5 V through 2.5 kΩ, VREF− (15) to GND through 2.5 kΩ, Iout (4) into the op-amp inverting input with Rf = 5 kΩ.','التوصيل المعتاد: VREF+ (14) على +5V عبر 2.5kΩ وVREF− (15) على GND عبر 2.5kΩ وIout (4) على مدخل مكبر العمليات العاكس مع Rf = 5kΩ.']]});
+ic({id:'MCP3008',n:'MCP3008',c:'iface',y:[4],k:'dip16',pins:'CH0 CH1 CH2 CH3 CH4 CH5 CH6 CH7 DGND /CS DIN DOUT CLK AGND VREF VDD',
+  v:[2.7,5,5.5],cur:0.5,cr:'em it',tt:'10-bit SPI ADC, 8 channels, up to 200 ksps @ 5 V',ty:{o:'DOUT',a:R('CH',0,7)+' VREF'},h:{CS:'SPI chip select (active low)',DIN:'SPI MOSI',DOUT:'SPI MISO',CLK:'SPI clock',VREF:'Reference (usually tie to VDD)'},
+  t:['10-bit SPI ADC (8 channels)','محول A/D 10 بت SPI (8 قنوات)'],
+  d:['Gives Arduino / Raspberry Pi 8 extra 10-bit analog inputs over just 4 SPI wires.','بيدّي Arduino / Raspberry Pi 8 مداخل تناظرية 10 بت إضافية بـ 4 أسلاك SPI بس.']});
+ic({id:'PCF8591',n:'PCF8591',c:'iface',y:[4],k:'dip16',pins:'AIN0 AIN1 AIN2 AIN3 A0 A1 A2 VSS SDA SCL OSC EXT AGND VREF AOUT VDD',
+  v:[2.5,5,6],cur:1,cr:'em',tt:'8-bit I²C: 4 ADC inputs + 1 DAC output',ty:{b:'SDA',o:'AOUT',a:'AIN0 AIN1 AIN2 AIN3 VREF AGND'},h:{SDA:'I²C data (4.7 kΩ pull-up)',SCL:'I²C clock (4.7 kΩ pull-up)',EXT:'GND = internal oscillator, VDD = external clock',A0:'I²C address bit (0x48 + A2A1A0)'},
+  t:['8-bit I²C ADC/DAC','محول A/D وD/A 8 بت I²C'],
+  d:['Four analog inputs and one analog output on the I²C bus (default address 0x48).','4 مداخل تناظرية وخرج تناظري واحد على ناقل I²C (العنوان الافتراضي 0x48).']});
+ic({id:'PCF8574',n:'PCF8574',c:'iface',y:[4],k:'dip16',pins:'A0 A1 A2 P0 P1 P2 P3 VSS P4 P5 P6 P7 /INT SCL SDA VDD',
+  v:[2.5,5,6],cur:0.1,cr:'em',tt:'I²C 8-bit quasi-bidirectional I/O expander (address 0x20–0x27)',ty:{b:R('P',0,7)+' SDA',o:'INT'},h:{INT:'Interrupt output (open drain, goes LOW on input change)',A0:'Address select bit'},
+  t:['I²C 8-bit I/O expander','موسّع أرجل I/O ثمانية (I²C)'],
+  d:['Adds 8 I/O pins over I²C. Common as the backpack that drives a 16×2 LCD with 2 wires.','بيضيف 8 أرجل I/O عبر I²C. مشهور كموديول بيشغّل LCD 16×2 بسلكين.']});
+ic({id:'MAX232',n:'MAX232',c:'iface',y:[3,4],k:'dip16',pins:'C1+ V+ C1- C2+ C2- V- T2OUT R2IN R2OUT T2IN T1IN R1OUT R1IN T1OUT GND VCC',
+  v:[4.5,5,5.5],cur:8,cr:'it cm em',tt:'TTL/CMOS ↔ RS-232 level converter (±10 V)',
+  ty:{a:'C1+ C1- C2+ C2- V+ V-',o:'T1OUT T2OUT R1OUT R2OUT'},h:{T1IN:'TTL/CMOS transmit input (from MCU TX)',T1OUT:'RS-232 transmit output (to PC RX, DB9 pin 2)',R1IN:'RS-232 receive input (from PC TX, DB9 pin 3)',R1OUT:'TTL/CMOS receive output (to MCU RX)','V+':'+10 V charge-pump output (cap to VCC)','V-':'−10 V charge-pump output (cap to GND)'},
+  t:['RS-232 line driver/receiver','مترجم مستويات RS-232'],
+  d:['Lets a 5 V microcontroller talk to a PC serial port. It generates ±10 V from a single +5 V using four external capacitors.','بيخلي ميكروكنترولر 5V يكلم بورت السيريال في الـPC. بيولّد ±10V من +5V واحدة باستخدام 4 مكثفات خارجية.'],
+  w:[['Capacitors: 1 µF between C1+/C1−, C2+/C2−, V+ → VCC, V− → GND (0.1 µF for MAX232A). Use polarised parts with + toward the positive pin.','المكثفات: 1µF بين C1+/C1− وC2+/C2− وV+ لـ VCC وV− لـ GND (0.1µF للـMAX232A). راعي القطبية.'],
+     ['MCU TX → T1IN (11); T1OUT (14) → DB9 pin 2; DB9 pin 3 → R1IN (13); R1OUT (12) → MCU RX; GND to DB9 pin 5.','TX الميكرو ← T1IN (11)؛ T1OUT (14) ← DB9 رجل 2؛ DB9 رجل 3 ← R1IN (13)؛ R1OUT (12) ← RX الميكرو؛ GND على DB9 رجل 5.']]});
+ic({id:'DS1307',n:'DS1307',c:'iface',y:[4],k:'dip8',pins:'X1 X2 VBAT GND SDA SCL SQW/OUT VCC',
+  v:[4.5,5,5.5],vx:[['VBAT','VBAT','2.0 – 3.5 V (3 V lithium cell)']],cur:1.5,cr:'em',tt:'I²C real-time clock, BCD registers 00h–07h, address 0x68',
+  ty:{a:'X1 X2',p:'VBAT',b:'SDA',o:'SQW/OUT'},h:{X1:'32.768 kHz crystal',X2:'32.768 kHz crystal',VBAT:'3 V backup battery (CR2032) — keeps time when VCC is off','SQW/OUT':'Square-wave output 1 Hz / 4 / 8 / 32 kHz (open-drain, pull-up)',SDA:'I²C data (pull-up needed)',SCL:'I²C clock (pull-up needed)'},
+  t:['Real-time clock (I²C)','ساعة زمن حقيقي (I²C)'],
+  d:['Keeps seconds, minutes, hours, date, month and year with battery backup. Values are stored as BCD.','بتحفظ الثواني والدقايق والساعات والتاريخ بنسخة بطارية احتياطية. القيم متخزنة BCD.'],
+  w:[['32.768 kHz crystal across pins 1–2 (no extra caps), CR2032 on pin 3 (or GND if unused), 4.7 kΩ pull-ups on SDA/SCL to +5 V.','كريستال 32.768kHz بين رجل 1 و2 (من غير مكثفات)، وبطارية CR2032 على رجل 3 (أو GND لو مش مستخدمة)، وPull-up 4.7kΩ على SDA/SCL لـ+5V.']]});
+ic({id:'MAX7219',n:'MAX7219',c:'iface',y:[4],k:'dip24',pins:'DIN DIG0 DIG4 GND DIG6 DIG2 DIG3 DIG7 GND DIG5 DIG1 LOAD CLK SEGA SEGF SEGB SEGG ISET V+ SEGC SEGE SEGDP SEGD DOUT',
+  v:[4,5,5.5],cur:8,curT:['≈ 8 mA + display current (up to 330 mA)','≈ 8mA + تيار الشاشة (لحد 330mA)'],cr:'em it',tt:'SPI driver for 8 digits of 7-segment (or 8×8 LED matrix)',
+  ty:{o:R('DIG',0,7)+' SEGA SEGB SEGC SEGD SEGE SEGF SEGG SEGDP DOUT',a:'ISET'},h:{DIN:'SPI data in',CLK:'SPI clock',LOAD:'Latch (CS) — data is latched on rising edge',ISET:'Segment current: resistor to V+ (9.53 kΩ ≈ 40 mA)',DOUT:'Data out — chain to next MAX7219'},
+  t:['8-digit LED display driver (SPI)','درايفر شاشة LED بـ8 خانات (SPI)'],
+  d:['Multiplexes eight 7-segment digits or a 8×8 LED matrix with only 3 wires from the MCU. Brightness is set in software.','بيعمل Multiplex لـ8 خانات 7-segment أو مصفوفة LED 8×8 بـ3 أسلاك بس من الميكرو. السطوع بيتضبط بالبرنامج.'],
+  w:[['One 9.53 kΩ resistor from ISET to V+; 10 µF + 0.1 µF across V+/GND. Both GND pins to ground.','مقاومة 9.53kΩ من ISET لـ V+؛ ومكثف 10µF + 0.1µF بين V+ وGND. وصّل رجلين GND.']]});
+ic({id:'LCD1602',n:'LCD 16×2 (HD44780)',c:'iface',y:[3,4],k:'sip16',kn:'header',pins:'VSS VDD V0 RS RW E D0 D1 D2 D3 D4 D5 D6 D7 A K',alias:'lcd hd44780 display',
+  v:[4.5,5,5.5],cur:100,curT:['Logic ≈ 1–2 mA + backlight 20–120 mA','المنطق ≈ 1–2mA + الإضاءة الخلفية 20–120mA'],cr:'em it lab',tt:'16 characters × 2 lines, parallel 4/8-bit interface',
+  ty:{a:'V0',b:R('D',0,7),p:'A',g:'K'},h:{V0:'Contrast: wiper of a 10 kΩ pot between VDD and GND',RS:'Register select: 0 = command, 1 = data',RW:'Read/Write: LOW = write (tie to GND when only writing)',E:'Enable strobe (falling edge latches data)',D0:'Data bus (unused in 4-bit mode)',D4:'Data bus (4-bit mode uses D4–D7)',A:'Backlight anode (+5 V through ≈ 220 Ω unless the module has one)',K:'Backlight cathode (GND)'},
+  t:['16×2 character LCD module','شاشة LCD حروف 16×2'],
+  d:['The standard text display. In 4-bit mode you need only 6 pins from the MCU: RS, E, D4–D7 (RW to GND).','شاشة النصوص القياسية. في وضع 4-bit محتاج 6 أرجل بس من الميكرو: RS وE وD4–D7 (وRW على GND).'],
+  w:[['Contrast: 10 kΩ pot with ends at +5 V and GND and the wiper to V0 (pin 3); if the screen shows only black squares, adjust it.','التباين: بوتنشيومتر 10kΩ أطرافه على +5V وGND والمنتصف على V0 (رجل 3)؛ لو الشاشة مربعات سودا اضبطه.'],
+     ['Power-up: wait > 15 ms, then send the 0x33, 0x32, 0x28, 0x0C, 0x06, 0x01 initialisation sequence for 4-bit mode.','بعد تشغيل الكهرباء: استنى > 15ms وابعت تسلسل التهيئة 0x33 و0x32 و0x28 و0x0C و0x06 و0x01 للوضع 4-bit.']]});
+var SEG7 = 'E D COM C DP B A COM F G';
+ic({id:'7SEG-CC',n:'7-Segment (Common Cathode)',c:'iface',y:[1,2],k:'dip10',pins:SEG7,vs:'No supply pin — each segment ≈ 2 V @ 10–20 mA',rail:'other',cur:0,curT:['≈ 10–20 mA per lit segment','≈ 10–20mA لكل segment منوّر'],cr:'dl lab',tt:'Common pin → GND, drive segment HIGH',alias:'seven segment display led',
+  ty:{g:'COM',i:'A B C D E F G DP'},h:{COM:'Common cathode → GND (pins 3 and 8 are the same)',A:'Segment a (top)',B:'Segment b (top right)',C:'Segment c (bottom right)',D:'Segment d (bottom)',E:'Segment e (bottom left)',F:'Segment f (top left)',G:'Segment g (middle)',DP:'Decimal point'},
+  t:['7-segment LED display (common cathode)','شاشة LED سبع قطع (Common Cathode)'],
+  d:['Eight LEDs (a–g + DP) sharing a cathode. Series resistor per segment: R = (5 V − 2 V) / 10 mA ≈ 300 Ω (220–330 Ω). Drive with 74LS48 or CD4511.','ثمانية LEDs (a–g + DP) بيشتركوا في الكاثود. مقاومة لكل segment: R = (5V − 2V) / 10mA ≈ 300Ω (من 220 لـ 330Ω). شغّلها بـ 74LS48 أو CD4511.'],
+  warn:['Pin numbering shown is for the usual 10-pin package (pin 1 = bottom-left when the decimal point is at the bottom-right). Check your part.','الترتيب هنا للشكل المعتاد 10 أرجل (رجل 1 أسفل الشمال والنقطة أسفل اليمين). اتأكد من القطعة عندك.']});
+ic({id:'7SEG-CA',n:'7-Segment (Common Anode)',c:'iface',y:[1,2],k:'dip10',pins:SEG7,vs:'No supply pin — each segment ≈ 2 V @ 10–20 mA',rail:'other',cur:0,curT:['≈ 10–20 mA per lit segment','≈ 10–20mA لكل segment منوّر'],cr:'dl lab',tt:'Common pin → +5 V, drive segment LOW',alias:'seven segment display led',
+  ty:{p:'COM',i:'A B C D E F G DP'},h:{COM:'Common anode → +5 V (pins 3 and 8 are the same)'},
+  t:['7-segment LED display (common anode)','شاشة LED سبع قطع (Common Anode)'],
+  d:['Same layout but the anodes are common: a segment lights when its pin is pulled LOW. Drive with 74LS47.','نفس الشكل بس الأنود مشترك: الـsegment بينوّر لما رجله تبقى LOW. شغّلها بـ 74LS47.']});
+ic({id:'LM35',n:'LM35',c:'iface',y:[2,3],k:'to92',pins:'+VS VOUT GND',v:[4,5,30],cur:0.06,curT:['≈ 60 µA','≈ 60µA'],cr:'ms em',tt:'Vout = 10 mV / °C (0 °C → 0 V)',
+  ty:{p:'+VS',o:'VOUT'},x:[['Scale','المعامل','10 mV per °C'],['Accuracy','الدقة','±0.5 °C @ 25 °C']],
+  t:['Precision analog temperature sensor','حساس حرارة تناظري دقيق'],
+  d:['Outputs 10 mV for every °C, so 250 mV = 25 °C. Read it with an ADC (e.g. ADC0804, Arduino analogRead) or amplify with an op-amp.','بيدّي 10mV لكل درجة مئوية، يعني 250mV = 25°C. اقراه بـ ADC (زي ADC0804 أو analogRead في Arduino) أو كبّره بمكبر عمليات.'],
+  w:[['Flat face towards you, pins down: +VS (left), VOUT (middle), GND (right).','الوش المسطّح ناحيتك والأرجل لتحت: +VS (شمال) وVOUT (نص) وGND (يمين).'],
+     ['With Arduino 5 V ADC (1024 steps): T(°C) = analogRead × 5 × 100 / 1024. Use the 1.1 V internal reference for better resolution.','مع Arduino 5V (1024 خطوة): T = analogRead × 5 × 100 / 1024. استخدم المرجع الداخلي 1.1V لدقة أعلى.']]});
+ic({id:'DS18B20',n:'DS18B20',c:'iface',y:[4],k:'to92',pins:'GND DQ VDD',v:[3,5,5.5],cur:1,curT:['≈ 1 mA while converting','≈ 1mA وقت التحويل'],cr:'em ms',tt:'1-Wire digital temperature sensor, −55…+125 °C, 9–12 bit',
+  ty:{b:'DQ'},h:{DQ:'1-Wire data — needs a 4.7 kΩ pull-up to VDD'},x:[['Accuracy','الدقة','±0.5 °C (−10…+85 °C)'],['Resolution','الدقة الرقمية','9 – 12 bit (0.5 … 0.0625 °C)']],
+  t:['1-Wire digital temperature sensor','حساس حرارة رقمي 1-Wire'],
+  d:['Digital sensor with a unique 64-bit ID: many sensors can share one data wire.','حساس رقمي ليه ID فريد 64 بت: ممكن عدة حساسات يشاركوا سلك بيانات واحد.'],
+  w:[['Flat face toward you: GND (left), DQ (middle), VDD (right). 4.7 kΩ resistor between DQ and VDD.','الوش المسطّح ناحيتك: GND (شمال) وDQ (نص) وVDD (يمين). مقاومة 4.7kΩ بين DQ وVDD.']],
+  warn:['Reversing VDD and GND heats the sensor quickly — double-check before powering.','لو عكست VDD وGND الحساس بيسخن بسرعة — راجع قبل التشغيل.']});
+
+/* ── UI: browse / detail ── */
+var icSelected = null;
+var icCircuit = [];
+var icFilterState = {q:'', cat:'all', year:'all'};
+
+function icFmtV(v){
+  function f(x){ return (Math.round(x*100)/100).toString(); }
+  return f(v[0])+' – '+f(v[2])+' V';
+}
+function icYearsTxt(o){ return o.y.map(function(y){ return t('ic_year')+' '+y; }).join(' · '); }
+function icCoursesTxt(o){ return (o.cr||'').split(/\s+/).filter(Boolean).map(function(c){ return ICL(IC_COURSES[c]); }).join(' · '); }
+function icSupplyOf(o){
+  if(o.vs) return o.vs;
+  if(o.v) return icFmtV(o.v);
+  if(o.fam==='ttl') return icFmtV([4.75,5,5.25]);
+  if(o.fam==='hc') return icFmtV([2,5,6]);
+  if(o.fam==='cmos') return icFmtV([3,5,18]);
+  return '—';
+}
+function icVOf(o){
+  if(o.v) return o.v;
+  if(o.fam==='ttl') return [4.75,5,5.25];
+  if(o.fam==='hc') return [2,5,6];
+  if(o.fam==='cmos') return [3,5,18];
+  return null;
+}
+function icMatches(o){
+  var f = icFilterState;
+  if(f.cat!=='all' && o.c!==f.cat) return false;
+  if(f.year!=='all' && o.y.indexOf(parseInt(f.year,10))===-1) return false;
+  if(f.q){
+    var hay = (o.n+' '+o.id+' '+o.t[0]+' '+o.t[1]+' '+(o.d?o.d[0]:'')+' '+(o.alias||'')+' '+(o.cr||'')).toLowerCase();
+    var parts = f.q.toLowerCase().split(/\s+/).filter(Boolean);
+    for(var i=0;i<parts.length;i++){ if(hay.indexOf(parts[i])===-1) return false; }
+  }
+  return true;
+}
+function icBuildFilters(){
+  var cs = document.getElementById('ic-cat');
+  var ys = document.getElementById('ic-year');
+  if(!cs || !ys) return;
+  var cv = cs.value || 'all', yv = ys.value || 'all';
+  cs.innerHTML = '<option value="all">'+t('ic_all_cats')+'</option>' + Object.keys(IC_CATS).map(function(k){ return '<option value="'+k+'">'+ICL(IC_CATS[k])+'</option>'; }).join('');
+  ys.innerHTML = '<option value="all">'+t('ic_all_years')+'</option>' + [1,2,3,4].map(function(y){ return '<option value="'+y+'">'+t('ic_year')+' '+y+'</option>'; }).join('');
+  cs.value = cv; ys.value = yv;
+}
+function icOnFilter(){
+  icFilterState.q = document.getElementById('ic-search').value.trim();
+  icFilterState.cat = document.getElementById('ic-cat').value;
+  icFilterState.year = document.getElementById('ic-year').value;
+  icRenderList();
+}
+function icRenderList(){
+  var box = document.getElementById('ic-list');
+  if(!box) return;
+  var list = IC_DB.filter(icMatches);
+  document.getElementById('ic-count').textContent = list.length + ' / ' + IC_DB.length;
+  if(!list.length){ box.innerHTML = '<div class="hint" style="padding:10px">'+t('ic_none')+'</div>'; return; }
+  var html = '', lastCat = null;
+  list.forEach(function(o){
+    if(o.c!==lastCat){ html += '<div class="ic-catlabel">'+ICL(IC_CATS[o.c])+'</div>'; lastCat = o.c; }
+    html += '<button class="ic-chip'+(o.id===icSelected?' active':'')+'" onclick="icShow(\''+o.id+'\')"><b>'+icEsc(o.n)+'</b><span>'+icEsc(ICL(o.t))+'</span></button>';
+  });
+  box.innerHTML = html;
+}
+function icFind(id){ for(var i=0;i<IC_DB.length;i++){ if(IC_DB[i].id===id) return IC_DB[i]; } return null; }
+
+function icShow(id){
+  var o = icFind(id); if(!o) return;
+  icSelected = id;
+  icRenderList();
+  var pins = icParse(o);
+  var inCircuit = icCircuit.indexOf(id)!==-1;
+  var h = '<div class="card ic-detail">';
+  h += '<div class="ic-head"><div><div class="ic-name">'+icEsc(o.n)+'</div><div class="ic-title">'+icEsc(ICL(o.t))+'</div></div>';
+  h += '<button class="btn '+(inCircuit?'btn-ghost':'')+' btn-sm" onclick="icToggleCircuit(\''+id+'\')"><i class="fa-solid '+(inCircuit?'fa-minus':'fa-plus')+'"></i> '+(inCircuit?t('ic_remove_circuit'):t('ic_add_circuit'))+'</button></div>';
+  h += '<div class="ic-badges"><span class="ic-badge">'+ICL(IC_CATS[o.c])+'</span><span class="ic-badge">'+icYearsTxt(o)+'</span>'+(o.cr?'<span class="ic-badge">'+icCoursesTxt(o)+'</span>':'')+'</div>';
+
+  // key numbers
+  var v = icVOf(o);
+  var stats = [];
+  stats.push([t('ic_supply'), icSupplyOf(o), (v && !o.vs) ? (t('ic_typ')+' '+v[1]+' V') : (o.vsn?ICL(o.vsn):'')]);
+  if(o.cur!==undefined || o.curT) stats.push([t('ic_current'), o.curT ? ICL(o.curT) : ('≈ '+o.cur+' mA'), t('ic_current_note')]);
+  stats.push([t('ic_package'), icPkgLabel(o), pins.length+' '+t('ic_pins')]);
+  if(o.fam) stats.push([t('ic_family'), o.fam==='ttl'?'TTL / CMOS (74xx)':(o.fam==='hc'?'74HC (CMOS)':(o.fam==='cmos'?'CD4000B (CMOS)':'—')), '']);
+  (o.vx||[]).forEach(function(r){ stats.push([ICL(r[0]), ICL(r[1]), r[2]?ICL(r[2]):'']); });
+  (o.x||[]).forEach(function(r){ stats.push([ICL(r[0]), ICL(r[1]), r[2]?ICL(r[2]):'']); });
+  h += '<div class="result-grid ic-stats">';
+  stats.forEach(function(s,i){
+    h += '<div class="result-item'+(i===0?' ic-hero':'')+'"><div class="rk">'+icEsc(s[0])+'</div><div class="rv">'+icEsc(s[1])+'</div>'+(s[2]?'<div class="rk" style="margin:3px 0 0">'+icEsc(s[2])+'</div>':'')+'</div>';
+  });
+  h += '</div>';
+
+  // pinout + info
+  h += '<div class="ic-cols"><div class="ic-pinout"><div class="ic-sec">'+t('ic_pinout')+'</div>'+icSvg(o);
+  var used = {}; pins.forEach(function(p){ used[p.type]=1; });
+  h += '<div class="ic-legend">'+Object.keys(IC_TYPE_INFO).filter(function(k){ return used[k]; }).map(function(k){ return '<span><i style="background:'+IC_TYPE_INFO[k][0]+'"></i>'+ICL([IC_TYPE_INFO[k][1],IC_TYPE_INFO[k][2]])+'</span>'; }).join('')+'</div>';
+  h += '<div class="hint">'+t(/^dip/.test(o.k)?'ic_dip_note':(/^sip/.test(o.k)?'ic_sip_note':'ic_to_note'))+'</div></div>';
+
+  h += '<div class="ic-info">';
+  h += '<div class="ic-sec">'+t('ic_about')+'</div><p class="ic-desc">'+icEsc(ICL(o.d))+'</p>';
+  if(o.tt) h += '<div class="ic-tt">'+icEsc(o.tt)+'</div>';
+  var notes = (o.w||[]).concat(o.fam ? IC_FAM_NOTES[o.fam] : []);
+  if(notes.length){
+    h += '<div class="ic-sec">'+t('ic_howto')+'</div><ul class="ic-notes">'+notes.map(function(n){ return '<li>'+icEsc(ICL(n))+'</li>'; }).join('')+'</ul>';
+  }
+  if(o.warn) h += '<div class="ic-warn"><i class="fa-solid fa-triangle-exclamation"></i> '+icEsc(ICL(o.warn))+'</div>';
+  h += '</div></div>';
+
+  // variants table for 74xx
+  if(o.fam==='ttl'){
+    var vr = (o.vars || 'LS HC HCT').split(/\s+/);
+    h += '<div class="ic-sec">'+t('ic_variants')+'</div><div class="tbl-wrap"><table><thead><tr><th>'+t('ic_variant')+'</th><th>VCC</th><th>VIH min</th><th>VIL max</th><th>VOH min</th><th>VOL max</th></tr></thead><tbody>';
+    IC_LOGIC_FAMILIES.forEach(function(f){
+      var key = f[0].replace('74','').replace(/\s.*/,'');
+      if(vr.indexOf(key)===-1) return;
+      h += '<tr><td><b>'+f[0]+o.id.slice(2)+'</b></td><td>'+f[1]+'</td><td>'+f[2]+'</td><td>'+f[3]+'</td><td>'+f[4]+'</td><td>'+f[5]+'</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  }
+
+  // pin table
+  h += '<div class="ic-sec">'+t('ic_pintable')+'</div><div class="tbl-wrap"><table class="ic-pintbl"><thead><tr><th>#</th><th>'+t('ic_pin_name')+'</th><th>'+t('ic_pin_type')+'</th><th>'+t('ic_pin_func')+'</th></tr></thead><tbody>';
+  pins.forEach(function(p){
+    h += '<tr><td>'+p.n+'</td><td class="ic-pn"'+(p.bar?' style="text-decoration:overline"':'')+'>'+icEsc(p.name)+'</td><td><span class="ic-tp" style="background:'+IC_TYPE_INFO[p.type][0]+'22;color:'+IC_TYPE_INFO[p.type][0]+';border-color:'+IC_TYPE_INFO[p.type][0]+'66">'+ICL([IC_TYPE_INFO[p.type][1],IC_TYPE_INFO[p.type][2]])+'</span></td><td class="ic-pf">'+icEsc(icPinHelp(o,p))+(p.bar?' <span class="ic-al">('+t('ic_active_low')+')</span>':'')+'</td></tr>';
+  });
+  h += '</tbody></table></div>';
+  h += '</div>';
+  document.getElementById('ic-detail').innerHTML = h;
+}
+
+/* ── UI: circuit power budget ── */
+function icToggleCircuit(id){
+  var i = icCircuit.indexOf(id);
+  if(i===-1) icCircuit.push(id); else icCircuit.splice(i,1);
+  icRenderBudget();
+  if(icSelected===id) icShow(id);
+}
+function icClearCircuit(){ icCircuit = []; icRenderBudget(); if(icSelected) icShow(icSelected); }
+function icRenderBudget(){
+  var box = document.getElementById('ic-budget');
+  var badge = document.getElementById('ic-circuit-count');
+  if(badge) badge.textContent = icCircuit.length ? String(icCircuit.length) : '';
+  if(!box) return;
+  if(!icCircuit.length){ box.innerHTML = '<div class="hint">'+t('ic_budget_empty')+'</div>'; return; }
+  var ics = icCircuit.map(icFind).filter(Boolean);
+  var h = '<div class="ic-budget-list">';
+  ics.forEach(function(o){
+    var v = icVOf(o);
+    h += '<div class="ic-brow"><div><b>'+icEsc(o.n)+'</b> <span class="hint" style="margin:0">'+icEsc(ICL(o.t))+'</span></div><div class="ic-brow-r"><span>'+icEsc(icSupplyOf(o))+'</span><span>'+(o.cur!==undefined?('≈ '+o.cur+' mA'):'—')+'</span><button class="btn btn-ghost btn-sm" onclick="icToggleCircuit(\''+o.id+'\')"><i class="fa-solid fa-xmark"></i></button></div></div>';
+  });
+  h += '</div>';
+
+  var pos = ics.filter(function(o){ return !o.rail && icVOf(o); });
+  var dual = ics.filter(function(o){ return o.rail==='dual'; });
+  var other = ics.filter(function(o){ return o.rail==='other' || (!o.rail && !icVOf(o)); });
+  var total = 0; ics.forEach(function(o){ if(o.cur) total += o.cur; });
+
+  h += '<div class="result-box"><div class="rlabel">'+t('ic_result')+'</div>';
+  if(pos.length){
+    var lo = -Infinity, hi = Infinity, loIc = null, hiIc = null;
+    pos.forEach(function(o){ var v = icVOf(o); if(v[0]>lo){ lo=v[0]; loIc=o; } if(v[2]<hi){ hi=v[2]; hiIc=o; } });
+    if(lo<=hi){
+      var rec = (lo<=5 && hi>=5) ? 5 : ((lo<=3.3 && hi>=3.3) ? 3.3 : Math.round(((lo+hi)/2)*10)/10);
+      h += '<div class="ic-ok"><i class="fa-solid fa-circle-check"></i> '+t('ic_common_ok')+' <b>'+lo+' – '+hi+' V</b> — '+t('ic_recommended')+' <b>'+rec+' V</b></div>';
+      var pw = total ? Math.round(rec*total)/1000 : 0;
+      h += '<div class="result-grid"><div class="result-item ic-hero"><div class="rk">'+t('ic_total_current')+'</div><div class="rv">≈ '+(Math.round(total*10)/10)+' mA</div></div>'+
+           '<div class="result-item"><div class="rk">'+t('ic_supply_size')+'</div><div class="rv">≥ '+(Math.ceil(total*1.5/10)*10)+' mA</div></div>'+
+           '<div class="result-item"><div class="rk">'+t('ic_power')+'</div><div class="rv">≈ '+(Math.round(pw*1000)/1000)+' W</div></div></div>';
+    } else {
+      h += '<div class="ic-bad"><i class="fa-solid fa-circle-xmark"></i> '+t('ic_common_bad')+' <b>'+icEsc(loIc.n)+'</b> ('+t('ic_needs_min')+' '+lo+' V) / <b>'+icEsc(hiIc.n)+'</b> ('+t('ic_max_only')+' '+hi+' V). '+t('ic_common_fix')+'</div>';
+      h += '<div class="result-grid"><div class="result-item"><div class="rk">'+t('ic_total_current')+'</div><div class="rv">≈ '+(Math.round(total*10)/10)+' mA</div></div></div>';
+    }
+  }
+  if(dual.length){
+    var dlo = -Infinity, dhi = Infinity;
+    dual.forEach(function(o){ var v = icVOf(o); if(v[0]>dlo) dlo=v[0]; if(v[2]<dhi) dhi=v[2]; });
+    h += '<div class="'+(dlo<=dhi?'ic-ok':'ic-bad')+'" style="margin-top:8px"><i class="fa-solid fa-plus-minus"></i> '+t('ic_dual_rail')+': '+(dlo<=dhi ? '<b>±'+dlo+' … ±'+dhi+' V</b>' : t('ic_common_bad')+' ('+dlo+' / '+dhi+')')+'</div>';
+  }
+  if(other.length){
+    h += '<div class="hint" style="margin-top:10px"><b>'+t('ic_other_rails')+':</b></div><ul class="ic-notes">'+other.map(function(o){
+      return '<li><b>'+icEsc(o.n)+'</b> — '+icEsc(icSupplyOf(o))+(o.vx?' · '+o.vx.map(function(r){ return icEsc(ICL(r[0]))+': '+icEsc(ICL(r[1])); }).join(' · '):'')+'</li>';
+    }).join('')+'</ul>';
+  }
+  h += '<div class="hint" style="margin-top:10px">'+t('ic_budget_disclaimer')+'</div></div>';
+  h += '<button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="icClearCircuit()"><i class="fa-solid fa-trash"></i> '+t('clear_all')+'</button>';
+  box.innerHTML = h;
+}
+
+/* ── UI: logic family table ── */
+function icRenderFamilies(){
+  var box = document.getElementById('ic-families');
+  if(!box) return;
+  var h = '<div class="tbl-wrap"><table><thead><tr><th>'+t('ic_family')+'</th><th>VCC</th><th>VIH min</th><th>VIL max</th><th>VOH min</th><th>VOL max</th><th>IOH</th><th>IOL</th></tr></thead><tbody>';
+  IC_LOGIC_FAMILIES.forEach(function(f){
+    h += '<tr><td><b>'+f[0]+'</b></td><td>'+f[1]+'</td><td>'+f[2]+'</td><td>'+f[3]+'</td><td>'+f[4]+'</td><td>'+f[5]+'</td><td>'+f[6]+'</td><td>'+f[7]+'</td></tr>';
+  });
+  h += '</tbody></table></div><ul class="ic-notes" style="margin-top:14px">'+IC_LOGIC_FAMILIES.map(function(f){ return '<li><b>'+f[0]+':</b> '+icEsc(ICL(f[8]))+'</li>'; }).join('')+'</ul>';
+  h += '<div class="ic-warn" style="margin-top:12px"><i class="fa-solid fa-triangle-exclamation"></i> '+t('ic_ls_hc_warn')+'</div>';
+  box.innerHTML = h;
+}
+function icRefresh(){
+  icBuildFilters();
+  icRenderList();
+  icRenderBudget();
+  icRenderFamilies();
+  if(icSelected) icShow(icSelected);
+}
 
 /* ════════════════════════════════════════════════════════════
    INITIALIZE (apply saved/default language + theme on load)
