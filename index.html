@@ -707,6 +707,13 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
 .ic-count-badge{display:inline-block;min-width:16px;text-align:center;font-size:10px;font-weight:800;color:#fff;background:var(--accent);border-radius:99px;padding:0 5px}
 .ic-count-badge:empty{display:none}
 </style>
+<style>
+
+.gpa-tbl td,.gpa-tbl th{padding:7px 10px}
+.gpa-tbl select{padding:6px 8px;font-size:12.5px}
+.gpa-row-off{opacity:.55}
+.gpa-row-off td:not(:first-child){color:var(--text-dim)}
+</style>
 <div id="ajoobot-page" dir="ltr" lang="en">
 <div class="topbar">
   <div class="brand">
@@ -734,6 +741,7 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
     <button class="nav-btn" data-tool="binsys"><i class="fa-solid fa-microchip"></i> <span data-i18n="nav_binsys">Binary System</span></button>
     <button class="nav-btn" data-tool="mcode"><i class="fa-solid fa-hashtag"></i> <span data-i18n="nav_mcode">Machine Code</span></button>
     <button class="nav-btn" data-tool="icdata"><i class="fa-solid fa-book-open"></i> <span data-i18n="nav_icdata">IC Datasheets</span></button>
+    <button class="nav-btn" data-tool="gpa"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="nav_gpa">GPA Calculator</span></button>
     <button class="nav-btn" data-tool="matrix"><i class="fa-solid fa-table-cells-large"></i> <span data-i18n="nav_matrix">Matrix Calculator</span></button>
     <button class="nav-btn" data-tool="sci"><i class="fa-solid fa-calculator"></i> <span data-i18n="nav_sci">Scientific Calculator</span></button>
   </nav>
@@ -1167,6 +1175,32 @@ table tbody tr:hover{background:rgba(8,145,178,.05)}
       <div class="subpanel" id="ic-sub-fam"><div class="card"><div id="ic-families"></div></div></div>
     </section>
 
+        <!-- ═══════════════ 11) GPA CALCULATOR ═══════════════ -->
+    <section class="tool-panel" id="tool-gpa">
+      <div class="panel-head">
+        <h2><span class="icon-chip"><i class="fa-solid fa-graduation-cap"></i></span> <span data-i18n="nav_gpa">GPA Calculator</span></h2>
+        <p data-i18n="gpa_desc">Pick your level, choose the courses you registered and their grades, and get your term GPA and new cumulative GPA.</p>
+      </div>
+
+      <div class="card">
+        <div class="field-row">
+          <div class="field" style="max-width:220px"><label data-i18n="gpa_prev_cgpa_label">Current CGPA (before this term)</label><input type="number" id="gpa-prev-cgpa" min="0" max="4" step="0.001" placeholder="e.g. 3.250" oninput="gpaRenderSummary()"/></div>
+          <div class="field" style="max-width:260px"><label data-i18n="gpa_prev_credits_label">Total credit hours passed so far</label><input type="number" id="gpa-prev-credits" min="0" step="1" placeholder="e.g. 45" oninput="gpaRenderSummary()"/></div>
+        </div>
+        <div class="hint" data-i18n="gpa_prev_hint">Leave these empty if you only want this term's GPA. Fill both to get your new cumulative GPA (CGPA).</div>
+      </div>
+
+      <div class="subtabs" id="gpa-level-tabs"></div>
+      <div class="card">
+        <div class="hint" data-i18n="gpa_instructions">Tick the courses you registered this term and pick a grade for each.</div>
+        <div id="gpa-course-table"></div>
+      </div>
+
+      <div id="gpa-summary"></div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="gpaResetAll()"><i class="fa-solid fa-trash"></i> <span data-i18n="clear_all">Clear all</span></button>
+      <div class="hint" data-i18n="gpa_disclaimer" style="margin-top:10px">Based on the official grading scale and study plan. Elective-group course names are summarised — check your registration for the exact elective. Always verify your final GPA with the registrar.</div>
+    </section>
+
     <!-- ═══════════════ 9) MATRIX CALCULATOR ═══════════════ -->
     <section class="tool-panel" id="tool-matrix">
       <div class="panel-head">
@@ -1446,6 +1480,41 @@ Object.assign(I18N.ar, {
 Object.assign(I18N.en,{mc_group_muldiv:"Multiply / Divide / NOT / NEG",mc_group_io:"Input / Output",mc_group_jcc:"Conditional jumps / Loop",mc_group_string:"String / Misc"});
 Object.assign(I18N.ar,{mc_group_muldiv:"ضرب / قسمة / NOT / NEG",mc_group_io:"دخل / خرج (IN / OUT)",mc_group_jcc:"قفزات شرطية / Loop",mc_group_string:"تعليمات String / متفرقات"});
 
+Object.assign(I18N.en, {
+  nav_gpa:"GPA Calculator",
+  gpa_desc:"Pick your level, choose the courses you registered and their grades, and get your term GPA and new cumulative GPA.",
+  gpa_prev_cgpa_label:"Current CGPA (before this term)", gpa_prev_credits_label:"Total credit hours passed so far",
+  gpa_prev_hint:"Leave these empty if you only want this term's GPA. Fill both to get your new cumulative GPA (CGPA).",
+  gpa_instructions:"Tick the courses you registered this term and pick a grade for each.",
+  gpa_sem1:"First semester", gpa_sem2:"Second semester",
+  gpa_course:"Course", gpa_credit:"Credit hours", gpa_grade:"Grade", gpa_points:"Quality points",
+  gpa_pick_grade:"— pick a grade —", gpa_noncount_group:"Not counted in GPA",
+  gpa_elective:"Elective", gpa_passfail:"Pass / Fail", gpa_not_counted:"not counted",
+  gpa_empty:"Tick at least one course above and pick its grade to see your result.",
+  gpa_term_result:"Result", gpa_term_gpa:"This term's GPA", gpa_term_credits:"Credit hours this term", gpa_term_points:"Quality points this term",
+  gpa_new_cgpa:"Your new CGPA", gpa_total_credits:"total credit hours",
+  gpa_need_prev:"Enter your current CGPA and total passed credit hours above to also get your new cumulative GPA.",
+  gpa_all_excluded:"All selected courses are grades that don't count toward the GPA (AU / W / I / P).",
+  gpa_disclaimer:"Based on the official grading scale and study plan. Elective-group course names are summarised — check your registration for the exact elective. Always verify your final GPA with the registrar."
+});
+Object.assign(I18N.ar, {
+  nav_gpa:"حاسبة المعدل (GPA)",
+  gpa_desc:"اختار سنتك الدراسية وحدد المواد اللي سجلتها ودرجة كل مادة، وهتطلعلك معدل الترم والمعدل التراكمي الجديد.",
+  gpa_prev_cgpa_label:"الـ CGPA الحالي (قبل الترم ده)", gpa_prev_credits_label:"إجمالي الساعات المعتمدة اللي نجحت فيها لحد دلوقتي",
+  gpa_prev_hint:"سيبهم فاضيين لو عايز معدل الترم بس. لو عبيتهم هتحصل كمان على المعدل التراكمي الجديد (CGPA).",
+  gpa_instructions:"حط علامة صح على المواد اللي سجلتها الترم ده واختار درجة كل مادة.",
+  gpa_sem1:"الفصل الدراسي الأول", gpa_sem2:"الفصل الدراسي الثاني",
+  gpa_course:"المادة", gpa_credit:"الساعات المعتمدة", gpa_grade:"التقدير", gpa_points:"النقاط",
+  gpa_pick_grade:"— اختار التقدير —", gpa_noncount_group:"مش بتحسب في المعدل",
+  gpa_elective:"اختياري", gpa_passfail:"منتسب/راسب فقط", gpa_not_counted:"مش محسوبة",
+  gpa_empty:"حط صح على مادة واحدة على الأقل واختار تقديرها عشان تشوف النتيجة.",
+  gpa_term_result:"النتيجة", gpa_term_gpa:"معدل الترم ده", gpa_term_credits:"عدد الساعات المعتمدة الترم ده", gpa_term_points:"مجموع النقاط الترم ده",
+  gpa_new_cgpa:"الـ CGPA الجديد", gpa_total_credits:"إجمالي الساعات المعتمدة",
+  gpa_need_prev:"اكتب الـ CGPA الحالي وإجمالي الساعات الناجح فيها فوق عشان تحصل كمان على المعدل التراكمي الجديد.",
+  gpa_all_excluded:"كل المواد المختارة تقديراتها من النوع اللي مش بيتحسب في المعدل (AU / W / I / P).",
+  gpa_disclaimer:"البيانات من جدول التقديرات والخطة الدراسية الرسمية. أسماء مجموعات المواد الاختيارية ملخّصة — راجع تسجيلك عشان تعرف المادة بالظبط. اتأكد دايمًا من معدلك النهائي مع شؤون الطلاب."
+});
+
 var currentLang = localStorage.getItem('ajoobot_lang') || 'en';
 var currentTheme = localStorage.getItem('ajoobot_theme') || 'light';
 
@@ -1473,6 +1542,7 @@ function applyLang(){
   if(typeof sciBuildGrid==='function') sciBuildGrid();
   if(typeof mcBuildOperandFields==='function') mcBuildOperandFields();
   if(typeof icRefresh==='function') icRefresh();
+  if(typeof gpaRefresh==='function') gpaRefresh();
   ['bc-error','kmap-result','tt-fromexpr-result','tt2-result','be-vars-wrap','be-result','rc-result',
    'sn-result','addr-result','ipbin-error','bcalc-result','bcalc-flags','shift-result','shift-flags',
    'mc-result','mx-result'].forEach(function(id){ var el=document.getElementById(id); if(el) el.innerHTML=''; });
@@ -3742,9 +3812,217 @@ function icRefresh(){
   if(icSelected) icShow(icSelected);
 }
 
+
+/* ════════════════════════════════════════════════════════════
+   11) GPA CALCULATOR — Computer Engineering program
+   Source: faculty study-plan table + grading scale (matrial.pdf)
+   ════════════════════════════════════════════════════════════ */
+var GPA_SCALE = [
+  ['A+',4.0],['A',4.0],['A-',3.7],['B+',3.3],['B',3.0],['B-',2.7],
+  ['C+',2.3],['C',2.0],['C-',1.7],['D+',1.3],['D',1.0],['F',0.0]
+];
+var GPA_SCALE_MAP = {}; GPA_SCALE.forEach(function(g){ GPA_SCALE_MAP[g[0]] = g[1]; });
+var GPA_NONCOUNT = ['AU','W','I','P']; // excluded from GPA (audit / withdrawn / incomplete / pass-only)
+
+/* level keys used in the UI; 'L0' = المستوى صفر (تمهيدي) */
+var GPA_LEVELS = ['L0','L1','L2','L3','L4'];
+var GPA_LEVEL_NAME = {
+  L0:['Level 0 (Preparatory)','المستوى صفر (تمهيدي)'],
+  L1:['Level 1','المستوى الأول'],
+  L2:['Level 2','المستوى الثاني'],
+  L3:['Level 3','المستوى الثالث'],
+  L4:['Level 4','المستوى الرابع']
+};
+/* c = credit hours ("الساعات المعتمدة") · sem = 1 or 2 · nogpa = pass/fail course (field training) */
+function gc(id,en,ar,c,level,sem,extra){
+  var o = {id:id, n:[en,ar], c:c, level:level, sem:sem};
+  if(extra) Object.keys(extra).forEach(function(k){ o[k]=extra[k]; });
+  GPA_COURSES.push(o);
+}
+var GPA_COURSES = [];
+/* ── Level 0 / Semester 1 ── */
+gc('BAS011','Mathematics 1','رياضيات 1',3,'L0',1);
+gc('BAS031','Physics 1','فيزياء 1',3,'L0',1);
+gc('BAS021','Mechanics 1','ميكانيكا 1',3,'L0',1);
+gc('BAS041','Fundamentals of Engineering Chemistry','أساسيات الكيمياء الهندسية',3,'L0',1);
+gc('PDE051','Principles of Manufacturing Engineering','مبادئ هندسة التصنيع',3,'L0',1);
+gc('HSS011','English Language 1','لغة إنجليزية 1',2,'L0',1);
+/* ── Level 0 / Semester 2 ── */
+gc('BAS012','Mathematics 2','رياضيات 2',3,'L0',2);
+gc('BAS032','Physics 2','فيزياء 2',3,'L0',2);
+gc('BAS022','Mechanics 2','ميكانيكا 2',3,'L0',2);
+gc('CSE061','Introduction to Computer Systems','مقدمة في نظم الحاسب',2,'L0',2);
+gc('PDE052','Engineering Drawing & Projection','رسم هندسي وإسقاط',3,'L0',2);
+gc('HSS012','English Language 2','لغة إنجليزية 2',2,'L0',2);
+
+/* ── Level 1 / Semester 1 ── */
+gc('BAS113','Mathematics 3','رياضيات 3',3,'L1',1);
+gc('CSE111','Structured Programming','برمجة هيكلية',3,'L1',1);
+gc('CSE121','Logic Circuits Design','تصميم دوائر منطقية',3,'L1',1);
+gc('ECE121','Electrical Circuits 1','دوائر كهربية 1',2,'L1',1);
+gc('ECE122','Electronics 1','إلكترونيات 1',2,'L1',1);
+gc('HSS121','History of Engineering and Technology','تاريخ الهندسة والتكنولوجيا',1,'L1',1);
+/* ── Level 1 / Semester 2 ── */
+gc('BAS114','Mathematics 4','رياضيات 4',3,'L1',2);
+gc('CSE112','Programming Applications','تطبيقات برمجة',3,'L1',2);
+gc('ECE123','Electrical Circuits 2','دوائر كهربية 2',2,'L1',2);
+gc('ECE124','Electronics 2','إلكترونيات 2',2,'L1',2);
+gc('ELE111','Measurements and Instrumentations','أجهزة وقياسات',3,'L1',2);
+gc('ENG131','Technical Report Writing','كتابة تقارير فنية',2,'L1',2);
+
+/* ── Level 2 / Semester 1 ── */
+gc('CSE213','Data Structures','هياكل بيانات',3,'L2',1);
+gc('CSE214','Object-Oriented Programming','البرمجة الشيئية',3,'L2',1);
+gc('CSE222','Digital Systems Design','تصميم نظم منطقية',3,'L2',1);
+gc('BAS215','Mathematics 5','رياضيات 5',3,'L2',1);
+gc('ECE231','Communication Theory','نظرية اتصالات',2,'L2',1);
+gc('HSS231','Presentation and Communication Skills','مهارات العرض والاتصال',2,'L2',1);
+/* ── Level 2 / Semester 2 ── */
+gc('CSE215','Database Systems','نظم قواعد بيانات',3,'L2',2);
+gc('ELE251','Electrical Power and Machines','آلات وقوى كهربية',3,'L2',2);
+gc('CSE223','Computer Architecture','عمارة الحاسب',3,'L2',2);
+gc('CSE224','Data Acquisition Systems','نظم اكتساب المعلومات',3,'L2',2);
+gc('ECE232','Introduction to Communication Systems','مقدمة في نظم الاتصالات',2,'L2',2);
+gc('HSS241','Law and Human Rights','القانون وحقوق الإنسان',2,'L2',2);
+gc('CSE281','Field Training (1)','تدريب ميداني (1)',0,'L2',2,{nogpa:1});
+
+/* ── Level 3 / Semester 1 ── */
+gc('CSE331','Systems Programming','برمجة النظم',3,'L3',1);
+gc('CSE325','Introduction to Microprocessors','مقدمة في الميكروبروسيسور',3,'L3',1);
+gc('ELE321','Automatic Control Systems','نظم التحكم الآلي',2,'L3',1);
+gc('CSE332','Software Engineering','هندسة البرمجيات',3,'L3',1);
+gc('CSE335A','Elective 1 (Computing Algorithms / Simulation & Modeling / Signal Processing)','مقرر اختياري 1 (خوارزميات حاسوبية / المحاكاة والنمذجة / معالجة الإشارة)',3,'L3',1,{elective:1});
+gc('CSE335B','Elective 2 (Assembly Language / Computer Graphics / Control Devices)','مقرر اختياري 2 (لغة التجميع / رسوميات الحاسب / أجهزة التحكم)',3,'L3',1,{elective:1});
+/* ── Level 3 / Semester 2 ── */
+gc('CSE326','Embedded Systems','الأنظمة المدمجة',3,'L3',2);
+gc('CSE333','Operating Systems','نظم تشغيل',3,'L3',2);
+gc('ELE322','Modern Control Engineering','هندسة التحكم الحديث',3,'L3',2);
+gc('CSE336A','Elective 3 (see elective table)','مقرر اختياري 3 (راجع جدول المقررات الاختيارية)',3,'L3',2,{elective:1});
+gc('CSE336B','Elective 4 (see elective table)','مقرر اختياري 4 (راجع جدول المقررات الاختيارية)',3,'L3',2,{elective:1});
+gc('CSE381','Field Training (2)','تدريب ميداني (2)',0,'L3',2,{nogpa:1});
+
+/* ── Level 4 / Semester 1 ── */
+gc('CSE441','Artificial Intelligence','ذكاء اصطناعي',3,'L4',1);
+gc('CSE451','Computer Networks 1','شبكات الحاسب 1',3,'L4',1);
+gc('CSE462A','Elective 5 (Neural Networks / Pattern Recognition / Digital VLSI Design)','مقرر اختياري 5 (الشبكات العصبية / التعرف على الأنماط / تصميم نظم متكاملة رقمية)',3,'L4',1,{elective:1});
+gc('CSE491','Graduation Project (1)','مشروع التخرج (1)',3,'L4',1);
+gc('HSS442','Ethics of Professional Practice','آداب وأخلاقيات المهنة',2,'L4',1);
+gc('ENG432','Project Management','إدارة المشروعات',2,'L4',1);
+/* ── Level 4 / Semester 2 ── */
+gc('CSE481','Distributed Systems','الأنظمة الموزعة',3,'L4',2);
+gc('CSE482','Data Security','أمن البيانات',3,'L4',2);
+gc('CSE452','Computer Networks 2','شبكات الحاسب 2',3,'L4',2);
+gc('CSE471A','Elective 6 (Computer Performance & Evaluation / Robotic Engineering / VLSI Fabrication & Testing)','مقرر اختياري 6 (تقييم أداء الحاسبات / هندسة الروبوت / تصنيع واختبار الدوائر المتكاملة)',3,'L4',2,{elective:1});
+gc('CSE492','Graduation Project (2)','مشروع التخرج (2)',4,'L4',2);
+gc('HSS432','Marketing','التسويق',2,'L4',2);
+
+/* ── GPA UI ── */
+var gpaSelectedLevel = 'L0';
+var gpaGrades = {}; // courseId -> grade string
+var gpaChecked = {}; // courseId -> bool (registered this term)
+
+function gpaCoursesFor(level){ return GPA_COURSES.filter(function(c){ return c.level===level; }); }
+function gpaCourseName(c){ return currentLang==='ar' ? c.n[1] : c.n[0]; }
+
+function gpaBuildLevelTabs(){
+  var box = document.getElementById('gpa-level-tabs');
+  if(!box) return;
+  box.innerHTML = GPA_LEVELS.map(function(lv){
+    return '<div class="subtab-btn'+(lv===gpaSelectedLevel?' active':'')+'" onclick="gpaSelectLevel(\''+lv+'\')">'+ (currentLang==='ar'?GPA_LEVEL_NAME[lv][1]:GPA_LEVEL_NAME[lv][0]) +'</div>';
+  }).join('');
+}
+function gpaSelectLevel(lv){ gpaSelectedLevel = lv; gpaBuildLevelTabs(); gpaBuildCourseTable(); }
+
+function gpaGradeSelectHtml(id){
+  var cur = gpaGrades[id] || '';
+  var opts = '<option value="">'+t('gpa_pick_grade')+'</option>';
+  opts += GPA_SCALE.map(function(g){ return '<option value="'+g[0]+'"'+(cur===g[0]?' selected':'')+'>'+g[0]+' ('+g[1].toFixed(1)+')</option>'; }).join('');
+  opts += '<optgroup label="'+t('gpa_noncount_group')+'">' + GPA_NONCOUNT.map(function(g){ return '<option value="'+g+'"'+(cur===g?' selected':'')+'>'+g+'</option>'; }).join('') + '</optgroup>';
+  return '<select onchange="gpaSetGrade(\''+id+'\',this.value)">'+opts+'</select>';
+}
+function gpaSetGrade(id,v){ gpaGrades[id]=v; if(v && !gpaChecked[id]){ gpaChecked[id]=true; gpaBuildCourseTable(); } else gpaRenderSummary(); }
+function gpaToggleCourse(id,on){ gpaChecked[id]=on; if(!on){ delete gpaGrades[id]; } gpaBuildCourseTable(); }
+
+function gpaBuildCourseTable(){
+  var box = document.getElementById('gpa-course-table');
+  if(!box) return;
+  var s1 = gpaCoursesFor(gpaSelectedLevel).filter(function(c){return c.sem===1;});
+  var s2 = gpaCoursesFor(gpaSelectedLevel).filter(function(c){return c.sem===2;});
+  function sec(title, list){
+    var h = '<div class="ic-sec">'+title+'</div><div class="tbl-wrap"><table class="gpa-tbl"><thead><tr><th></th><th>'+t('gpa_course')+'</th><th>'+t('gpa_credit')+'</th><th>'+t('gpa_grade')+'</th></tr></thead><tbody>';
+    list.forEach(function(c){
+      var chk = !!gpaChecked[c.id];
+      if(c.nogpa){
+        h += '<tr class="'+(chk?'':'gpa-row-off')+'"><td><input type="checkbox" '+(chk?'checked':'')+' onchange="gpaToggleCourse(\''+c.id+'\',this.checked)"/></td>'+
+             '<td>'+gpaCourseName(c)+' <span class="ic-badge">'+t('gpa_passfail')+'</span></td><td>—</td><td class="hint" style="margin:0">'+t('gpa_not_counted')+'</td></tr>';
+        return;
+      }
+      h += '<tr class="'+(chk?'':'gpa-row-off')+'"><td><input type="checkbox" '+(chk?'checked':'')+' onchange="gpaToggleCourse(\''+c.id+'\',this.checked)"/></td>'+
+           '<td>'+gpaCourseName(c)+(c.elective?' <span class="ic-badge">'+t('gpa_elective')+'</span>':'')+'</td><td>'+c.c+'</td><td>'+(chk?gpaGradeSelectHtml(c.id):'—')+'</td></tr>';
+    });
+    return h+'</tbody></table></div>';
+  }
+  box.innerHTML = sec(t('gpa_sem1'), s1) + sec(t('gpa_sem2'), s2);
+  gpaRenderSummary();
+}
+
+function gpaRenderSummary(){
+  var box = document.getElementById('gpa-summary');
+  if(!box) return;
+  var rows = GPA_COURSES.filter(function(c){ return gpaChecked[c.id] && !c.nogpa && gpaGrades[c.id]; });
+  var qp = 0, credits = 0, list = [];
+  rows.forEach(function(c){
+    var g = gpaGrades[c.id];
+    if(GPA_NONCOUNT.indexOf(g)!==-1){ list.push([c,g,null]); return; }
+    var pts = GPA_SCALE_MAP[g];
+    qp += pts*c.c; credits += c.c;
+    list.push([c,g,pts]);
+  });
+  var prevCgpaEl = document.getElementById('gpa-prev-cgpa');
+  var prevCrEl = document.getElementById('gpa-prev-credits');
+  var prevCgpa = prevCgpaEl ? parseFloat(prevCgpaEl.value) : NaN;
+  var prevCr = prevCrEl ? parseFloat(prevCrEl.value) : NaN;
+
+  var h = '';
+  if(!list.length){
+    h = '<div class="hint">'+t('gpa_empty')+'</div>';
+  } else {
+    h += '<div class="tbl-wrap"><table><thead><tr><th>'+t('gpa_course')+'</th><th>'+t('gpa_credit')+'</th><th>'+t('gpa_grade')+'</th><th>'+t('gpa_points')+'</th></tr></thead><tbody>';
+    list.forEach(function(r){
+      h += '<tr><td>'+gpaCourseName(r[0])+'</td><td>'+r[0].c+'</td><td>'+r[1]+'</td><td>'+(r[2]===null?t('gpa_not_counted'):r[2].toFixed(1))+'</td></tr>';
+    });
+    h += '</tbody></table></div>';
+    h += '<div class="result-box"><div class="rlabel">'+t('gpa_term_result')+'</div>';
+    if(credits>0){
+      var termGpa = qp/credits;
+      h += '<div class="result-grid"><div class="result-item ic-hero"><div class="rk">'+t('gpa_term_gpa')+'</div><div class="rv">'+termGpa.toFixed(3)+'</div></div>'+
+           '<div class="result-item"><div class="rk">'+t('gpa_term_credits')+'</div><div class="rv">'+credits+'</div></div>'+
+           '<div class="result-item"><div class="rk">'+t('gpa_term_points')+'</div><div class="rv">'+qp.toFixed(2)+'</div></div></div>';
+      if(!isNaN(prevCgpa) && !isNaN(prevCr) && prevCr>=0){
+        var newCgpa = (prevCgpa*prevCr + qp)/(prevCr+credits);
+        h += '<div class="ic-ok" style="margin-top:12px"><i class="fa-solid fa-circle-check"></i> '+t('gpa_new_cgpa')+': <b style="font-size:17px">'+newCgpa.toFixed(3)+'</b> ('+t('gpa_total_credits')+': '+(prevCr+credits)+')</div>';
+      } else {
+        h += '<div class="hint" style="margin-top:10px">'+t('gpa_need_prev')+'</div>';
+      }
+    } else {
+      h += '<div class="hint">'+t('gpa_all_excluded')+'</div>';
+    }
+    h += '</div>';
+  }
+  box.innerHTML = h;
+}
+function gpaResetAll(){
+  gpaGrades = {}; gpaChecked = {};
+  var p1=document.getElementById('gpa-prev-cgpa'), p2=document.getElementById('gpa-prev-credits');
+  if(p1) p1.value=''; if(p2) p2.value='';
+  gpaBuildCourseTable();
+}
+function gpaRefresh(){ gpaBuildLevelTabs(); gpaBuildCourseTable(); }
+
 /* ════════════════════════════════════════════════════════════
    INITIALIZE (apply saved/default language + theme on load)
    ════════════════════════════════════════════════════════════ */
 applyLang();
 applyTheme();
+if(typeof gpaRefresh==='function') gpaRefresh();
 </script>
